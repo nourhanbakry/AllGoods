@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.allgoods.Data.local.SharedPrefManager;
 import com.example.allgoods.R;
+import com.example.allgoods.UI.Auth.login.LoginActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -34,7 +35,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void navigateNext() {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
         }, SPLASH_DELAY);
     }
