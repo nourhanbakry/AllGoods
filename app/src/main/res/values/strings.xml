@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">AllGoods</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="loading">loading</string>
+    <string name="welcome_to_allgoods_n_app_n_the_center_of_commerce">Welcome to allGoods \n App \n The center of commerce</string>
+    <string name="upper_splash_image">Upper Splash Image</string>
+    <string name="lower_splash_image">lower splash image</string>
+    <string name="app_logo">logo</string>
 </resources>
