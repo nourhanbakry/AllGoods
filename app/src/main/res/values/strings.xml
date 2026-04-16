@@ -7,4 +7,7 @@
     <string name="upper_splash_image">Upper Splash Image</string>
     <string name="lower_splash_image">lower splash image</string>
     <string name="app_logo">logo</string>
+    <string name="home">Home</string>
+    <string name="cart">Cart</string>
+    <string name="wishlist">Wishlist</string>
 </resources>
