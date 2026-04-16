@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.allgoods.R;
 import com.example.allgoods.UI.Auth.forgetpassword.ForgetPasswordActivity;
 import com.example.allgoods.UI.Auth.signup.SignUpActivity;
+import com.example.allgoods.UI.Main.MainActivity;
 import com.google.android.material.button.MaterialButton;
 
 public class LoginActivity extends AppCompatActivity {
@@ -96,5 +97,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String email, String password) {
         Toast.makeText(this, "Login Successful ", Toast.LENGTH_SHORT).show();
+        startActivities(new android.content.Intent[]{new android.content.Intent(this, MainActivity.class)});
     }
 }
