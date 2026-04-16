@@ -1,5 +1,7 @@
 package com.example.allgoods.UI.Main;
 
+import static com.example.allgoods.utils.Constants.SPLASH_DELAY;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,8 +18,6 @@ import com.example.allgoods.R;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-
-    private static final int SPLASH_DELAY = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
