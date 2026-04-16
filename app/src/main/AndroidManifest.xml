@@ -12,13 +12,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AllGoods">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".UI.Main.SplashActivity"
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".UI.Auth.forgetpassword.ForgetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Auth.signup.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Auth.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Main.MainActivity"
+            android:exported="true">
         </activity>
     </application>
 

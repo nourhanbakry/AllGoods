@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.Main.SplashActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:contentDescription="@string/upper_splash_image"
+        android:src="@drawable/upper_splash"
+        android:id="@+id/image_1"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
+        />
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:contentDescription="@string/lower_splash_image"
+        android:src="@drawable/lower_splash"
+        android:id="@+id/image_2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:scaleType="centerCrop"
+        />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-60dp"
+        android:layout_marginStart="20dp"
+        android:contentDescription="@string/app_logo"
+        android:src="@drawable/all_good"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_1" />
+
+    <ImageView
+        android:id="@+id/loading"
+        android:layout_width="180dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="-60dp"
+        android:contentDescription="@string/loading"
+        android:src="@drawable/loading"
+        app:layout_constraintEnd_toEndOf="@+id/logo"
+        app:layout_constraintStart_toStartOf="@+id/logo"
+        app:layout_constraintTop_toBottomOf="@id/logo" />
+
+    <TextView
+        android:id="@+id/text_splash"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+        android:shadowColor="#4D000000"
+        android:shadowDx="30"
+        android:shadowDy="30"
+
+        android:shadowRadius="20"
+        android:text="@string/welcome_to_allgoods_n_app_n_the_center_of_commerce"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24sp"
+
+        app:layout_constraintBottom_toTopOf="@+id/image_2"
+        app:layout_constraintEnd_toEndOf="@+id/logo"
+        app:layout_constraintStart_toStartOf="@+id/logo"
+        app:layout_constraintTop_toBottomOf="@id/loading" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
