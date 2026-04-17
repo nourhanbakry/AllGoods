@@ -1,4 +1,4 @@
-package com.example.allgoods.UI.Customer.Wishlist;
+package com.example.allgoods.UI.Customer.AccountInfo;
 
 import android.os.Bundle;
 
@@ -11,13 +11,12 @@ import android.view.ViewGroup;
 import com.example.allgoods.R;
 
 
-public class WishlistFragment extends Fragment {
+public class AccountInfoFragment extends Fragment {
 
-    public WishlistFragment() {}
+    public AccountInfoFragment() {}
 
-
-    public static WishlistFragment newInstance(String param1, String param2) {
-        WishlistFragment fragment = new WishlistFragment();
+    public static AccountInfoFragment newInstance(String param1, String param2) {
+        AccountInfoFragment fragment = new AccountInfoFragment();
         return fragment;
     }
 
@@ -30,6 +29,6 @@ public class WishlistFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_wishlist, container, false);
+        return inflater.inflate(R.layout.fragment_account_info, container, false);
     }
 }
