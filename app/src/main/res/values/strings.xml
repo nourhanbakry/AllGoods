@@ -28,4 +28,23 @@
     <string name="home">Home</string>
     <string name="cart">Cart</string>
     <string name="wishlist">Wishlist</string>
+    <string name="forgot_pass_title">Forgot Password</string>
+    <string name="please_write_your_email_to_receive_a_n_confirmation_code_to_set_a_new_password">Please write your email to receive a \n confirmation code to set a new password.</string>
+    <string name="confirm_email">Confirm Email</string>
+    <string name="forget_password_image">Forget password image</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="_00_20">00:20</string>
+    <string name="resend_confirmation_code">resend confirmation code.</string>
+    <string name="confirm_code">Confirm Code</string>
+    <string name="otp_confirmed">OTP Confirmed: %1$s</string>
+    <string name="otp_resent">OTP Resent</string>
+    <string name="please_enter_all_digits">Please enter all 4 digits</string>
+    <string name="email_is_required">Email is required</string>
+    <string name="enter_valid_email">Enter valid email</string>
+    <string name="new_password">New Password</string>
+    <string name="please_write_your_new_password">Please write your new password.</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="password_must_be_at_least_6_characters">Password must be at least 6 characters</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="password_reset_successfully">Password reset successfully</string>
 </resources>
