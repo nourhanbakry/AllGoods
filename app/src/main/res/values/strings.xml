@@ -28,4 +28,13 @@
     <string name="home">Home</string>
     <string name="cart">Cart</string>
     <string name="wishlist">Wishlist</string>
+    <string name="open_nav">Open Navigation Drawer</string>
+    <string name="close_nav">Close Navigation Drawer</string>
+    <string name="account_information">Account Information</string>
+    <string name="passwords">Passwords</string>
+    <string name="my_cards">My Cards</string>
+    <string name="logout">Logout</string>
+    <string name="orders">3 Orders</string>
+    <string name="verified_profile">Verified Profile</string>
+    <string name="user_name">Mrh Raju</string>
 </resources>
