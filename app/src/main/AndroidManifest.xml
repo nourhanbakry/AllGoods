@@ -14,6 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AllGoods">
         <activity
+            android:name=".UI.Auth.forgetpassword.NewPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Auth.forgetpassword.VerificationActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.Auth.signup.SignUpActivity"
             android:exported="false" />
         <activity
