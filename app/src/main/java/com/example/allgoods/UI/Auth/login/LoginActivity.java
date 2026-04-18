@@ -21,9 +21,6 @@ import com.google.android.material.button.MaterialButton;
 public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
 
-    private EditText etEmail, etPassword;
-    private MaterialButton btnLogin;
-    private TextView tvForgotPassword, tvSignUp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +42,8 @@ public class LoginActivity extends AppCompatActivity {
                 v -> startActivities(new android.content.Intent[]{new android.content.Intent(this, ForgetPasswordActivity.class)})
         );
 
-        tvSignUp.setOnClickListener(
-                v -> startActivities(new android.content.Intent[]{new android.content.Intent(this, SignUpActivity.class)})
+        binding.signUpText.setOnClickListener(
+                v -> startActivity(new android.content.Intent(this, SignUpActivity.class))
         );
 
 
@@ -54,8 +51,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void validateInputs() {
 
-        String email = etEmail.getText().toString().trim();
-        String password = etPassword.getText().toString().trim();
+        String email = binding.etEmail.getText().toString().trim();
+        String password = binding.etPassword.getText().toString().trim();
 
         boolean isValid = true;
 
@@ -69,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             binding.etEmail.setError("Enter valid email");
             isValid = false;
         } else {
-            etEmail.setError(null);
+            binding.etEmail.setError(null);
         }
 
         // Password empty
