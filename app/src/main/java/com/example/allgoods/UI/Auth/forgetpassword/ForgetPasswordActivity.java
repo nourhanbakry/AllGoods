@@ -14,53 +14,49 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.allgoods.R;
+import com.example.allgoods.databinding.ActivityForgetPasswordBinding;
 import com.google.android.material.button.MaterialButton;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
+    ActivityForgetPasswordBinding binding;
 
-    private EditText etEmail;
-    private MaterialButton btnConfirmPassword;
-    private ImageView ivBack;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_forget_password);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        binding = ActivityForgetPasswordBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        initViews();
+
          setupListeners();
          setupTextWatchers();
     }
 
-    private void initViews() {
-        etEmail = findViewById(R.id.etEmailForget);
-        btnConfirmPassword = findViewById(R.id.btnConfirmEmail);
-        ivBack = findViewById(R.id.backButton);
-    }
+
 
     private void setupListeners() {
-        btnConfirmPassword.setOnClickListener(v -> validateInputs());
-        ivBack.setOnClickListener(v -> onBackPressed());
+        binding.btnConfirmEmail.setOnClickListener(v -> validateInputs());
+        binding.backButton.setOnClickListener(v -> onBackPressed());
     }
 
     private void validateInputs() {
-        String email = etEmail.getText().toString().trim();
+        String email = binding.etEmailForget.getText().toString().trim();
 
         boolean isValid = true;
         if (email.isEmpty()) {
-            etEmail.setError("Email is required");
+            binding.etEmailForget.setError("Email is required");
             isValid = false;
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etEmail.setError("Enter valid email");
+            binding.etEmailForget.setError("Enter valid email");
             isValid = false;
         } else {
-            etEmail.setError(null);
+            binding.etEmailForget.setError(null);
         }
 
 
@@ -80,7 +76,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         TextWatcher watcher = new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                etEmail.setError(null);
+                binding.etEmailForget.setError(null);
             }
 
             @Override
@@ -92,7 +88,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
             }
         };
 
-        etEmail.addTextChangedListener(watcher);
+        binding.etEmailForget.addTextChangedListener(watcher);
     }
 
 

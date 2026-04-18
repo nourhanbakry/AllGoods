@@ -19,17 +19,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.allgoods.R;
+import com.example.allgoods.databinding.ActivityVerificationBinding;
 import com.example.allgoods.utils.ValidationUtils;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.Locale;
 
 public class VerificationActivity extends AppCompatActivity {
-
-    private EditText etDigit1, etDigit2, etDigit3, etDigit4;
-    private TextView tvTimer, tvResend;
-    private MaterialButton btnConfirmEmail;
-    private ImageView backButton;
+    ActivityVerificationBinding binding;
     private CountDownTimer countDownTimer;
     private boolean isTimerRunning = false;
 
@@ -37,46 +34,36 @@ public class VerificationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_verification);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        binding = ActivityVerificationBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        initViews();
         setupOtpInputs();
         setupClickListeners();
         startResendTimer();
     }
 
-    private void initViews() {
-        etDigit1 = findViewById(R.id.etDigit1);
-        etDigit2 = findViewById(R.id.etDigit2);
-        etDigit3 = findViewById(R.id.etDigit3);
-        etDigit4 = findViewById(R.id.etDigit4);
-        tvTimer = findViewById(R.id.tvTimer);
-        tvResend = findViewById(R.id.tvResend);
-        btnConfirmEmail = findViewById(R.id.btnConfirmEmail);
-        backButton = findViewById(R.id.backButton);
-    }
 
     private void setupOtpInputs() {
-        etDigit1.addTextChangedListener(new OtpTextWatcher(etDigit1, etDigit2));
-        etDigit2.addTextChangedListener(new OtpTextWatcher(etDigit2, etDigit3));
-        etDigit3.addTextChangedListener(new OtpTextWatcher(etDigit3, etDigit4));
-        etDigit4.addTextChangedListener(new OtpTextWatcher(etDigit4, null));
+        binding.etDigit1.addTextChangedListener(new OtpTextWatcher(binding.etDigit1, binding.etDigit2));
+        binding.etDigit2.addTextChangedListener(new OtpTextWatcher(binding.etDigit2, binding.etDigit3));
+        binding.etDigit3.addTextChangedListener(new OtpTextWatcher(binding.etDigit3, binding.etDigit4));
+        binding.etDigit4.addTextChangedListener(new OtpTextWatcher(binding.etDigit4, null));
 
-        etDigit1.setOnKeyListener(new OtpKeyListener(etDigit1, null));
-        etDigit2.setOnKeyListener(new OtpKeyListener(etDigit2, etDigit1));
-        etDigit3.setOnKeyListener(new OtpKeyListener(etDigit3, etDigit2));
-        etDigit4.setOnKeyListener(new OtpKeyListener(etDigit4, etDigit3));
+        binding.etDigit1.setOnKeyListener(new OtpKeyListener(binding.etDigit1, null));
+        binding.etDigit2.setOnKeyListener(new OtpKeyListener(binding.etDigit2, binding.etDigit1));
+        binding.etDigit3.setOnKeyListener(new OtpKeyListener(binding.etDigit3, binding.etDigit2));
+        binding.etDigit4.setOnKeyListener(new OtpKeyListener(binding.etDigit4, binding.etDigit3));
     }
 
     private void setupClickListeners() {
-        backButton.setOnClickListener(v -> finish());
+        binding.backButton.setOnClickListener(v -> finish());
 
-        btnConfirmEmail.setOnClickListener(v -> {
+        binding.btnConfirmEmail.setOnClickListener(v -> {
             String otp = getOtpCode();
             if (ValidationUtils.isValidOtp(otp)) {
                 // TODO: Handle OTP verification logic
@@ -87,7 +74,7 @@ public class VerificationActivity extends AppCompatActivity {
             }
         });
 
-        tvResend.setOnClickListener(v -> {
+        binding.tvResend.setOnClickListener(v -> {
             if (!isTimerRunning) {
                 // TODO: Resend OTP logic
                 Toast.makeText(this, R.string.otp_resent, Toast.LENGTH_SHORT).show();
@@ -97,10 +84,10 @@ public class VerificationActivity extends AppCompatActivity {
     }
 
     private String getOtpCode() {
-        return etDigit1.getText().toString() +
-                etDigit2.getText().toString() +
-                etDigit3.getText().toString() +
-                etDigit4.getText().toString();
+        return binding.etDigit1.getText().toString() +
+                binding.etDigit2.getText().toString() +
+                binding.etDigit3.getText().toString() +
+                binding.etDigit4.getText().toString();
     }
 
     private void startResendTimer() {
@@ -109,22 +96,22 @@ public class VerificationActivity extends AppCompatActivity {
         }
 
         isTimerRunning = true;
-        tvResend.setEnabled(false);
-        tvResend.setTextColor(getResources().getColor(android.R.color.darker_gray, getTheme()));
+        binding.tvResend.setEnabled(false);
+        binding.tvResend.setTextColor(getResources().getColor(android.R.color.darker_gray, getTheme()));
 
         countDownTimer = new CountDownTimer(20000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 int seconds = (int) (millisUntilFinished / 1000);
-                tvTimer.setText(String.format(Locale.getDefault(), "00:%02d", seconds));
+                binding.tvTimer.setText(String.format(Locale.getDefault(), "00:%02d", seconds));
             }
 
             @Override
             public void onFinish() {
                 isTimerRunning = false;
-                tvResend.setEnabled(true);
-                tvResend.setTextColor(getResources().getColor(android.R.color.black, getTheme()));
-                tvTimer.setText("00:00");
+                binding.tvResend.setEnabled(true);
+                binding.tvResend.setTextColor(getResources().getColor(android.R.color.black, getTheme()));
+                binding.tvTimer.setText("00:00");
             }
         }.start();
     }

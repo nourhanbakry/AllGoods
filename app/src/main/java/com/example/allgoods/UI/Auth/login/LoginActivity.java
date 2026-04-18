@@ -15,9 +15,11 @@ import com.example.allgoods.R;
 import com.example.allgoods.UI.Auth.forgetpassword.ForgetPasswordActivity;
 import com.example.allgoods.UI.Auth.signup.SignUpActivity;
 import com.example.allgoods.UI.Main.MainActivity;
+import com.example.allgoods.databinding.ActivityLoginBinding;
 import com.google.android.material.button.MaterialButton;
 
 public class LoginActivity extends AppCompatActivity {
+    ActivityLoginBinding binding;
 
     private EditText etEmail, etPassword;
     private MaterialButton btnLogin;
@@ -26,28 +28,20 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_login);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        initViews();
         setupListeners();
     }
 
-    private void initViews() {
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnLogin);
-        tvForgotPassword = findViewById(R.id.forgetPassword);
-        tvSignUp = findViewById(R.id.signUpText);
-    }
-
     private void setupListeners() {
-        btnLogin.setOnClickListener(v -> validateInputs());
-        tvForgotPassword.setOnClickListener(
+        binding.btnLogin.setOnClickListener(v -> validateInputs());
+        binding.forgetPassword.setOnClickListener(
                 v -> startActivities(new android.content.Intent[]{new android.content.Intent(this, ForgetPasswordActivity.class)})
         );
 
@@ -67,12 +61,12 @@ public class LoginActivity extends AppCompatActivity {
 
         // Email empty
         if (email.isEmpty()) {
-            etEmail.setError("Email is required");
+            binding.etEmail.setError("Email is required");
             isValid = false;
         }
         // Email format
         else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etEmail.setError("Enter valid email");
+            binding.etEmail.setError("Enter valid email");
             isValid = false;
         } else {
             etEmail.setError(null);
@@ -80,15 +74,15 @@ public class LoginActivity extends AppCompatActivity {
 
         // Password empty
         if (password.isEmpty()) {
-            etPassword.setError("Password is required");
+            binding.etPassword.setError("Password is required");
             isValid = false;
         }
         // Password length
         else if (password.length() < 6) {
-            etPassword.setError("Password must be at least 6 characters");
+            binding.etPassword.setError("Password must be at least 6 characters");
             isValid = false;
         } else {
-            etPassword.setError(null);
+           binding.etPassword.setError(null);
         }
 
         if (isValid) loginUser(email, password);
