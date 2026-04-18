@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
+    android:backgroundTint="@color/white"
     tools:openDrawer="start"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
