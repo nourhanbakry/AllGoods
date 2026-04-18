@@ -56,4 +56,9 @@
     <string name="password_must_be_at_least_6_characters">Password must be at least 6 characters</string>
     <string name="passwords_do_not_match">Passwords do not match</string>
     <string name="password_reset_successfully">Password reset successfully</string>
+    <string name="stats">Stats</string>
+    <string name="inventory">Inventory</string>
+    <string name="add_product">Add Product</string>
+    <string name="reviews">Reviews</string>
+    <string name="orders_seller">Orders</string>
 </resources>
