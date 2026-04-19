@@ -49,19 +49,18 @@ public class MainActivity extends AppCompatActivity {
         selectTab(0);
     }
 
+    public DrawerLayout getDrawerLayout() {
+        return binding.drawerMainLayout;
+    }
 
     private void setupDrawer() {
 
-        binding.homeMenuIcon.setOnClickListener(v ->
-                binding.drawerMainLayout.openDrawer(GravityCompat.START)
-        );
+        binding.drawerMainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
-        binding.drawerMainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         binding.drawerMainLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                binding.homeMenuIcon.setImageResource(R.drawable.menu_close);
                 if (drawerIcon != null) {
                     drawerIcon.setImageResource(R.drawable.menu_close);
                 }
@@ -69,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-                binding.homeMenuIcon.setImageResource(R.drawable.menu_open);
                 if (drawerIcon != null) {
                     drawerIcon.setImageResource(R.drawable.menu_open);
                 }
@@ -127,19 +125,16 @@ public class MainActivity extends AppCompatActivity {
         if (tab == 0) {
             binding.homeIcon.setVisibility(View.GONE);
             binding.homeText.setVisibility(View.VISIBLE);
-            binding.homeMenuIcon.setVisibility(View.VISIBLE);
             replaceFragment(new HomeFragment());
 
         } else if (tab == 1) {
             binding.wishlistIcon.setVisibility(View.GONE);
             binding.wishlistText.setVisibility(View.VISIBLE);
-            binding.homeMenuIcon.setVisibility(View.GONE);
             replaceFragment(new WishlistFragment());
 
         } else {
             binding.cartIcon.setVisibility(View.GONE);
             binding.cartText.setVisibility(View.VISIBLE);
-            binding.homeMenuIcon.setVisibility(View.GONE);
             replaceFragment(new CartFragment());
         }
     }
