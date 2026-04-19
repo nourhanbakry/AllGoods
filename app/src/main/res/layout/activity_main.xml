@@ -11,27 +11,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/homeMenuIcon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="13dp"
-            android:src="@drawable/menu_open"
-            android:background="@drawable/circle_bg"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="50dp"/>
 
+        <!-- Fragments Frame -->
         <FrameLayout
             android:id="@+id/frameLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/bottomBar"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+
+        <!-- Bottom Nav Bar -->
         <LinearLayout
             android:id="@+id/bottomBar"
             android:layout_width="0dp"
@@ -112,7 +104,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Drawer -->
+    <!-- Drawer with logout-->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="300dp"

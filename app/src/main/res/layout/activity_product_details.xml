@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/productDetails"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/productPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_120"
+            android:textColor="#000000"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/productPriceLabel"
+            app:layout_constraintTop_toBottomOf="@id/productPriceLabel" />
+
+        <ImageView
+            android:id="@+id/productImage"
+            android:layout_width="0dp"
+            android:layout_height="350dp"
+            android:background="@drawable/bg_edittext_rounded"
+            android:src="@drawable/home_product"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:id="@+id/backButton"
+            android:contentDescription="@string/back_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/back_button"
+            android:layout_margin="22dp"
+            />
+
+        <TextView
+            android:textSize="13sp"
+            android:id="@+id/productSubTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/men_s_printed_pullover_hoodie"
+            android:textColor="@color/gray9E"
+            android:layout_margin="20dp"
+            app:layout_constraintTop_toBottomOf="@id/productImage"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/productPriceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:text="@string/price"
+            android:textColor="@color/gray9E"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@+id/productSubTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/productSubTitle" />
+
+        <TextView
+            android:id="@+id/productTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Nike Club Fleece"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/productSubTitle"
+            app:layout_constraintStart_toStartOf="@id/productSubTitle"
+            app:layout_constraintEnd_toStartOf="@id/productPrice" />
+
+        <LinearLayout
+            android:weightSum="4"
+            android:id="@+id/smallImagesLayout"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintTop_toBottomOf="@id/productTitle">
+            <ImageView
+                android:id="@+id/image1"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_edittext_rounded"
+                android:src="@drawable/home_product"
+                android:layout_width="77dp"
+                android:layout_height="77dp"/>
+            <ImageView
+                android:id="@+id/image2"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_edittext_rounded"
+                android:src="@drawable/home_product"
+                android:layout_width="77dp"
+                android:layout_height="77dp"/>
+            <ImageView
+                android:id="@+id/image3"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_edittext_rounded"
+                android:src="@drawable/home_product"
+                android:layout_width="77dp"
+                android:layout_height="77dp"/>
+            <ImageView
+                android:id="@+id/image4"
+                android:background="@drawable/bg_edittext_rounded"
+                android:src="@drawable/home_product"
+                android:layout_width="77dp"
+                android:layout_height="77dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/sizeHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/size"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/smallImagesLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:text="@string/size_guide"
+            android:textColor="@color/gray9E"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/sizeHeader"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/sizeHeader"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <LinearLayout
+            android:id="@+id/sizesLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:paddingHorizontal="16dp"
+            app:layout_constraintTop_toBottomOf="@id/sizeHeader">
+
+            <TextView android:layout_width="0dp" android:layout_height="55dp" android:layout_weight="1" android:layout_margin="4dp" android:text="@string/s" android:gravity="center" android:background="@drawable/bg_gray_fa" android:textStyle="bold" android:textSize="17sp"  />
+            <TextView android:layout_width="0dp" android:layout_height="55dp" android:layout_weight="1" android:layout_margin="4dp" android:text="@string/m" android:gravity="center" android:background="@drawable/bg_gray_fa" android:textStyle="bold" android:textSize="17sp" />
+            <TextView android:layout_width="0dp" android:layout_height="55dp" android:layout_weight="1" android:layout_margin="4dp" android:text="@string/l" android:gravity="center" android:background="@drawable/bg_gray_fa" android:textStyle="bold" android:textSize="17sp" />
+            <TextView android:layout_width="0dp" android:layout_height="55dp" android:layout_weight="1" android:layout_margin="4dp" android:text="@string/xl" android:gravity="center" android:background="@drawable/bg_gray_fa" android:textStyle="bold" android:textSize="17sp" />
+            <TextView android:layout_width="0dp" android:layout_height="55dp" android:layout_weight="1" android:layout_margin="4dp" android:text="@string/_2xl" android:gravity="center" android:background="@drawable/bg_gray_fa" android:textStyle="bold" android:textSize="17sp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/descHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/description"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/sizesLayout"
+            app:layout_constraintStart_toStartOf="@id/sizeHeader" />
+
+        <TextView
+            android:id="@+id/descText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="20dp"
+            android:text="The Nike Throwback Pullover Hoodie is made from premium French terry fabric that blends a performance feel with Read More.."
+            android:textColor="@color/gray9E"
+            android:lineSpacingExtra="4dp"
+            app:layout_constraintTop_toBottomOf="@id/descHeader"
+            app:layout_constraintStart_toStartOf="@id/descHeader"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/reviewsHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reviews"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/descText"
+            app:layout_constraintStart_toStartOf="@id/descHeader" />
+
+        <TextView
+            android:id="@+id/viewAllReviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:text="@string/view_all"
+            android:textColor="@color/gray9E"
+            app:layout_constraintBottom_toBottomOf="@+id/reviewsHeader"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/reviewsHeader" />
+
+        <ImageView
+            android:id="@+id/userImg"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/user_dummy_photo"
+            app:layout_constraintTop_toBottomOf="@id/reviewsHeader"
+            app:layout_constraintStart_toStartOf="@id/reviewsHeader" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@string/ronald_richards"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/userImg"
+            app:layout_constraintStart_toEndOf="@id/userImg" />
+
+        <TextView
+            android:id="@+id/reviewDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="13 Sep, 2020"
+            android:textColor="@color/gray9E"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/userImg"
+            app:layout_constraintStart_toStartOf="@id/userName"
+            app:layout_constraintTop_toBottomOf="@id/userName" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:progressTint="#FFB300"
+            android:rating="4.5"
+            app:layout_constraintStart_toStartOf="@+id/ratingValue"
+            app:layout_constraintTop_toBottomOf="@id/ratingValue" />
+
+        <TextView
+            android:id="@+id/reviewComment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque malesuada eget vitae amet..."
+            android:textColor="#757575"
+            app:layout_constraintTop_toBottomOf="@id/userImg"
+            app:layout_constraintStart_toStartOf="@id/userImg"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="20dp" />
+
+        <TextView
+            android:id="@+id/ratingValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="68dp"
+            android:text="@string/_4_8"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/userName" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="@string/rating"
+            android:textColor="@color/gray9E"
+            app:layout_constraintBottom_toBottomOf="@+id/ratingValue"
+            app:layout_constraintStart_toEndOf="@+id/ratingValue"
+            app:layout_constraintTop_toTopOf="@+id/ratingValue" />
+
+        <TextView
+            android:id="@+id/totalPriceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_price"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toBottomOf="@id/reviewComment"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp" />
+
+        <TextView
+            android:id="@+id/totalPriceValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:text="$125"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/totalPriceLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/totalPriceLabel" />
+
+        <Button
+            android:id="@+id/btnAddToCart"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="20dp"
+            android:backgroundTint="#1A1A1A"
+            android:text="@string/add_to_cart"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            app:cornerRadius="15dp"
+            app:layout_constraintTop_toBottomOf="@id/totalPriceLabel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

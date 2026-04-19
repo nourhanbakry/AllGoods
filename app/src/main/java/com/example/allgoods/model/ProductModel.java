@@ -1,0 +1,67 @@
+package com.example.allgoods.model;
+
+public class ProductModel {
+
+    private int id;
+    private String name;
+    private String image;
+    private double price;
+    private boolean isFav = false;
+
+    public ProductModel() {}
+
+    public ProductModel(int id, String name, String image, double price) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.price = price;
+    }
+
+    public ProductModel(int id, String name, String image, double price, boolean isFav) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.price = price;
+        this.isFav = isFav;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public boolean isFav() {
+        return isFav;
+    }
+
+    public void setFav(boolean fav) {
+        isFav = fav;
+    }
+}
