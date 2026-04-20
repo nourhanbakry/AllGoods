@@ -145,4 +145,12 @@ public class MainActivity extends AppCompatActivity {
                 .replace(binding.frameLayout.getId(), fragment)
                 .commit();
     }
+
+    public void hideBottomBar() {
+        findViewById(R.id.bottomBar).setVisibility(View.GONE);
+    }
+
+    public void showBottomBar() {
+        findViewById(R.id.bottomBar).setVisibility(View.VISIBLE);
+    }
 }

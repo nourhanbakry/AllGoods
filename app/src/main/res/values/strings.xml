@@ -84,6 +84,9 @@
     <string name="rating">rating</string>
     <string name="_4_8">4.8</string>
     <string name="size_guide">Size Guide</string>
+    <string name="items">Items</string>
+    <string name="in_wishlist">in wishlist</string>
+    <string name="available_in_stock">Available in stock</string>
     <string name="_245">245</string>
     <string name="add_review">Add Review</string>
     <string name="image_add">Image add</string>
