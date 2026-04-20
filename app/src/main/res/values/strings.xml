@@ -95,4 +95,22 @@
     <string name="type_your_name">Type your name</string>
     <string name="how_was_your_experience">How was your experience ?</string>
     <string name="describe_your_experience">Describe your experience?</string>
+    <string name="address">Address</string>
+    <string name="mrh_raju">Mrh Raju</string>
+    <string name="city">City</string>
+    <string name="bangladesh">Bangladesh</string>
+    <string name="sylhet">Sylhet</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="_880_1453_987533">+880 1453-987533</string>
+    <string name="chhatak_sunamgonj_12_8ab">Chhatak, Sunamgonj 12/8AB</string>
+    <string name="save">Save</string>
+    <string name="add_new_card">Add New Card</string>
+    <string name="card_owner">Card Owner</string>
+    <string name="card_number">Card Number</string>
+    <string name="_5254_7634_8734_7690">5254 7634 8734 7690</string>
+    <string name="_24_24">24/24</string>
+    <string name="cvv">CVV</string>
+    <string name="_776">776</string>
+    <string name="add_card">Add Card</string>
+    <string name="submit_review">Submit Review</string>
 </resources>
