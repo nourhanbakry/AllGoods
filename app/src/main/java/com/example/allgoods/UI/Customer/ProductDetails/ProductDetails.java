@@ -8,7 +8,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.allgoods.R;
+import com.example.allgoods.UI.Customer.Reviews.View.ReviewsFragment;
 import com.example.allgoods.databinding.ActivityProductDetailsBinding;
 
 public class ProductDetails extends AppCompatActivity {
@@ -32,7 +32,10 @@ public class ProductDetails extends AppCompatActivity {
         });
 
         binding.viewAllReviews.setOnClickListener(v->{
-            //TODO: move to reviews screen
+            getSupportFragmentManager().beginTransaction()
+                    .replace(android.R.id.content, new ReviewsFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
 
         binding.btnAddToCart.setOnClickListener(v -> {

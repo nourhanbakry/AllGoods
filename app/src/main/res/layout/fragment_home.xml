@@ -51,15 +51,12 @@
         android:id="@+id/etSearch"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-
         android:layout_marginTop="20dp"
-
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-
+        android:maxLines="1"
         android:drawableStart="@drawable/search_icon"
         android:drawablePadding="10dp"
-
         android:background="@drawable/bg_gray_fa"
         android:gravity="center_vertical"
         android:hint="@string/search"
