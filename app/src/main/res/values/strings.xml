@@ -84,4 +84,15 @@
     <string name="rating">rating</string>
     <string name="_4_8">4.8</string>
     <string name="size_guide">Size Guide</string>
+    <string name="_245">245</string>
+    <string name="add_review">Add Review</string>
+    <string name="image_add">Image add</string>
+    <string name="person">Person</string>
+    <string name="reviewer_name">Reviewer Name</string>
+    <string name="_13_sep_2020">13 Sep, 2020</string>
+    <string name="_4">4.5</string>
+    <string name="discription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque malesuada eget vitae amet…</string>
+    <string name="type_your_name">Type your name</string>
+    <string name="how_was_your_experience">How was your experience ?</string>
+    <string name="describe_your_experience">Describe your experience?</string>
 </resources>
