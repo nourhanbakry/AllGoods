@@ -1,27 +1,32 @@
 package com.example.allgoods.model;
 
+import com.example.allgoods.utils.Category;
+
 public class ProductModel {
 
     private int id;
     private String name;
     private String image;
     private double price;
+    private Category category;
     private boolean isFav = false;
 
     public ProductModel() {}
 
-    public ProductModel(int id, String name, String image, double price) {
+    public ProductModel(int id, String name, String image, double price, Category category) {
         this.id = id;
         this.name = name;
         this.image = image;
         this.price = price;
+        this.category = category;
     }
 
-    public ProductModel(int id, String name, String image, double price, boolean isFav) {
+    public ProductModel(int id, String name, String image, double price,Category category ,boolean isFav) {
         this.id = id;
         this.name = name;
         this.image = image;
         this.price = price;
+        this.category = category;
         this.isFav = isFav;
     }
 
@@ -63,5 +68,13 @@ public class ProductModel {
 
     public void setFav(boolean fav) {
         isFav = fav;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
