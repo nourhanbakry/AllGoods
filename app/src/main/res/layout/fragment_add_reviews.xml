@@ -151,5 +151,21 @@
         app:layout_constraintBottom_toBottomOf="@+id/customSeek"
         app:layout_constraintTop_toTopOf="@+id/customSeek"/>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/submit_review"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/bg_custom_button"
+        app:backgroundTint="@null"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
