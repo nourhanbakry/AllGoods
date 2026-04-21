@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.allgoods.model.ProductModel;
+import com.example.allgoods.utils.Category;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,21 +24,24 @@ public class CartViewModel extends ViewModel {
                 1,
                 "Nike Sportswear",
                 "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
-                45
+                45,
+                Category.TSHIRT
         ));
 
         list.add(new ProductModel(
                 2,
                 "Nike T-shirt",
                 "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
-                45
+                45,
+                Category.TSHIRT
         ));
 
         list.add(new ProductModel(
                 3,
                 "Nike T-shirt",
                 "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
-                45
+                45,
+                Category.TSHIRT
         ));
 
         cartItems.setValue(list);

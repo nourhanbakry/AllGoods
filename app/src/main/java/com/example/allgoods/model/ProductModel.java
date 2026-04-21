@@ -78,6 +78,7 @@ public class ProductModel {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
     public Category getCategory() {
         return category;
     }
