@@ -11,8 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.allgoods.R;
 import com.example.allgoods.UI.Customer.Cart.Adapter.CartAdapter;
+import com.example.allgoods.UI.Customer.Cart.Address.AddressFragment;
 import com.example.allgoods.UI.Customer.Home.Adapter.ProductAdapter;
+import com.example.allgoods.UI.Customer.MyCards.MyCardsFragment;
+import com.example.allgoods.UI.Customer.Reviews.View.ReviewsFragment;
 import com.example.allgoods.databinding.FragmentCartBinding;
 
 import java.util.ArrayList;
@@ -53,6 +57,24 @@ public class CartFragment extends Fragment {
         });
 
         viewModel.loadDummyCartProducts();
+
+        binding.OpenAddress.setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayout, new AddressFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        binding.OpenPayment.setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayout, new MyCardsFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        binding.btnCheckout.setOnClickListener(v -> {
+            //navigate to checkout fragment
+        });
 
     }
 

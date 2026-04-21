@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.allgoods.R;
+import com.example.allgoods.UI.Main.MainActivity;
 import com.example.allgoods.databinding.FragmentAddCardsBinding;
 import com.example.allgoods.utils.ValidationUtils;
 
@@ -167,8 +168,15 @@ public class AddCardsFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity) requireActivity()).hideBottomBar();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ((MainActivity) requireActivity()).showBottomBar();
         binding = null;
     }
 }

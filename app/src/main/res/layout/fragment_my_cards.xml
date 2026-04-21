@@ -46,7 +46,7 @@
         />
 
     <LinearLayout
-        android:layout_width="380dp"
+        android:layout_width="350dp"
         android:layout_height="50dp"
         android:id="@+id/layoutAddPayment"
         app:layout_constraintStart_toStartOf="@id/card"
@@ -240,7 +240,7 @@
             android:id="@+id/tvPrimaryAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/save_as_primary_address"
+            android:text="@string/save_card_info"
             android:textSize="18sp"
             android:textColor="@color/black"
             android:layout_marginTop="25dp"

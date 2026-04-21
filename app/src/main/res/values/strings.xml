@@ -131,4 +131,5 @@
     <string name="email_sent">Email Sent to</string>
     <string name="payment">Payment</string>
     <string name="save_as_primary_address">Save as primary address</string>
+    <string name="save_card_info">Save card info</string>
 </resources>
