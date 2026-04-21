@@ -116,6 +116,16 @@
     <string name="_776">776</string>
     <string name="add_card">Add Card</string>
     <string name="submit_review">Submit Review</string>
+    <string name="men_s_tie_dye_t_shirt_nnike_sportswear">Men\'s Tie-Dye T-Shirt\nNike Sportswear</string>
+    <string name="delivery_address">Delivery Address</string>
+    <string name="checkout">Checkout</string>
+    <string name="order_info">Order Info</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="shipping_cost">Shipping cost</string>
+    <string name="total">Total</string>
+    <string name="visa_classic">Visa Classic</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="no_address_please_add_one">No Address, please add one</string>
     <string name="continue_shopping">Continue Shopping</string>
     <string name="no_internet">No internet</string>
     <string name="email_sent">Email Sent to</string>

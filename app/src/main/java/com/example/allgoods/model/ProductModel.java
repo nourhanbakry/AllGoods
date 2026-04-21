@@ -11,6 +11,8 @@ public class ProductModel {
     private Category category;
     private boolean isFav = false;
 
+    private int quantity = 1;
+
     public ProductModel() {}
 
     public ProductModel(int id, String name, String image, double price, Category category) {
@@ -70,6 +72,12 @@ public class ProductModel {
         isFav = fav;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     public Category getCategory() {
         return category;
     }
