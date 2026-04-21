@@ -1,5 +1,4 @@
-package com.example.allgoods.UI.Customer.Home;
-
+package com.example.allgoods.UI.Customer.Categories;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -11,9 +10,27 @@ import com.example.allgoods.utils.Category;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeViewModel extends ViewModel {
+public class CategoriesViewModel extends ViewModel {
 
     private final MutableLiveData<List<ProductModel>> products = new MutableLiveData<>();
+
+//    public LiveData<List<ProductModel>> getProductsByCategory(String category) {
+//        MutableLiveData<List<ProductModel>> filtered = new MutableLiveData<>();
+//
+//        List<ProductModel> all = getProducts().getValue();
+//        List<ProductModel> result = new ArrayList<>();
+//
+//        if (all != null) {
+//            for (ProductModel product : all) {
+//                if (product.getCategory().equals(category)) {
+//                    result.add(product);
+//                }
+//            }
+//        }
+//
+//        filtered.setValue(result);
+//        return filtered;
+//    }
 
     public LiveData<List<ProductModel>> getProducts() {
         return products;

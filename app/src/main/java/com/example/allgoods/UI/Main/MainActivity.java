@@ -15,18 +15,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.allgoods.R;
-import com.example.allgoods.UI.Customer.AccountInfo.AccountInfoFragment;
 import com.example.allgoods.UI.Customer.Cart.CartFragment;
 import com.example.allgoods.UI.Customer.Home.HomeFragment;
-import com.example.allgoods.UI.Customer.MyCards.MyCardsFragment;
-import com.example.allgoods.UI.Customer.Passwords.PassworsFragment;
 import com.example.allgoods.UI.Customer.Wishlist.WishlistFragment;
 import com.example.allgoods.databinding.ActivityMainBinding;
+import com.example.allgoods.utils.Network.NetworkListener;
+import com.example.allgoods.utils.Network.NetworkManager;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private ImageView drawerIcon;
+    private NetworkManager networkManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +41,47 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-
         setupDrawer();
         setupHeader();
         setupBottomNav();
-
         selectTab(0);
+        connection();
+
+
+    }
+
+    private void connection(){
+        networkManager = new NetworkManager();
+
+        networkManager.register(this, new NetworkListener() {
+            @Override
+            public void onConnected() {
+                runOnUiThread(() -> {
+                    binding.noInternetAnimation.setVisibility(View.GONE);
+                    binding.internetText.setVisibility(View.GONE);
+                });
+            }
+
+            @Override
+            public void onDisconnected() {
+                runOnUiThread(() -> {
+                    binding.noInternetAnimation.setVisibility(View.VISIBLE);
+                    binding.noInternetAnimation.playAnimation();
+                    binding.internetText.setVisibility(View.VISIBLE);
+                });
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        networkManager.unregister(this);
     }
 
     public DrawerLayout getDrawerLayout() {
@@ -144,5 +179,13 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(binding.frameLayout.getId(), fragment)
                 .commit();
+    }
+
+    public void hideBottomBar() {
+        findViewById(R.id.bottomBar).setVisibility(View.GONE);
+    }
+
+    public void showBottomBar() {
+        findViewById(R.id.bottomBar).setVisibility(View.VISIBLE);
     }
 }

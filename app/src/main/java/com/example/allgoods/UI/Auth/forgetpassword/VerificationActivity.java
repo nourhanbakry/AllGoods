@@ -20,6 +20,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.allgoods.R;
 import com.example.allgoods.databinding.ActivityVerificationBinding;
+import com.example.allgoods.utils.Network.NetworkListener;
+import com.example.allgoods.utils.Network.NetworkManager;
+import com.example.allgoods.utils.SnackBarHelper;
 import com.example.allgoods.utils.ValidationUtils;
 import com.google.android.material.button.MaterialButton;
 
@@ -29,6 +32,10 @@ public class VerificationActivity extends AppCompatActivity {
     ActivityVerificationBinding binding;
     private CountDownTimer countDownTimer;
     private boolean isTimerRunning = false;
+
+    private NetworkManager networkManager;
+
+    private Boolean lastNetworkState = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +49,62 @@ public class VerificationActivity extends AppCompatActivity {
             return insets;
         });
 
+        connection();
         setupOtpInputs();
         setupClickListeners();
         startResendTimer();
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+
+    private void connection() {
+
+        networkManager = new NetworkManager();
+
+        networkManager.register(this, new NetworkListener() {
+
+            @Override
+            public void onConnected() {
+                runOnUiThread(() -> {
+
+                    // show success ONLY if previously disconnected
+                    if (lastNetworkState != null && !lastNetworkState) {
+                        SnackBarHelper.showSuccess(binding.getRoot(),
+                                "Internet Connection Available");
+                    }
+
+                    lastNetworkState = true;
+                    setConfirmEmailEnabled(true);
+                });
+            }
+
+            @Override
+            public void onDisconnected() {
+                runOnUiThread(() -> {
+
+                    // show error ONLY if previously connected
+                    if (lastNetworkState == null || lastNetworkState) {
+                        SnackBarHelper.showError(binding.getRoot(),
+                                "No Internet Connection");
+                    }
+
+                    lastNetworkState = false;
+                    setConfirmEmailEnabled(false);
+                });
+            }
+        });
+    }
+
+
+    private void setConfirmEmailEnabled(boolean enabled) {
+        binding.btnConfirmEmail.setEnabled(enabled);
+        binding.btnConfirmEmail.setAlpha(enabled ? 1f : 0.5f);
+    }
     private void setupOtpInputs() {
         binding.etDigit1.addTextChangedListener(new OtpTextWatcher(binding.etDigit1, binding.etDigit2));
         binding.etDigit2.addTextChangedListener(new OtpTextWatcher(binding.etDigit2, binding.etDigit3));
@@ -67,17 +124,18 @@ public class VerificationActivity extends AppCompatActivity {
             String otp = getOtpCode();
             if (ValidationUtils.isValidOtp(otp)) {
                 // TODO: Handle OTP verification logic
-                Toast.makeText(this, getString(R.string.otp_confirmed, otp), Toast.LENGTH_SHORT).show();
+                SnackBarHelper.showSuccess(binding.getRoot(), getString(R.string.otp_confirmed, otp));
                 startActivities(new Intent[]{new Intent(this, NewPasswordActivity.class)});
+                finish();
             } else {
-                Toast.makeText(this, R.string.please_enter_all_digits, Toast.LENGTH_SHORT).show();
+                SnackBarHelper.showError(binding.getRoot(), getString(R.string.please_enter_all_digits));
             }
         });
 
         binding.tvResend.setOnClickListener(v -> {
             if (!isTimerRunning) {
                 // TODO: Resend OTP logic
-                Toast.makeText(this, R.string.otp_resent, Toast.LENGTH_SHORT).show();
+                SnackBarHelper.showSuccess(binding.getRoot(), getString(R.string.otp_resent));
                 startResendTimer();
             }
         });
@@ -122,6 +180,7 @@ public class VerificationActivity extends AppCompatActivity {
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
+        networkManager.unregister(this);
     }
 
     private class OtpTextWatcher implements TextWatcher {

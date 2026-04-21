@@ -202,7 +202,7 @@
         android:id="@+id/tvPrimaryAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save as primary address"
+        android:text="@string/save_as_primary_address"
         android:textSize="18sp"
         android:textColor="@color/black"
         android:layout_marginTop="25dp"

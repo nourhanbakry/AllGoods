@@ -22,7 +22,7 @@ public class CustomRatingSeekBar extends View {
 
     private Paint thumbPaint;
 
-    private float progress = 0.5f;
+    private float progress = 0f;
 
     private Paint backgroundPaint;
 
