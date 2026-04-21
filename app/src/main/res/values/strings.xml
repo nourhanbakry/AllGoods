@@ -116,4 +116,7 @@
     <string name="_776">776</string>
     <string name="add_card">Add Card</string>
     <string name="submit_review">Submit Review</string>
+    <string name="continue_shopping">Continue Shopping</string>
+    <string name="no_internet">No internet</string>
+    <string name="email_sent">Email Sent to</string>
 </resources>

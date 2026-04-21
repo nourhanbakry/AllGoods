@@ -1,5 +1,6 @@
 package com.example.allgoods.UI.Auth.forgetpassword;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,12 +16,17 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.allgoods.R;
 import com.example.allgoods.databinding.ActivityForgetPasswordBinding;
+import com.example.allgoods.utils.Network.NetworkListener;
+import com.example.allgoods.utils.Network.NetworkManager;
+import com.example.allgoods.utils.SnackBarHelper;
 import com.google.android.material.button.MaterialButton;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
     ActivityForgetPasswordBinding binding;
 
+    private NetworkManager networkManager;
 
+    private Boolean lastNetworkState = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,30 +40,74 @@ public class ForgetPasswordActivity extends AppCompatActivity {
             return insets;
         });
 
+        connection();
          setupListeners();
          setupTextWatchers();
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        networkManager.unregister(this);
+    }
 
+    private void connection() {
+
+        networkManager = new NetworkManager();
+
+        networkManager.register(this, new NetworkListener() {
+
+            @Override
+            public void onConnected() {
+                runOnUiThread(() -> {
+
+                    // show success ONLY if previously disconnected
+                    if (lastNetworkState != null && !lastNetworkState) {
+                        SnackBarHelper.showSuccess(binding.getRoot(),
+                                "Internet Connection Available");
+                    }
+
+                    lastNetworkState = true;
+                    setConfirmEmailEnabled(true);
+                });
+            }
+
+            @Override
+            public void onDisconnected() {
+                runOnUiThread(() -> {
+
+                    // show error ONLY if previously connected
+                    if (lastNetworkState == null || lastNetworkState) {
+                        SnackBarHelper.showError(binding.getRoot(),
+                                "No Internet Connection");
+                    }
+
+                    lastNetworkState = false;
+                    setConfirmEmailEnabled(false);
+                });
+            }
+        });
+    }
+
+    private void setConfirmEmailEnabled(boolean enabled) {
+        binding.btnConfirmEmail.setEnabled(enabled);
+        binding.btnConfirmEmail.setAlpha(enabled ? 1f : 0.5f);
+    }
     private void setupListeners() {
         binding.btnConfirmEmail.setOnClickListener(v -> validateInputs());
         binding.backButton.setOnClickListener(v -> onBackPressed());
     }
 
     private void validateInputs() {
-        String email = binding.etEmailForget.getText().toString().trim();
+        String email = String.valueOf(binding.etEmailForget.getText()).trim();
 
-        boolean isValid = true;
-        if (email.isEmpty()) {
-            binding.etEmailForget.setError("Email is required");
-            isValid = false;
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.etEmailForget.setError("Enter valid email");
-            isValid = false;
-        } else {
-            binding.etEmailForget.setError(null);
-        }
+        boolean isValid = isEmailValid(email);
 
 
         if (isValid) {
@@ -65,9 +115,22 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isEmailValid(String email) {
+        if (email.isEmpty()) {
+            binding.etEmailForget.setError(getString(R.string.email_is_required));
+            return false;
+        }else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.etEmailForget.setError(getString(R.string.enter_valid_email));
+            return false;
+        }else {
+            binding.etEmailForget.setError(null);
+            return true;
+        }
+    }
+
     private void verifyEmail(String email) {
-        Toast.makeText(this, "Email Sent", Toast.LENGTH_SHORT).show();
-        startActivities(new android.content.Intent[]{new android.content.Intent(this, VerificationActivity.class)});
+        SnackBarHelper.showSuccess(binding.getRoot(), getString(R.string.email_sent) + email);
+        binding.getRoot().postDelayed(() -> startActivity(new Intent(this, VerificationActivity.class)), 1500);
     }
 
 
