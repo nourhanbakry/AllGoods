@@ -8,6 +8,8 @@ public class ProductModel {
     private double price;
     private boolean isFav = false;
 
+    private int quantity = 1;
+
     public ProductModel() {}
 
     public ProductModel(int id, String name, String image, double price) {
@@ -63,5 +65,13 @@ public class ProductModel {
 
     public void setFav(boolean fav) {
         isFav = fav;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
