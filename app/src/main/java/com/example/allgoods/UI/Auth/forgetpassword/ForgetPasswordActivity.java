@@ -1,5 +1,6 @@
 package com.example.allgoods.UI.Auth.forgetpassword;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,54 +15,101 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.allgoods.R;
+import com.example.allgoods.databinding.ActivityForgetPasswordBinding;
+import com.example.allgoods.utils.Network.NetworkListener;
+import com.example.allgoods.utils.Network.NetworkManager;
+import com.example.allgoods.utils.SnackBarHelper;
 import com.google.android.material.button.MaterialButton;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
+    ActivityForgetPasswordBinding binding;
 
-    private EditText etEmail;
-    private MaterialButton btnConfirmPassword;
-    private ImageView ivBack;
+    private NetworkManager networkManager;
 
+    private Boolean lastNetworkState = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_forget_password);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        binding = ActivityForgetPasswordBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        initViews();
+
+        connection();
          setupListeners();
          setupTextWatchers();
+
     }
 
-    private void initViews() {
-        etEmail = findViewById(R.id.etEmailForget);
-        btnConfirmPassword = findViewById(R.id.btnConfirmEmail);
-        ivBack = findViewById(R.id.backButton);
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        setConfirmEmailEnabled(networkManager.isConnected(this));
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        networkManager.unregister(this);
+    }
+
+    private void connection() {
+
+        networkManager = new NetworkManager();
+
+        networkManager.register(this, new NetworkListener() {
+
+            @Override
+            public void onConnected() {
+                runOnUiThread(() -> {
+
+                    // show success ONLY if previously disconnected
+                    if (lastNetworkState != null && !lastNetworkState) {
+                        SnackBarHelper.showSuccess(binding.getRoot(),
+                                "Internet Connection Available");
+                    }
+
+                    lastNetworkState = true;
+                    setConfirmEmailEnabled(true);
+                });
+            }
+
+            @Override
+            public void onDisconnected() {
+                runOnUiThread(() -> {
+
+                    // show error ONLY if previously connected
+                    if (lastNetworkState == null || lastNetworkState) {
+                        SnackBarHelper.showError(binding.getRoot(),
+                                "No Internet Connection");
+                    }
+
+                    lastNetworkState = false;
+                    setConfirmEmailEnabled(false);
+                });
+            }
+        });
+    }
+
+    private void setConfirmEmailEnabled(boolean enabled) {
+        binding.btnConfirmEmail.setEnabled(enabled);
+        binding.btnConfirmEmail.setAlpha(enabled ? 1f : 0.5f);
+    }
     private void setupListeners() {
-        btnConfirmPassword.setOnClickListener(v -> validateInputs());
-        ivBack.setOnClickListener(v -> onBackPressed());
+        binding.btnConfirmEmail.setOnClickListener(v -> validateInputs());
+        binding.backButton.setOnClickListener(v -> onBackPressed());
     }
 
     private void validateInputs() {
-        String email = etEmail.getText().toString().trim();
+        String email = String.valueOf(binding.etEmailForget.getText()).trim();
 
-        boolean isValid = true;
-        if (email.isEmpty()) {
-            etEmail.setError("Email is required");
-            isValid = false;
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etEmail.setError("Enter valid email");
-            isValid = false;
-        } else {
-            etEmail.setError(null);
-        }
+        boolean isValid = isEmailValid(email);
 
 
         if (isValid) {
@@ -69,9 +117,22 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isEmailValid(String email) {
+        if (email.isEmpty()) {
+            binding.etEmailForget.setError(getString(R.string.email_is_required));
+            return false;
+        }else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.etEmailForget.setError(getString(R.string.enter_valid_email));
+            return false;
+        }else {
+            binding.etEmailForget.setError(null);
+            return true;
+        }
+    }
+
     private void verifyEmail(String email) {
-        Toast.makeText(this, "Email Sent", Toast.LENGTH_SHORT).show();
-        startActivities(new android.content.Intent[]{new android.content.Intent(this, VerificationActivity.class)});
+        SnackBarHelper.showSuccess(binding.getRoot(), getString(R.string.email_sent) + email);
+        binding.getRoot().postDelayed(() -> startActivity(new Intent(this, VerificationActivity.class)), 1500);
     }
 
 
@@ -80,7 +141,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         TextWatcher watcher = new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                etEmail.setError(null);
+                binding.etEmailForget.setError(null);
             }
 
             @Override
@@ -92,7 +153,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
             }
         };
 
-        etEmail.addTextChangedListener(watcher);
+        binding.etEmailForget.addTextChangedListener(watcher);
     }
 
 

@@ -1,8 +1,7 @@
 package com.example.allgoods.UI.Auth.login;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -11,88 +10,138 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.allgoods.R;
 import com.example.allgoods.UI.Auth.forgetpassword.ForgetPasswordActivity;
 import com.example.allgoods.UI.Auth.signup.SignUpActivity;
 import com.example.allgoods.UI.Main.MainActivity;
-import com.google.android.material.button.MaterialButton;
+import com.example.allgoods.databinding.ActivityLoginBinding;
+import com.example.allgoods.utils.Network.NetworkListener;
+import com.example.allgoods.utils.Network.NetworkManager;
+import com.example.allgoods.utils.SnackBarHelper;
 
 public class LoginActivity extends AppCompatActivity {
+    ActivityLoginBinding binding;
 
-    private EditText etEmail, etPassword;
-    private MaterialButton btnLogin;
-    private TextView tvForgotPassword, tvSignUp;
+    private NetworkManager networkManager;
+
+    private boolean lastNetworkState = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_login);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        initViews();
+        connection();
         setupListeners();
     }
 
-    private void initViews() {
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnLogin);
-        tvForgotPassword = findViewById(R.id.forgetPassword);
-        tvSignUp = findViewById(R.id.signUpText);
+    private void connection(){
+        networkManager = new NetworkManager();
+
+        if (!networkManager.isConnected(this)) {
+            setLoginEnabled(false);
+            SnackBarHelper.showError(binding.getRoot(), "No Internet Connection");
+        } else {
+            setLoginEnabled(true);
+            SnackBarHelper.showSuccess(binding.getRoot(), "Internet Connection Available");
+
+        }
+
+        networkManager.register(this, new NetworkListener() {
+            @Override
+            public void onConnected() {
+                runOnUiThread(() -> {
+                    if (!lastNetworkState) SnackBarHelper.showSuccess(binding.getRoot(), "Internet Connection Available");
+
+                    lastNetworkState = true;
+                    setLoginEnabled(true);
+                });
+            }
+
+            @Override
+            public void onDisconnected() {
+                runOnUiThread(() -> {
+                    if (lastNetworkState) SnackBarHelper.showError(binding.getRoot(), "No Internet Connection");
+
+                    lastNetworkState = false;
+                    setLoginEnabled(false);
+                });
+            }
+        });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setLoginEnabled(networkManager.isConnected(this));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        networkManager.unregister(this);
+    }
+
+    private void setLoginEnabled(boolean enabled) {
+        binding.btnLogin.setEnabled(enabled);
+        binding.btnLogin.setAlpha(enabled ? 1f : 0.5f);
+    }
     private void setupListeners() {
-        btnLogin.setOnClickListener(v -> validateInputs());
-        tvForgotPassword.setOnClickListener(
+        binding.btnLogin.setOnClickListener(v -> validateInputs());
+        binding.forgetPassword.setOnClickListener(
                 v -> startActivities(new android.content.Intent[]{new android.content.Intent(this, ForgetPasswordActivity.class)})
         );
 
-        tvSignUp.setOnClickListener(
-                v -> startActivities(new android.content.Intent[]{new android.content.Intent(this, SignUpActivity.class)})
+        binding.signUpText.setOnClickListener(
+                v -> startActivity(new android.content.Intent(this, SignUpActivity.class))
         );
-
-
     }
 
     private void validateInputs() {
 
-        String email = etEmail.getText().toString().trim();
-        String password = etPassword.getText().toString().trim();
+        String email = String.valueOf(binding.etEmail.getText()).trim();
+        String password = String.valueOf(binding.etPassword.getText()).trim();
 
-        boolean isValid = true;
+        boolean isValid = isEmailValid(email) & isPasswordValid(password);
 
-        // Email empty
-        if (email.isEmpty()) {
-            etEmail.setError("Email is required");
-            isValid = false;
-        }
-        // Email format
-        else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etEmail.setError("Enter valid email");
-            isValid = false;
-        } else {
-            etEmail.setError(null);
+
+        if (isValid) {
+            loginUser(email, password);
         }
 
-        // Password empty
+    }
+
+    private boolean isPasswordValid(String password) {
         if (password.isEmpty()) {
-            etPassword.setError("Password is required");
-            isValid = false;
+            binding.etPassword.setError("Password is required");
+            return false;
         }
-        // Password length
         else if (password.length() < 6) {
-            etPassword.setError("Password must be at least 6 characters");
-            isValid = false;
+            binding.etPassword.setError("Password Not Valid");
+            return false;
         } else {
-            etPassword.setError(null);
+           binding.etPassword.setError(null);
+           return true;
         }
+    }
 
-        if (isValid) loginUser(email, password);
-
+    private boolean isEmailValid(String email) {
+        if (email.isEmpty()) {
+            binding.etEmail.setError("Email is required");
+            return false;
+        }else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.etEmail.setError("Enter valid email");
+            return false;
+        }else {
+            binding.etEmail.setError(null);
+            return true;
+        }
     }
 
     private void loginUser(String email, String password) {

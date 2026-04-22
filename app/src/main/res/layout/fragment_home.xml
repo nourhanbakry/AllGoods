@@ -1,12 +1,221 @@
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fillViewport="true"
+    android:background="@color/white">
 
-    <TextView
-        android:layout_gravity="center"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="20dp">
+
+        <!-- drawer icon -->
+        <ImageView
+            android:id="@+id/homeMenuIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginVertical="50dp"
+            android:layout_marginTop="52dp"
+            android:background="@drawable/circle_bg"
+            android:padding="13dp"
+            android:src="@drawable/menu_open"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- hello -->
+
+        <TextView
+        android:id="@+id/helloText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Home fragment"/>
+        android:text="@string/hello"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginTop="110dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-</FrameLayout>
+    <!-- subtitle -->
+    <TextView
+        android:id="@+id/welcomeSubText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_to_allgoods"
+        android:textColor="@color/gray9E"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/helloText"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <EditText
+        android:id="@+id/etSearch"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:maxLines="1"
+        android:drawableStart="@drawable/search_icon"
+        android:drawablePadding="10dp"
+        android:background="@drawable/bg_gray_fa"
+        android:gravity="center_vertical"
+        android:hint="@string/search"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray9E"
+        app:layout_constraintTop_toBottomOf="@id/welcomeSubText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- section title -->
+    <TextView
+        android:id="@+id/chooseItemText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_item"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black20"
+        android:layout_marginStart="10dp"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etSearch" />
+
+        <!-- categories -->
+    <LinearLayout
+        android:id="@+id/categories"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginVertical="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chooseItemText">
+
+        <LinearLayout
+            android:id="@+id/pants_category"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_gray_fa"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_white_squre"
+                android:padding="5dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/pants"
+                    android:scaleType="centerInside"/>
+            </FrameLayout>
+
+            <TextView
+                android:textColor="@color/black20"
+                android:textSize="17sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/pants"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginStart="12dp"
+
+            android:id="@+id/tshirt_category"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_gray_fa"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_white_squre"
+                android:padding="5dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/tshirt"
+                    android:scaleType="centerInside"/>
+            </FrameLayout>
+
+            <TextView
+                android:textColor="@color/black20"
+                android:textSize="17sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/t_shirt"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginStart="12dp"
+            android:id="@+id/hoodie_category"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_gray_fa"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_white_squre"
+                android:padding="5dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/hoodie"
+                    android:scaleType="centerInside"/>
+            </FrameLayout>
+
+            <TextView
+                android:textColor="@color/black20"
+                android:textSize="17sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/hoodie"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/clothes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/clothes"
+        android:textSize="18sp"
+        android:textColor="@color/black20"
+        android:layout_marginVertical="20dp"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categories" />
+        <!-- recycler -->
+    <androidx.recyclerview.widget.RecyclerView
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
+        android:paddingBottom="80dp"
+        android:id="@+id/productsRv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clothes"
+        tools:listitem="@layout/home_product_rv_item"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

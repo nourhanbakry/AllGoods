@@ -2,65 +2,84 @@ package com.example.allgoods.UI.Customer.Cart;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.allgoods.R;
+import com.example.allgoods.UI.Customer.Cart.Adapter.CartAdapter;
+import com.example.allgoods.UI.Customer.Cart.Address.AddressFragment;
+import com.example.allgoods.UI.Customer.Home.Adapter.ProductAdapter;
+import com.example.allgoods.UI.Customer.MyCards.MyCardsFragment;
+import com.example.allgoods.UI.Customer.Reviews.View.ReviewsFragment;
+import com.example.allgoods.databinding.FragmentCartBinding;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CartFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
 public class CartFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    FragmentCartBinding binding;
+    CartViewModel viewModel;
+    CartAdapter adapter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public CartFragment() {}
 
-    public CartFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CartFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CartFragment newInstance(String param1, String param2) {
-        CartFragment fragment = new CartFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentCartBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+       setupViewModel();
+    }
+    private void setupViewModel(){
+        viewModel = new ViewModelProvider(this).get(CartViewModel.class);
+
+        viewModel.getCartItems().observe(getViewLifecycleOwner(), cartItems -> {
+
+            if (adapter == null) {
+                adapter = new CartAdapter(requireContext(), cartItems);
+                binding.checkoutItemsRv.setAdapter(adapter);
+            } else {
+                adapter.notifyDataSetChanged();
+            }
+
+            updatePrices();
+        });
+
+        viewModel.loadDummyCartProducts();
+
+        binding.OpenAddress.setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayout, new AddressFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        binding.OpenPayment.setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayout, new MyCardsFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        binding.btnCheckout.setOnClickListener(v -> {
+            //navigate to checkout fragment
+        });
+
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cart, container, false);
+    private void updatePrices() {
+        binding.subTotalPrice.setText(String.valueOf(viewModel.calculateSubtotal()));
+        binding.totalPrice.setText(String.valueOf(viewModel.calculateTotal()));
     }
 }

@@ -19,88 +19,134 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.allgoods.R;
+import com.example.allgoods.databinding.ActivityVerificationBinding;
+import com.example.allgoods.utils.Network.NetworkListener;
+import com.example.allgoods.utils.Network.NetworkManager;
+import com.example.allgoods.utils.SnackBarHelper;
 import com.example.allgoods.utils.ValidationUtils;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.Locale;
 
 public class VerificationActivity extends AppCompatActivity {
-
-    private EditText etDigit1, etDigit2, etDigit3, etDigit4;
-    private TextView tvTimer, tvResend;
-    private MaterialButton btnConfirmEmail;
-    private ImageView backButton;
+    ActivityVerificationBinding binding;
     private CountDownTimer countDownTimer;
     private boolean isTimerRunning = false;
+
+    private NetworkManager networkManager;
+
+    private Boolean lastNetworkState = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_verification);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        binding = ActivityVerificationBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        initViews();
+        connection();
         setupOtpInputs();
         setupClickListeners();
         startResendTimer();
     }
 
-    private void initViews() {
-        etDigit1 = findViewById(R.id.etDigit1);
-        etDigit2 = findViewById(R.id.etDigit2);
-        etDigit3 = findViewById(R.id.etDigit3);
-        etDigit4 = findViewById(R.id.etDigit4);
-        tvTimer = findViewById(R.id.tvTimer);
-        tvResend = findViewById(R.id.tvResend);
-        btnConfirmEmail = findViewById(R.id.btnConfirmEmail);
-        backButton = findViewById(R.id.backButton);
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setConfirmEmailEnabled(networkManager.isConnected(this));
     }
 
-    private void setupOtpInputs() {
-        etDigit1.addTextChangedListener(new OtpTextWatcher(etDigit1, etDigit2));
-        etDigit2.addTextChangedListener(new OtpTextWatcher(etDigit2, etDigit3));
-        etDigit3.addTextChangedListener(new OtpTextWatcher(etDigit3, etDigit4));
-        etDigit4.addTextChangedListener(new OtpTextWatcher(etDigit4, null));
 
-        etDigit1.setOnKeyListener(new OtpKeyListener(etDigit1, null));
-        etDigit2.setOnKeyListener(new OtpKeyListener(etDigit2, etDigit1));
-        etDigit3.setOnKeyListener(new OtpKeyListener(etDigit3, etDigit2));
-        etDigit4.setOnKeyListener(new OtpKeyListener(etDigit4, etDigit3));
+    private void connection() {
+
+        networkManager = new NetworkManager();
+
+        networkManager.register(this, new NetworkListener() {
+
+            @Override
+            public void onConnected() {
+                runOnUiThread(() -> {
+
+                    // show success ONLY if previously disconnected
+                    if (lastNetworkState != null && !lastNetworkState) {
+                        SnackBarHelper.showSuccess(binding.getRoot(),
+                                "Internet Connection Available");
+                    }
+
+                    lastNetworkState = true;
+                    setConfirmEmailEnabled(true);
+                });
+            }
+
+            @Override
+            public void onDisconnected() {
+                runOnUiThread(() -> {
+
+                    // show error ONLY if previously connected
+                    if (lastNetworkState == null || lastNetworkState) {
+                        SnackBarHelper.showError(binding.getRoot(),
+                                "No Internet Connection");
+                    }
+
+                    lastNetworkState = false;
+                    setConfirmEmailEnabled(false);
+                });
+            }
+        });
+    }
+
+
+    private void setConfirmEmailEnabled(boolean enabled) {
+        binding.btnConfirmEmail.setEnabled(enabled);
+        binding.btnConfirmEmail.setAlpha(enabled ? 1f : 0.5f);
+    }
+    private void setupOtpInputs() {
+        binding.etDigit1.addTextChangedListener(new OtpTextWatcher(binding.etDigit1, binding.etDigit2));
+        binding.etDigit2.addTextChangedListener(new OtpTextWatcher(binding.etDigit2, binding.etDigit3));
+        binding.etDigit3.addTextChangedListener(new OtpTextWatcher(binding.etDigit3, binding.etDigit4));
+        binding.etDigit4.addTextChangedListener(new OtpTextWatcher(binding.etDigit4, null));
+
+        binding.etDigit1.setOnKeyListener(new OtpKeyListener(binding.etDigit1, null));
+        binding.etDigit2.setOnKeyListener(new OtpKeyListener(binding.etDigit2, binding.etDigit1));
+        binding.etDigit3.setOnKeyListener(new OtpKeyListener(binding.etDigit3, binding.etDigit2));
+        binding.etDigit4.setOnKeyListener(new OtpKeyListener(binding.etDigit4, binding.etDigit3));
     }
 
     private void setupClickListeners() {
-        backButton.setOnClickListener(v -> finish());
+        binding.backButton.setOnClickListener(v -> finish());
 
-        btnConfirmEmail.setOnClickListener(v -> {
+        binding.btnConfirmEmail.setOnClickListener(v -> {
             String otp = getOtpCode();
             if (ValidationUtils.isValidOtp(otp)) {
                 // TODO: Handle OTP verification logic
-                Toast.makeText(this, getString(R.string.otp_confirmed, otp), Toast.LENGTH_SHORT).show();
+                SnackBarHelper.showSuccess(binding.getRoot(), getString(R.string.otp_confirmed, otp));
                 startActivities(new Intent[]{new Intent(this, NewPasswordActivity.class)});
+                finish();
             } else {
-                Toast.makeText(this, R.string.please_enter_all_digits, Toast.LENGTH_SHORT).show();
+                SnackBarHelper.showError(binding.getRoot(), getString(R.string.please_enter_all_digits));
             }
         });
 
-        tvResend.setOnClickListener(v -> {
+        binding.tvResend.setOnClickListener(v -> {
             if (!isTimerRunning) {
                 // TODO: Resend OTP logic
-                Toast.makeText(this, R.string.otp_resent, Toast.LENGTH_SHORT).show();
+                SnackBarHelper.showSuccess(binding.getRoot(), getString(R.string.otp_resent));
                 startResendTimer();
             }
         });
     }
 
     private String getOtpCode() {
-        return etDigit1.getText().toString() +
-                etDigit2.getText().toString() +
-                etDigit3.getText().toString() +
-                etDigit4.getText().toString();
+        return binding.etDigit1.getText().toString() +
+                binding.etDigit2.getText().toString() +
+                binding.etDigit3.getText().toString() +
+                binding.etDigit4.getText().toString();
     }
 
     private void startResendTimer() {
@@ -109,22 +155,22 @@ public class VerificationActivity extends AppCompatActivity {
         }
 
         isTimerRunning = true;
-        tvResend.setEnabled(false);
-        tvResend.setTextColor(getResources().getColor(android.R.color.darker_gray, getTheme()));
+        binding.tvResend.setEnabled(false);
+        binding.tvResend.setTextColor(getResources().getColor(android.R.color.darker_gray, getTheme()));
 
         countDownTimer = new CountDownTimer(20000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 int seconds = (int) (millisUntilFinished / 1000);
-                tvTimer.setText(String.format(Locale.getDefault(), "00:%02d", seconds));
+                binding.tvTimer.setText(String.format(Locale.getDefault(), "00:%02d", seconds));
             }
 
             @Override
             public void onFinish() {
                 isTimerRunning = false;
-                tvResend.setEnabled(true);
-                tvResend.setTextColor(getResources().getColor(android.R.color.black, getTheme()));
-                tvTimer.setText("00:00");
+                binding.tvResend.setEnabled(true);
+                binding.tvResend.setTextColor(getResources().getColor(android.R.color.black, getTheme()));
+                binding.tvTimer.setText("00:00");
             }
         }.start();
     }
@@ -135,6 +181,7 @@ public class VerificationActivity extends AppCompatActivity {
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
+        networkManager.unregister(this);
     }
 
     private class OtpTextWatcher implements TextWatcher {

@@ -15,11 +15,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.allgoods.R;
-import com.example.allgoods.UI.Customer.AccountInfo.AccountInfoFragment;
 import com.example.allgoods.UI.Customer.Cart.CartFragment;
 import com.example.allgoods.UI.Customer.Home.HomeFragment;
-import com.example.allgoods.UI.Customer.MyCards.MyCardsFragment;
-import com.example.allgoods.UI.Customer.Passwords.PassworsFragment;
 import com.example.allgoods.UI.Customer.Wishlist.WishlistFragment;
 import com.example.allgoods.UI.Seller.AddProduct.AddProductFragment;
 import com.example.allgoods.UI.Seller.Inventory.InventoryFragment;
@@ -27,12 +24,15 @@ import com.example.allgoods.UI.Seller.Orders.OrderskFragment;
 import com.example.allgoods.UI.Seller.Reviews.ReviewsFragment;
 import com.example.allgoods.UI.Seller.Stats.StatsFragment;
 import com.example.allgoods.databinding.ActivityMainBinding;
+import com.example.allgoods.utils.Network.NetworkListener;
+import com.example.allgoods.utils.Network.NetworkManager;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private ImageView drawerIcon;
     private String userRole = "customer";
+    private NetworkManager networkManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-
         setupDrawer();
         setupHeader();
         setupBottomNav();
@@ -65,21 +64,58 @@ public class MainActivity extends AppCompatActivity {
             binding.bottomBarSeller.setVisibility(View.GONE);
             selectTab(0);
         }
+        selectTab(0);
+        connection();
+
+
     }
 
+    private void connection(){
+        networkManager = new NetworkManager();
+
+        networkManager.register(this, new NetworkListener() {
+            @Override
+            public void onConnected() {
+                runOnUiThread(() -> {
+                    binding.noInternetAnimation.setVisibility(View.GONE);
+                    binding.internetText.setVisibility(View.GONE);
+                });
+            }
+
+            @Override
+            public void onDisconnected() {
+                runOnUiThread(() -> {
+                    binding.noInternetAnimation.setVisibility(View.VISIBLE);
+                    binding.noInternetAnimation.playAnimation();
+                    binding.internetText.setVisibility(View.VISIBLE);
+                });
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        networkManager.unregister(this);
+    }
+
+    public DrawerLayout getDrawerLayout() {
+        return binding.drawerMainLayout;
+    }
 
     private void setupDrawer() {
 
-        binding.homeMenuIcon.setOnClickListener(v ->
-                binding.drawerMainLayout.openDrawer(GravityCompat.START)
-        );
+        binding.drawerMainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
-        binding.drawerMainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         binding.drawerMainLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                binding.homeMenuIcon.setImageResource(R.drawable.menu_close);
                 if (drawerIcon != null) {
                     drawerIcon.setImageResource(R.drawable.menu_close);
                 }
@@ -87,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-                binding.homeMenuIcon.setImageResource(R.drawable.menu_open);
                 if (drawerIcon != null) {
                     drawerIcon.setImageResource(R.drawable.menu_open);
                 }
@@ -184,19 +219,16 @@ public class MainActivity extends AppCompatActivity {
         if (tab == 0) {
             binding.homeIcon.setVisibility(View.GONE);
             binding.homeText.setVisibility(View.VISIBLE);
-            binding.homeMenuIcon.setVisibility(View.VISIBLE);
             replaceFragment(new HomeFragment());
 
         } else if (tab == 1) {
             binding.wishlistIcon.setVisibility(View.GONE);
             binding.wishlistText.setVisibility(View.VISIBLE);
-            binding.homeMenuIcon.setVisibility(View.GONE);
             replaceFragment(new WishlistFragment());
 
         } else {
             binding.cartIcon.setVisibility(View.GONE);
             binding.cartText.setVisibility(View.VISIBLE);
-            binding.homeMenuIcon.setVisibility(View.GONE);
             replaceFragment(new CartFragment());
         }
     }
@@ -206,5 +238,13 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(binding.frameLayout.getId(), fragment)
                 .commit();
+    }
+
+    public void hideBottomBar() {
+        findViewById(R.id.bottomBar).setVisibility(View.GONE);
+    }
+
+    public void showBottomBar() {
+        findViewById(R.id.bottomBar).setVisibility(View.VISIBLE);
     }
 }
