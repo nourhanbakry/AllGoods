@@ -48,7 +48,9 @@ public class ForgetPasswordActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+
         super.onResume();
+        setConfirmEmailEnabled(networkManager.isConnected(this));
     }
 
     @Override

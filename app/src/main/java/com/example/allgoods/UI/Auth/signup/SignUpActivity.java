@@ -16,11 +16,17 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.allgoods.R;
 import com.example.allgoods.databinding.ActivitySignUpBinding;
+import com.example.allgoods.utils.Network.NetworkListener;
+import com.example.allgoods.utils.Network.NetworkManager;
+import com.example.allgoods.utils.SnackBarHelper;
 import com.google.android.material.button.MaterialButton;
 
 public class SignUpActivity extends AppCompatActivity {
     ActivitySignUpBinding binding;
 
+    private NetworkManager networkManager;
+
+    private boolean lastNetworkState = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +40,62 @@ public class SignUpActivity extends AppCompatActivity {
             return insets;
         });
 
+        connection();
         setupListeners();
         setupTextWatchers();
     }
 
+    private void connection(){
+        networkManager = new NetworkManager();
+
+        if (!networkManager.isConnected(this)) {
+            setSignUpEnabled(false);
+            SnackBarHelper.showError(binding.getRoot(), "No Internet Connection");
+        } else {
+            setSignUpEnabled(true);
+            SnackBarHelper.showSuccess(binding.getRoot(), "Internet Connection Available");
+
+        }
+
+        networkManager.register(this, new NetworkListener() {
+            @Override
+            public void onConnected() {
+                runOnUiThread(() -> {
+                    if (!lastNetworkState) SnackBarHelper.showSuccess(binding.getRoot(), "Internet Connection Available");
+
+                    lastNetworkState = true;
+                    setSignUpEnabled(true);
+                });
+            }
+
+            @Override
+            public void onDisconnected() {
+                runOnUiThread(() -> {
+                    if (lastNetworkState) SnackBarHelper.showError(binding.getRoot(), "No Internet Connection");
+
+                    lastNetworkState = false;
+                    setSignUpEnabled(false);
+                });
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        networkManager.unregister(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setSignUpEnabled(networkManager.isConnected(this));
+    }
+
+    private void setSignUpEnabled(boolean enabled) {
+        binding.btnSignUp.setEnabled(enabled);
+        binding.btnSignUp.setAlpha(enabled ? 1f : 0.5f);
+    }
     private void setupListeners() {
         binding.btnSignUp.setOnClickListener(v -> validateInputs());
         binding.backButton.setOnClickListener(v -> onBackPressed());
@@ -46,25 +104,28 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void validateInputs() {
 
-        String name = binding.etName.getText().toString().trim();
-        String email = binding.etEmail.getText().toString().trim();
-        String password = binding.etPassword.getText().toString().trim();
-        String confirmPassword = binding.etConfirmPassword.getText().toString().trim();
+        String name = String.valueOf(binding.etName.getText()).trim();
+        String email = String.valueOf(binding.etEmail.getText()).trim();
+        String password = String.valueOf(binding.etPassword.getText()).trim();
+        String confirmPassword = String.valueOf(binding.etConfirmPassword.getText()).trim();
 
         boolean isValid = true;
 
         // Name
-        if (name.isEmpty()) {
-            binding.etName.setError("Name is required");
-            isValid = false;
-        } else if (name.length() < 3) {
-            binding.etName.setError("Name must be at least 3 characters");
-            isValid = false;
-        } else {
-            binding.etName.setError(null);
-        }
+        isValid = isNameValid(name, isValid);
 
         // Email
+        isValid = isEmailValid(email, isValid);
+
+        // Password
+        isValid = isPasswordAdndConfirmPasswordValid(password, isValid, confirmPassword);
+
+        if (isValid) {
+            registerUser(name, email, password);
+        }
+    }
+
+    private boolean isEmailValid(String email, boolean isValid) {
         if (email.isEmpty()) {
             binding.etEmail.setError("Email is required");
             isValid = false;
@@ -74,8 +135,23 @@ public class SignUpActivity extends AppCompatActivity {
         } else {
             binding.etEmail.setError(null);
         }
+        return isValid;
+    }
 
-        // Password
+    private boolean isNameValid(String name, boolean isValid) {
+        if (name.isEmpty()) {
+            binding.etName.setError("Name is required");
+            isValid = false;
+        } else if (name.length() < 3) {
+            binding.etName.setError("Name must be at least 3 characters");
+            isValid = false;
+        } else {
+            binding.etName.setError(null);
+        }
+        return isValid;
+    }
+
+    private boolean isPasswordAdndConfirmPasswordValid(String password, boolean isValid, String confirmPassword) {
         if (password.isEmpty()) {
             binding.etPassword.setError("Password is required");
             isValid = false;
@@ -104,12 +180,8 @@ public class SignUpActivity extends AppCompatActivity {
         else {
             binding.etConfirmPassword.setError(null);
         }
-
-        if (isValid) {
-            registerUser(name, email, password);
-        }
+        return isValid;
     }
-
     private boolean isStrongPassword(String password) {
         return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{6,}$");
     }
