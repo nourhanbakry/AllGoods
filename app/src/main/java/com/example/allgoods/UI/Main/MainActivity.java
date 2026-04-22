@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.example.allgoods.R;
 import com.example.allgoods.UI.Customer.Cart.CartFragment;
 import com.example.allgoods.UI.Customer.Home.HomeFragment;
+import com.example.allgoods.UI.Customer.MyCards.MyCardsFragment;
 import com.example.allgoods.UI.Customer.Wishlist.WishlistFragment;
 import com.example.allgoods.UI.Seller.AddProduct.AddProductFragment;
 import com.example.allgoods.UI.Seller.Inventory.InventoryFragment;
@@ -54,7 +55,11 @@ public class MainActivity extends AppCompatActivity {
         setupDrawer();
         setupHeader();
         setupBottomNav();
+        selectCustomerOrSellerBottomNavBar();
+        connection();
+    }
 
+    private void  selectCustomerOrSellerBottomNavBar(){
         if ("seller".equals(userRole)) {
             binding.bottomBar.setVisibility(View.GONE);
             binding.bottomBarSeller.setVisibility(View.VISIBLE);
@@ -64,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
             binding.bottomBarSeller.setVisibility(View.GONE);
             selectTab(0);
         }
-        connection();
     }
 
     private void connection(){
@@ -145,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.passwords) {
 //                replaceFragment(new PassworsFragment());
             } else if (id == R.id.my_cards) {
-//                replaceFragment(new MyCardsFragment());
+                navigateToMyCards();
             } else if (id == R.id.wishlist) {
                 selectTab(1);
             }
@@ -153,7 +157,15 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
     }
+    private void navigateToMyCards(){
+        MyCardsFragment fragment = new MyCardsFragment();
 
+        Bundle bundle = new Bundle();
+        bundle.putString("source", "main");
+        fragment.setArguments(bundle);
+
+        replaceFragment(fragment);
+    }
     private void setupBottomNav() {
         if ("seller".equals(userRole)) {
             binding.statsTab.setOnClickListener(v -> selectTabSeller(0));

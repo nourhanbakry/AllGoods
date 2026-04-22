@@ -70,6 +70,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         return list.size();
     }
 
+    public void updateData(List<ProductModel> newList) {
+        this.list = newList;
+        notifyDataSetChanged();
+    }
+
 
     class CartViewHolder extends RecyclerView.ViewHolder {
         ItemInCartBinding binding;
