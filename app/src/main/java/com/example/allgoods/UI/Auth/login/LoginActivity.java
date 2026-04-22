@@ -145,8 +145,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String email, String password) {
-        Toast.makeText(this, "Login Successful ", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this, MainActivity.class));
+        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+        android.content.Intent intent = new android.content.Intent(this, MainActivity.class);
+        if (email.equals("admin@gmail.com") && password.equals("Galal1234")) {
+            intent.putExtra("USER_ROLE", "seller");
+        } else {
+            intent.putExtra("USER_ROLE", "customer");
+        }
+        startActivity(intent);
         finish();
     }
 }

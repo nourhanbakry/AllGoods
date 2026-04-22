@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
+    android:backgroundTint="@color/white"
     tools:openDrawer="start"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,10 +31,11 @@
             android:layout_height="70dp"
             android:orientation="horizontal"
             android:background="@android:color/white"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-
+            <!-- existing customer tabs -->
             <LinearLayout
                 android:id="@+id/homeTab"
                 android:layout_width="0dp"
@@ -102,6 +104,121 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/bottomBarSeller"
+            android:layout_width="0dp"
+            android:layout_height="90dp"
+            android:orientation="horizontal"
+            android:background="@android:color/white"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:id="@+id/statsTab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/statsIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/stats"/>
+                <TextView
+                    android:id="@+id/statsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stats"
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/inventoryTab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/inventoryIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/inventory"/>
+                <TextView
+                    android:id="@+id/inventoryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/inventory"
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/addProductTab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/addProductIcon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/add_product"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ordersTab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/ordersIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/orders"/>
+                <TextView
+                    android:id="@+id/ordersText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/orders_seller"
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/reviewsTab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/reviewsIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/reviews"/>
+                <TextView
+                    android:id="@+id/reviewsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reviews"
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+        </LinearLayout>
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/noInternetAnimation"
             android:layout_width="match_parent"
@@ -141,6 +258,7 @@
         android:layout_gravity="start"
         app:itemRippleColor="@android:color/transparent"
         app:itemBackground="@android:color/transparent"
+        android:backgroundTint="@color/white"
         app:menu="@menu/customer_drawer_menu"
         app:headerLayout="@layout/customer_drawer_nav_header">
 
@@ -174,7 +292,7 @@
                     android:text="@string/logout"
                     android:textColor="@color/red_light"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    />
             </LinearLayout>
         </LinearLayout>
 

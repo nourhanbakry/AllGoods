@@ -18,6 +18,11 @@ import com.example.allgoods.R;
 import com.example.allgoods.UI.Customer.Cart.CartFragment;
 import com.example.allgoods.UI.Customer.Home.HomeFragment;
 import com.example.allgoods.UI.Customer.Wishlist.WishlistFragment;
+import com.example.allgoods.UI.Seller.AddProduct.AddProductFragment;
+import com.example.allgoods.UI.Seller.Inventory.InventoryFragment;
+import com.example.allgoods.UI.Seller.Orders.OrderskFragment;
+import com.example.allgoods.UI.Seller.Reviews.ReviewsFragment;
+import com.example.allgoods.UI.Seller.Stats.StatsFragment;
 import com.example.allgoods.databinding.ActivityMainBinding;
 import com.example.allgoods.utils.Network.NetworkListener;
 import com.example.allgoods.utils.Network.NetworkManager;
@@ -26,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private ImageView drawerIcon;
+    private String userRole = "customer";
     private NetworkManager networkManager;
 
     @Override
@@ -34,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        if (getIntent() != null && getIntent().hasExtra("USER_ROLE")) {
+            userRole = getIntent().getStringExtra("USER_ROLE");
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.drawerMainLayout, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -44,6 +54,16 @@ public class MainActivity extends AppCompatActivity {
         setupDrawer();
         setupHeader();
         setupBottomNav();
+
+        if ("seller".equals(userRole)) {
+            binding.bottomBar.setVisibility(View.GONE);
+            binding.bottomBarSeller.setVisibility(View.VISIBLE);
+            selectTabSeller(0);
+        } else {
+            binding.bottomBar.setVisibility(View.VISIBLE);
+            binding.bottomBarSeller.setVisibility(View.GONE);
+            selectTab(0);
+        }
         selectTab(0);
         connection();
 
@@ -132,19 +152,58 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.wishlist) {
                 selectTab(1);
             }
-
-
-
             binding.drawerMainLayout.closeDrawer(GravityCompat.START);
             return true;
         });
     }
 
     private void setupBottomNav() {
+        if ("seller".equals(userRole)) {
+            binding.statsTab.setOnClickListener(v -> selectTabSeller(0));
+            binding.inventoryTab.setOnClickListener(v -> selectTabSeller(1));
+            binding.addProductTab.setOnClickListener(v -> selectTabSeller(2));
+            binding.ordersTab.setOnClickListener(v -> selectTabSeller(3));
+            binding.reviewsTab.setOnClickListener(v -> selectTabSeller(4));
+        } else {
+            binding.homeTab.setOnClickListener(v -> selectTab(0));
+            binding.wishlistTab.setOnClickListener(v -> selectTab(1));
+            binding.cartTab.setOnClickListener(v -> selectTab(2));
+        }
+    }
 
-        binding.homeTab.setOnClickListener(v -> selectTab(0));
-        binding.wishlistTab.setOnClickListener(v -> selectTab(1));
-        binding.cartTab.setOnClickListener(v -> selectTab(2));
+    private void selectTabSeller(int tab) {
+        binding.statsText.setVisibility(View.GONE);
+        binding.inventoryText.setVisibility(View.GONE);
+        binding.ordersText.setVisibility(View.GONE);
+        binding.reviewsText.setVisibility(View.GONE);
+        binding.homeMenuIcon.setVisibility(View.GONE);
+
+        binding.statsIcon.setVisibility(View.VISIBLE);
+        binding.inventoryIcon.setVisibility(View.VISIBLE);
+        binding.addProductIcon.setVisibility(View.VISIBLE);
+        binding.ordersIcon.setVisibility(View.VISIBLE);
+        binding.reviewsIcon.setVisibility(View.VISIBLE);
+
+        if (tab == 0) {
+            binding.statsIcon.setVisibility(View.GONE);
+            binding.statsText.setVisibility(View.VISIBLE);
+            replaceFragment(new StatsFragment());
+        } else if (tab == 1) {
+            binding.inventoryIcon.setVisibility(View.GONE);
+            binding.inventoryText.setVisibility(View.VISIBLE);
+            replaceFragment(new InventoryFragment());
+        } else if (tab == 2) {
+            //binding.addProductIcon.setVisibility(View.GONE);
+            replaceFragment(new AddProductFragment());
+        } else if (tab == 3) {
+            binding.ordersIcon.setVisibility(View.GONE);
+            binding.ordersText.setVisibility(View.VISIBLE);
+            replaceFragment(new OrderskFragment());
+        } else if (tab == 4) {
+            binding.reviewsIcon.setVisibility(View.GONE);
+            binding.reviewsText.setVisibility(View.VISIBLE);
+            replaceFragment(new ReviewsFragment());
+        }
     }
 
     private void selectTab(int tab) {
