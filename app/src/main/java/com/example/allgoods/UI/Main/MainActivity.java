@@ -64,10 +64,7 @@ public class MainActivity extends AppCompatActivity {
             binding.bottomBarSeller.setVisibility(View.GONE);
             selectTab(0);
         }
-        selectTab(0);
         connection();
-
-
     }
 
     private void connection(){
@@ -176,7 +173,6 @@ public class MainActivity extends AppCompatActivity {
         binding.inventoryText.setVisibility(View.GONE);
         binding.ordersText.setVisibility(View.GONE);
         binding.reviewsText.setVisibility(View.GONE);
-        binding.homeMenuIcon.setVisibility(View.GONE);
 
         binding.statsIcon.setVisibility(View.VISIBLE);
         binding.inventoryIcon.setVisibility(View.VISIBLE);
