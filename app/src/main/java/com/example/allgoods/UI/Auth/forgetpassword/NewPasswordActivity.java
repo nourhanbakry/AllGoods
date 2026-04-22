@@ -149,4 +149,10 @@ public class NewPasswordActivity extends AppCompatActivity {
         super.onDestroy();
         networkManager.unregister(this);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setResetPassEnabled(networkManager.isConnected(this));
+    }
 }
