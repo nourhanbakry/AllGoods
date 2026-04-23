@@ -37,6 +37,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
         holder.name.setText(card.name);
         holder.number.setText(formatCardNumber(card.number));
         holder.expiry.setText(card.expiry);
+        holder.cvv.setText(card.cvv);
 
         holder.itemView.setOnClickListener(v -> {
             holder.itemView.animate().scaleX(1.1f).scaleY(1.1f).setDuration(200).start();
@@ -50,19 +51,26 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
 
     static class CardViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, number, expiry;
+        TextView name, number, expiry,cvv;
 
         public CardViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            name = itemView.findViewById(R.id.tvCardName);
+            name = itemView.findViewById(R.id.tvCardOwner);
             number = itemView.findViewById(R.id.tvCardNumber);
             expiry = itemView.findViewById(R.id.tvExpiry);
+            cvv = itemView.findViewById(R.id.cardCVV);
         }
     }
 
-    // فورمات الرقم
     private String formatCardNumber(String number) {
-        return "**** **** **** " + number.substring(number.length() - 4);
+        if (number == null || number.length() < 8) {
+            return number;
+        }
+
+        String first4 = number.substring(0, 4);
+        String last4 = number.substring(number.length() - 4);
+
+        return first4 + " **** **** " + last4;
     }
 }

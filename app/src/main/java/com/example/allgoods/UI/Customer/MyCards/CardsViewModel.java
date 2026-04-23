@@ -22,8 +22,8 @@ public class CardsViewModel extends ViewModel {
         List<CardModel> list = new ArrayList<>();
 
         // test data
-//        list.add(new CardModel("Nourhan Bakry", "5254763487347690", "12/28"));
-//        list.add(new CardModel("Ali Ahmed", "4111111111111111", "11/26"));
+        list.add(new CardModel("Nourhan Bakry", "5254763487347690", "12/28","129"));
+        list.add(new CardModel("Ali Ahmed", "4111111111111111", "11/26","139"));
 
         cards.setValue(list);
     }

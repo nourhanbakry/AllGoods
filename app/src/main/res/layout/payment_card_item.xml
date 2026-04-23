@@ -21,11 +21,24 @@
                 android:src="@drawable/no_data_card"
                 android:scaleType="centerCrop"/>
 
+
+            <TextView
+                android:textStyle="bold"
+                android:id="@+id/tvCardOwner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/person"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:layout_gravity="top|start"
+                android:layout_margin="16dp"/>
+
+
             <TextView
                 android:id="@+id/tvCardNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="**** **** **** 1234"
+                android:text="4547 **** **** 1234"
                 android:layout_margin="16dp"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
@@ -34,10 +47,9 @@
 
             <TextView
                 android:textStyle="bold"
-                android:id="@+id/tvCardName"
+                android:id="@+id/cardCVV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/person"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
                 android:layout_gravity="bottom|start"

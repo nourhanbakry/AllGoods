@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.CompositePageTransformer;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.example.allgoods.UI.Customer.Home.HomeFragment;
 import com.example.allgoods.UI.Customer.MyCards.Adapter.CardsAdapter;
 import com.example.allgoods.UI.Main.MainActivity;
 import com.example.allgoods.databinding.FragmentMyCardsBinding;
+import com.example.allgoods.model.CardModel;
 import com.example.allgoods.utils.Network.NetworkListener;
 import com.example.allgoods.utils.Network.NetworkManager;
 import com.example.allgoods.utils.SnackBarHelper;
@@ -28,7 +30,7 @@ public class MyCardsFragment extends Fragment {
     private CardsViewModel viewModel;
 
     private NetworkManager networkManager;
-    private boolean lastNetworkState = true;
+    private Boolean lastNetworkState = null;
 
 
     public MyCardsFragment() {}
@@ -57,7 +59,7 @@ public class MyCardsFragment extends Fragment {
 
 
         setupViewModel();
-        connection();
+//        connection();
         binding.backButtonMyCard.setOnClickListener(v -> backToSource());
 
         binding.layoutAddPayment.setOnClickListener(v -> navigateToAddNewCard());
@@ -102,6 +104,7 @@ public class MyCardsFragment extends Fragment {
     }
 
     private void setupViewModel(){
+
         viewModel = new ViewModelProvider(this).get(CardsViewModel.class);
 
         viewModel.getCards().observe(getViewLifecycleOwner(), cards -> {
@@ -111,27 +114,52 @@ public class MyCardsFragment extends Fragment {
                 binding.viewPagerCards.setVisibility(View.GONE);
                 binding.noCardsAnimation.setVisibility(View.VISIBLE);
                 binding.noCardsText.setVisibility(View.VISIBLE);
+
+                binding.btnSaveCard.setVisibility(View.GONE);
+                binding.saveCardInfoTxt.setVisibility(View.GONE);
+                binding.saveCardInfoSwitch.setVisibility(View.GONE);
+
+                disableInputs();
+
             } else {
 
                 binding.viewPagerCards.setVisibility(View.VISIBLE);
                 binding.noCardsAnimation.setVisibility(View.GONE);
                 binding.noCardsText.setVisibility(View.GONE);
 
+                binding.btnSaveCard.setVisibility(View.VISIBLE);
+                binding.saveCardInfoTxt.setVisibility(View.VISIBLE);
+                binding.saveCardInfoSwitch.setVisibility(View.VISIBLE);
+
+                enableInputs();
+
                 CardsAdapter adapter = new CardsAdapter(cards);
                 binding.viewPagerCards.setAdapter(adapter);
 
-                //slider
                 binding.viewPagerCards.setClipToPadding(false);
                 binding.viewPagerCards.setClipChildren(false);
 
                 CompositePageTransformer transformer = new CompositePageTransformer();
-
                 transformer.addTransformer((page, position) -> {
                     float r = 1 - Math.abs(position);
                     page.setScaleY(0.85f + r * 0.15f);
                 });
 
                 binding.viewPagerCards.setPageTransformer(transformer);
+
+                // اfill first card
+                bindCardData(cards.get(0));
+
+                // fill when card swipe
+                binding.viewPagerCards.registerOnPageChangeCallback(
+                        new ViewPager2.OnPageChangeCallback() {
+                            @Override
+                            public void onPageSelected(int position) {
+                                super.onPageSelected(position);
+                                bindCardData(cards.get(position));
+                            }
+                        }
+                );
             }
         });
 
@@ -143,43 +171,76 @@ public class MyCardsFragment extends Fragment {
         binding.btnSaveCard.setAlpha(enabled ? 1f : 0.5f);
     }
 
-    private void connection(){
-        networkManager = new NetworkManager();
+//    private void connection() {
+//
+//        networkManager = new NetworkManager();
+//
+//        networkManager.register(requireContext(), new NetworkListener() {
+//
+//            @Override
+//            public void onConnected() {
+//                if (getActivity() != null) {
+//                    requireActivity().runOnUiThread(() -> {
+//
+//                        if (lastNetworkState != null && !lastNetworkState) {
+//                            SnackBarHelper.showSuccess(binding.getRoot(),
+//                                    "Internet Connection Available");
+//                        }
+//
+//                        lastNetworkState = true;
+//                        setSaveCardsEnabled(true);
+//                    });
+//                }
+//            }
+//
+//            @Override
+//            public void onDisconnected() {
+//                if (getActivity() != null) {
+//                    requireActivity().runOnUiThread(() -> {
+//
+//                        if (lastNetworkState == null || lastNetworkState) {
+//                            SnackBarHelper.showError(binding.getRoot(),
+//                                    "No Internet Connection");
+//                        }
+//
+//                        lastNetworkState = false;
+//                        setSaveCardsEnabled(false);
+//                    });
+//                }
+//            }
+//        });
+//    }
+    private void disableInputs() {
 
-        if (!networkManager.isConnected(requireContext())) {
-            setSaveCardsEnabled(false);
-            SnackBarHelper.showError(binding.getRoot(), "No Internet Connection");
-        } else {
-            setSaveCardsEnabled(true);
-            SnackBarHelper.showSuccess(binding.getRoot(), "Internet Connection Available");
+        binding.etCardOwner.setEnabled(false);
+        binding.etCardNumber.setEnabled(false);
+        binding.etEXP.setEnabled(false);
+        binding.etCVV.setEnabled(false);
 
-        }
+        binding.etCardOwner.setFocusable(false);
+        binding.etCardNumber.setFocusable(false);
+        binding.etEXP.setFocusable(false);
+        binding.etCVV.setFocusable(false);
+    }
 
-        networkManager.register(requireContext(), new NetworkListener() {
-            @Override
-            public void onConnected() {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        if (!lastNetworkState) SnackBarHelper.showSuccess(binding.getRoot(), "Internet Connection Available");
+    private void enableInputs() {
 
-                        lastNetworkState = true;
-                        setSaveCardsEnabled(true);
-                    });
-                }
-            }
+        binding.etCardOwner.setEnabled(true);
+        binding.etCardNumber.setEnabled(true);
+        binding.etEXP.setEnabled(true);
+        binding.etCVV.setEnabled(true);
 
-            @Override
-            public void onDisconnected() {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        if (lastNetworkState) SnackBarHelper.showError(binding.getRoot(), "No Internet Connection");
+        binding.etCardOwner.setFocusableInTouchMode(true);
+        binding.etCardNumber.setFocusableInTouchMode(true);
+        binding.etEXP.setFocusableInTouchMode(true);
+        binding.etCVV.setFocusableInTouchMode(true);
+    }
 
-                        lastNetworkState = false;
-                        setSaveCardsEnabled(false);
-                    });
-                }
-            }
-        });
+    private void bindCardData(CardModel card){
+        binding.etCardOwner.setText(card.name);
+        binding.etCardNumber.setText(card.number);
+        binding.etEXP.setText(card.expiry);
+        binding.etCVV.setText(card.cvv);
     }
 
 }

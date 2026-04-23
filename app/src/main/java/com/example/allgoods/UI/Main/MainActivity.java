@@ -1,5 +1,6 @@
 package com.example.allgoods.UI.Main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.allgoods.R;
+import com.example.allgoods.UI.Auth.forgetpassword.ForgetPasswordActivity;
 import com.example.allgoods.UI.Customer.Cart.CartFragment;
 import com.example.allgoods.UI.Customer.Home.HomeFragment;
 import com.example.allgoods.UI.Customer.MyCards.MyCardsFragment;
@@ -147,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             if (id == R.id.account_info) {
 //                replaceFragment( new AccountInfoFragment());
             } else if (id == R.id.passwords) {
-//                replaceFragment(new PassworsFragment());
+                openForgetPassword();
             } else if (id == R.id.my_cards) {
                 navigateToMyCards();
             } else if (id == R.id.wishlist) {
@@ -246,6 +248,10 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(binding.frameLayout.getId(), fragment)
                 .commit();
+    }
+    private void openForgetPassword(){
+        Intent intent = new Intent(MainActivity.this, ForgetPasswordActivity.class);
+        startActivity(intent);
     }
 
     public void hideBottomBar() {
