@@ -1,15 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
     tools:context=".UI.Customer.AccountInfo.AccountInfoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:id="@+id/backButtonAccount"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/back_button"
+        android:contentDescription="@string/back_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="22dp"
+        />
+
     <TextView
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Account Information" />
+        android:id="@+id/DeliveryAddress"
+        app:layout_constraintStart_toStartOf="@id/backButtonAccount"
+        app:layout_constraintTop_toBottomOf="@id/backButtonAccount"
+        android:text="@string/delivery_address"
+        android:layout_marginTop="22dp"
+        android:textSize="18sp"
+        />
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/address_info"
+        app:layout_constraintStart_toStartOf="@id/DeliveryAddress"
+        app:layout_constraintTop_toBottomOf="@id/DeliveryAddress"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:id="@+id/imageLocation"
+            android:src="@drawable/location_icon"
+            android:layout_gravity="center"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chhatak_sunamgonj_12_8ab"
+            android:gravity="center"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            />
+
+    </LinearLayout>
+    
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="314dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/divider"
+        app:layout_constraintStart_toStartOf="@+id/address_info"
+        app:layout_constraintTop_toBottomOf="@+id/address_info"
+        android:layout_marginTop="20dp"
+        app:dividerColor="@color/black"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Phone_Number"
+        app:layout_constraintStart_toStartOf="@id/divider"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        android:text="@string/phone_number"
+        android:layout_marginTop="22dp"
+        android:textSize="18sp"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/info_number"
+        app:layout_constraintStart_toStartOf="@id/Phone_Number"
+        app:layout_constraintTop_toBottomOf="@id/Phone_Number"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:id="@+id/imageCall"
+            android:src="@drawable/call"
+            android:layout_gravity="center"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_1_555_123_4567"
+            android:gravity="center"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            />
+
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

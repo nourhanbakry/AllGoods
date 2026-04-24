@@ -137,4 +137,5 @@
     <string name="save_as_primary_address">Save as primary address</string>
     <string name="save_card_info">Save card info</string>
     <string name="no_cards_please_add_one">No cards, please add one</string>
+    <string name="_1_555_123_4567">+1 (555) 123-4567</string>
 </resources>
