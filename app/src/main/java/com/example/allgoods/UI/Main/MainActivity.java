@@ -29,6 +29,7 @@ import com.example.allgoods.UI.Seller.Stats.StatsFragment;
 import com.example.allgoods.databinding.ActivityMainBinding;
 import com.example.allgoods.utils.Network.NetworkListener;
 import com.example.allgoods.utils.Network.NetworkManager;
+import com.example.allgoods.utils.Network.NetworkOverlayController;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,18 +80,13 @@ public class MainActivity extends AppCompatActivity {
         networkManager.register(this, new NetworkListener() {
             @Override
             public void onConnected() {
-                runOnUiThread(() -> {
-                    binding.noInternetAnimation.setVisibility(View.GONE);
-                    binding.internetText.setVisibility(View.GONE);
-                });
+                runOnUiThread(() -> hideOverlay());
             }
 
             @Override
             public void onDisconnected() {
                 runOnUiThread(() -> {
-                    binding.noInternetAnimation.setVisibility(View.VISIBLE);
-                    binding.noInternetAnimation.playAnimation();
-                    binding.internetText.setVisibility(View.VISIBLE);
+                    if(shouldShowOverlay()) showOverlay();
                 });
             }
         });
@@ -260,5 +256,27 @@ public class MainActivity extends AppCompatActivity {
 
     public void showBottomBar() {
         findViewById(R.id.bottomBar).setVisibility(View.VISIBLE);
+    }
+
+    private void showOverlay() {
+        binding.noInternetAnimation.setVisibility(View.VISIBLE);
+        binding.noInternetAnimation.playAnimation();
+        binding.internetText.setVisibility(View.VISIBLE);
+    }
+
+    private void hideOverlay() {
+        binding.noInternetAnimation.setVisibility(View.GONE);
+        binding.internetText.setVisibility(View.GONE);
+    }
+
+    private boolean shouldShowOverlay() {
+        Fragment current = getSupportFragmentManager()
+                .findFragmentById(binding.frameLayout.getId());
+
+        if (current instanceof NetworkOverlayController) {
+            return ((NetworkOverlayController) current).showNetworkOverlay();
+        }
+
+        return true; // default
     }
 }
