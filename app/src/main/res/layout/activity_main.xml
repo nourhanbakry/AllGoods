@@ -24,7 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
 
-        <!-- Bottom Nav Bar -->
+        <!-- Bottom Nav Bar Customer -->
         <LinearLayout
             android:id="@+id/bottomBar"
             android:layout_width="0dp"
@@ -104,6 +104,7 @@
 
         </LinearLayout>
 
+        <!-- Bottom Nav Bar Seller -->
         <LinearLayout
             android:id="@+id/bottomBarSeller"
             android:layout_width="0dp"
@@ -219,6 +220,8 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <!-- Connection Animation -->
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/noInternetAnimation"
             android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 package com.example.allgoods.UI.Main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,8 +16,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.allgoods.R;
+import com.example.allgoods.UI.Auth.forgetpassword.ForgetPasswordActivity;
 import com.example.allgoods.UI.Customer.Cart.CartFragment;
 import com.example.allgoods.UI.Customer.Home.HomeFragment;
+import com.example.allgoods.UI.Customer.MyCards.MyCardsFragment;
 import com.example.allgoods.UI.Customer.Wishlist.WishlistFragment;
 import com.example.allgoods.UI.Seller.AddProduct.AddProductFragment;
 import com.example.allgoods.UI.Seller.Inventory.InventoryFragment;
@@ -26,6 +29,7 @@ import com.example.allgoods.UI.Seller.Stats.StatsFragment;
 import com.example.allgoods.databinding.ActivityMainBinding;
 import com.example.allgoods.utils.Network.NetworkListener;
 import com.example.allgoods.utils.Network.NetworkManager;
+import com.example.allgoods.utils.Network.NetworkOverlayController;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,7 +58,11 @@ public class MainActivity extends AppCompatActivity {
         setupDrawer();
         setupHeader();
         setupBottomNav();
+        selectCustomerOrSellerBottomNavBar();
+        connection();
+    }
 
+    private void  selectCustomerOrSellerBottomNavBar(){
         if ("seller".equals(userRole)) {
             binding.bottomBar.setVisibility(View.GONE);
             binding.bottomBarSeller.setVisibility(View.VISIBLE);
@@ -64,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
             binding.bottomBarSeller.setVisibility(View.GONE);
             selectTab(0);
         }
-        connection();
     }
 
     private void connection(){
@@ -73,18 +80,13 @@ public class MainActivity extends AppCompatActivity {
         networkManager.register(this, new NetworkListener() {
             @Override
             public void onConnected() {
-                runOnUiThread(() -> {
-                    binding.noInternetAnimation.setVisibility(View.GONE);
-                    binding.internetText.setVisibility(View.GONE);
-                });
+                runOnUiThread(() -> hideOverlay());
             }
 
             @Override
             public void onDisconnected() {
                 runOnUiThread(() -> {
-                    binding.noInternetAnimation.setVisibility(View.VISIBLE);
-                    binding.noInternetAnimation.playAnimation();
-                    binding.internetText.setVisibility(View.VISIBLE);
+                    if(shouldShowOverlay()) showOverlay();
                 });
             }
         });
@@ -143,9 +145,9 @@ public class MainActivity extends AppCompatActivity {
             if (id == R.id.account_info) {
 //                replaceFragment( new AccountInfoFragment());
             } else if (id == R.id.passwords) {
-//                replaceFragment(new PassworsFragment());
+                openForgetPassword();
             } else if (id == R.id.my_cards) {
-//                replaceFragment(new MyCardsFragment());
+                navigateToMyCards();
             } else if (id == R.id.wishlist) {
                 selectTab(1);
             }
@@ -153,7 +155,15 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
     }
+    private void navigateToMyCards(){
+        MyCardsFragment fragment = new MyCardsFragment();
 
+        Bundle bundle = new Bundle();
+        bundle.putString("source", "main");
+        fragment.setArguments(bundle);
+
+        replaceFragment(fragment);
+    }
     private void setupBottomNav() {
         if ("seller".equals(userRole)) {
             binding.statsTab.setOnClickListener(v -> selectTabSeller(0));
@@ -235,6 +245,10 @@ public class MainActivity extends AppCompatActivity {
                 .replace(binding.frameLayout.getId(), fragment)
                 .commit();
     }
+    private void openForgetPassword(){
+        Intent intent = new Intent(MainActivity.this, ForgetPasswordActivity.class);
+        startActivity(intent);
+    }
 
     public void hideBottomBar() {
         findViewById(R.id.bottomBar).setVisibility(View.GONE);
@@ -242,5 +256,27 @@ public class MainActivity extends AppCompatActivity {
 
     public void showBottomBar() {
         findViewById(R.id.bottomBar).setVisibility(View.VISIBLE);
+    }
+
+    private void showOverlay() {
+        binding.noInternetAnimation.setVisibility(View.VISIBLE);
+        binding.noInternetAnimation.playAnimation();
+        binding.internetText.setVisibility(View.VISIBLE);
+    }
+
+    private void hideOverlay() {
+        binding.noInternetAnimation.setVisibility(View.GONE);
+        binding.internetText.setVisibility(View.GONE);
+    }
+
+    private boolean shouldShowOverlay() {
+        Fragment current = getSupportFragmentManager()
+                .findFragmentById(binding.frameLayout.getId());
+
+        if (current instanceof NetworkOverlayController) {
+            return ((NetworkOverlayController) current).showNetworkOverlay();
+        }
+
+        return true; // default
     }
 }

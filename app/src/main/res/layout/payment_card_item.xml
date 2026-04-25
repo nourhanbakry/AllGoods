@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="300dp"
+        android:layout_height="185dp"
+        android:layout_margin="8dp"
+        android:layout_gravity="center"
+        android:elevation="6dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/cardBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/no_data_card"
+                android:scaleType="centerCrop"/>
+
+
+            <TextView
+                android:textStyle="bold"
+                android:id="@+id/tvCardOwner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/person"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:layout_gravity="top|start"
+                android:layout_margin="16dp"/>
+
+
+            <TextView
+                android:id="@+id/tvCardNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4547 **** **** 1234"
+                android:layout_margin="16dp"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_gravity="center|start"
+                android:letterSpacing="0.1"/>
+
+            <TextView
+                android:textStyle="bold"
+                android:id="@+id/cardCVV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="16dp"/>
+
+            <TextView
+                android:id="@+id/tvExpiry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12/28"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"/>
+
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

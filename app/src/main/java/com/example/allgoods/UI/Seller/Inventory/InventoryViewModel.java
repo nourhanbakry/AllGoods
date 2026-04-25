@@ -1,4 +1,6 @@
 package com.example.allgoods.UI.Seller.Inventory;
 
-public class InventoryViewModel {
+import androidx.lifecycle.ViewModel;
+
+public class InventoryViewModel extends ViewModel {
 }
