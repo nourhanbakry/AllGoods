@@ -16,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.allgoods.Data.local.SharedPrefManager;
 import com.example.allgoods.R;
 import com.example.allgoods.UI.Auth.login.LoginActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -34,10 +36,50 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void navigateNext() {
+
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
+
+            SharedPrefManager prefManager = new SharedPrefManager(this);
+
+            boolean isLogged = prefManager.isLoggedIn();
+            String role = prefManager.getRole();
+
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (isLogged && user != null) {
+
+                user.reload().addOnCompleteListener(task -> {
+
+                    if (task.isSuccessful() && FirebaseAuth.getInstance().getCurrentUser() != null) {
+
+                        if ("customer".equals(role)) {
+                            goToMain();
+                        } else {
+                            goToLogin();
+                        }
+
+                    } else {
+                        prefManager.logout();
+                        goToLogin();
+                    }
+                });
+
+            } else {
+                prefManager.logout();
+                goToLogin();
+            }
+
         }, SPLASH_DELAY);
+    }
+
+    private void goToMain() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
+    private void goToLogin() {
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 }
 

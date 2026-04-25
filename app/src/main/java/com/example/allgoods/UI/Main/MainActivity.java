@@ -1,9 +1,15 @@
 package com.example.allgoods.UI.Main;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -15,8 +21,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.example.allgoods.Data.repository.Auth.AuthRepositoryImpl;
 import com.example.allgoods.R;
 import com.example.allgoods.UI.Auth.forgetpassword.ForgetPasswordActivity;
+import com.example.allgoods.UI.Auth.login.LoginActivity;
 import com.example.allgoods.UI.Customer.Cart.CartFragment;
 import com.example.allgoods.UI.Customer.Home.HomeFragment;
 import com.example.allgoods.UI.Customer.MyCards.MyCardsFragment;
@@ -30,6 +38,7 @@ import com.example.allgoods.databinding.ActivityMainBinding;
 import com.example.allgoods.utils.Network.NetworkListener;
 import com.example.allgoods.utils.Network.NetworkManager;
 import com.example.allgoods.utils.Network.NetworkOverlayController;
+import com.google.android.material.button.MaterialButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -136,6 +145,9 @@ public class MainActivity extends AppCompatActivity {
         drawerIcon.setOnClickListener(v ->
                 binding.drawerMainLayout.closeDrawer(GravityCompat.START)
         );
+
+        View logoutLayout = binding.navigationView.findViewById(R.id.logout_layout);
+        logoutLayout.setOnClickListener(v -> showLogoutDialog());
 
         binding.navigationView.setNavigationItemSelectedListener(item -> {
 
@@ -245,8 +257,9 @@ public class MainActivity extends AppCompatActivity {
                 .replace(binding.frameLayout.getId(), fragment)
                 .commit();
     }
-    private void openForgetPassword(){
+    private void openForgetPassword() {
         Intent intent = new Intent(MainActivity.this, ForgetPasswordActivity.class);
+        intent.putExtra("SOURCE", "IN_APP");
         startActivity(intent);
     }
 
@@ -278,5 +291,49 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return true; // default
+    }
+
+    private void showLogoutDialog() {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialog);
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+
+        TextView title = dialog.findViewById(R.id.dialog_title);
+        TextView subtitle = dialog.findViewById(R.id.dialog_content);
+
+        MaterialButton btnDelete = dialog.findViewById(R.id.btnDelete);
+        MaterialButton btnCancel = dialog.findViewById(R.id.btnCancel);
+
+        title.setText("Logout");
+        subtitle.setText("Do you really want to exit your account?");
+        btnDelete.setText("Logout");
+
+        btnDelete.setOnClickListener(v -> {
+            performLogout();
+            dialog.dismiss();
+        });
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
+    private void performLogout() {
+
+       AuthRepositoryImpl repo =
+                new AuthRepositoryImpl(this);
+
+        repo.logout();
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }
