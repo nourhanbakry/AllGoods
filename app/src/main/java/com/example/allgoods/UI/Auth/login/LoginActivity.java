@@ -1,5 +1,7 @@
 package com.example.allgoods.UI.Auth.login;
 
+import static com.example.allgoods.utils.Result.Status.LOADING;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -10,8 +12,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.allgoods.Data.local.SharedPrefManager;
+import com.example.allgoods.Data.repository.Auth.AuthRepositoryImpl;
 import com.example.allgoods.UI.Auth.forgetpassword.ForgetPasswordActivity;
 import com.example.allgoods.UI.Auth.signup.SignUpActivity;
+import com.example.allgoods.UI.Auth.signup.SignUpViewModel;
 import com.example.allgoods.UI.Main.MainActivity;
 import com.example.allgoods.databinding.ActivityLoginBinding;
 import com.example.allgoods.utils.Network.NetworkListener;
@@ -25,6 +30,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean lastNetworkState = true;
 
+    private LoginViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +44,53 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        setupViewModel();
         connection();
         setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setLoginEnabled(networkManager.isConnected(this));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        networkManager.unregister(this);
+    }
+
+    private void setupViewModel(){
+        viewModel = new LoginViewModel(new AuthRepositoryImpl(this));
+        viewModel.getLoginState().observe(this, result -> {
+
+            switch (result.status) {
+
+                case LOADING:
+                    setLoginEnabled(false);
+                    break;
+
+                case SUCCESS:
+
+                    setLoginEnabled(true);
+
+                    String role = result.data.role;
+                    String email = result.data.email;
+                    String name = result.data.name;
+                    boolean remember = binding.loginRememberMeSwitch.isChecked();
+
+                    navigateToHome(role, remember, email, name);
+
+                    break;
+
+                case ERROR:
+                    setLoginEnabled(true);
+                    Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        });
+
     }
 
     private void connection(){
@@ -76,27 +128,18 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setLoginEnabled(networkManager.isConnected(this));
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        networkManager.unregister(this);
-    }
-
     private void setLoginEnabled(boolean enabled) {
         binding.btnLogin.setEnabled(enabled);
         binding.btnLogin.setAlpha(enabled ? 1f : 0.5f);
     }
+
     private void setupListeners() {
         binding.btnLogin.setOnClickListener(v -> validateInputs());
-        binding.forgetPassword.setOnClickListener(
-                v -> startActivities(new android.content.Intent[]{new android.content.Intent(this, ForgetPasswordActivity.class)})
-        );
+        binding.forgetPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ForgetPasswordActivity.class);
+            intent.putExtra("SOURCE", "AUTH");
+            startActivity(intent);
+        });
 
         binding.signUpText.setOnClickListener(
                 v -> startActivity(new android.content.Intent(this, SignUpActivity.class))
@@ -145,14 +188,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String email, String password) {
-        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-        android.content.Intent intent = new android.content.Intent(this, MainActivity.class);
-        if (email.equals("admin@gmail.com") && password.equals("Galal1234")) {
-            intent.putExtra("USER_ROLE", "seller");
-        } else {
-            intent.putExtra("USER_ROLE", "customer");
+       viewModel.login(email,password);
+    }
+
+    private void navigateToHome(String role, boolean rememberMe, String email, String name) {
+
+        SharedPrefManager pref = new SharedPrefManager(this);
+
+        if (role.equals("seller")) {
+            pref.logout();
+        } else if (rememberMe) {
+            pref.saveUser(name, email, role);
         }
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("USER_ROLE", role);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
         startActivity(intent);
-        finish();
     }
 }
