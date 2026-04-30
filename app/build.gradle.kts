@@ -46,6 +46,8 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -56,4 +58,6 @@ dependencies {
 
     //lottie
     implementation("com.airbnb.android:lottie-compose:6.7.1")
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

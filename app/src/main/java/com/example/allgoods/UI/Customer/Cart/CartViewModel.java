@@ -8,7 +8,9 @@ import com.example.allgoods.model.ProductModel;
 import com.example.allgoods.utils.Category;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CartViewModel extends ViewModel {
 
@@ -22,27 +24,44 @@ public class CartViewModel extends ViewModel {
 
         list.add(new ProductModel(
                 1,
-                "Nike Sportswear",
+                "Nike Sportswear Club Fleece",
                 "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
-                45,
-                Category.TSHIRT
+                99.0,
+                Category.PANTS
         ));
 
         list.add(new ProductModel(
                 2,
-                "Nike T-shirt",
+                "Trail Running Jacket Nike",
                 "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
-                45,
-                Category.TSHIRT
+                120.0,
+                Category.PANTS
         ));
 
         list.add(new ProductModel(
                 3,
-                "Nike T-shirt",
+                "Nike Sportswear Club Fleece",
                 "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
-                45,
-                Category.TSHIRT
+                99.0,
+                Category.PANTS
         ));
+        list.add(new ProductModel(
+                4,
+                "Trail Running Jacket Nike",
+                "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
+                120.0,
+                Category.PANTS
+        ));
+
+        list.add(new ProductModel(
+                5,
+                "Nike Sportswear Club Fleece",
+                "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
+                99.0,
+                Category.PANTS
+        ));
+
+
 
         cartItems.setValue(list);
     }
