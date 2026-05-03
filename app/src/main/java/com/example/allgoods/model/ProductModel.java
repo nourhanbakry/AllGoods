@@ -28,11 +28,13 @@ public class ProductModel implements Serializable {
 
     public ProductModel() {}
 
-    // 2. Constructor Seller (Add Product)
-    public ProductModel(String name, String image, double price, String description,
+
+
+    // Constructor  Seller
+    public ProductModel(String name, List<String> images, double price, String description,
                         Category category, String sellerId, Map<String, Integer> sizesQuantity) {
         this.name = name;
-        this.image = image;
+        this.images = images;
         this.price = price;
         this.description = description;
         this.category = category;
@@ -40,11 +42,17 @@ public class ProductModel implements Serializable {
         this.sizesQuantity = sizesQuantity;
     }
 
+
+
     // 3. Constructor للـ Customer (Dummy Data & Cart)
     public ProductModel(String id, String name, String image, double price, Category category) {
         this.id = id;
         this.name = name;
         this.image = image;
+        this.images = new ArrayList<>();
+        if (image != null && !image.isEmpty()) {
+            this.images.add(image);
+        }
         this.price = price;
         this.category = category;
     }
@@ -53,6 +61,10 @@ public class ProductModel implements Serializable {
         this.id = id;
         this.name = name;
         this.image = image;
+        this.images = new ArrayList<>();
+        if (image != null && !image.isEmpty()) {
+            this.images.add(image);
+        }
         this.price = price;
         this.category = category;
         this.isFav = isFav;

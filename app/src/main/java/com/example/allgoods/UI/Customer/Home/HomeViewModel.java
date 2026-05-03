@@ -11,6 +11,7 @@ import com.example.allgoods.model.ProductModel;
 import com.example.allgoods.utils.Category;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class HomeViewModel extends ViewModel {

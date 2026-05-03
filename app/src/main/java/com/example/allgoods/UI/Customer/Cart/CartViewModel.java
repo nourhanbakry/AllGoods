@@ -8,6 +8,7 @@ import com.example.allgoods.model.ProductModel;
 import com.example.allgoods.utils.Category;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

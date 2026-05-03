@@ -48,8 +48,12 @@ public class WishlistProductAdapter extends RecyclerView.Adapter<WishlistProduct
         holder.name.setText(product.getName());
         holder.price.setText(String.valueOf(product.getPrice()));
 
+        String imageUrl = (product.getImages() != null && !product.getImages().isEmpty()) 
+                ? product.getImages().get(0) 
+                : product.getImage();
+
         Glide.with(context)
-                .load(product.getImage())
+                .load(imageUrl)
                 .into(holder.image);
 
         // In wishlist, it's always fav initially

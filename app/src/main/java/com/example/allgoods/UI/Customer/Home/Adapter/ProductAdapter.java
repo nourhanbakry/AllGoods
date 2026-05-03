@@ -2,6 +2,7 @@ package com.example.allgoods.UI.Customer.Home.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,8 +53,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.ratingBar.setRating(product.getRating());
         holder.reviewCount.setText("(" + product.getReviewCount() + ")");
 
+        String imageUrl = (product.getImages() != null && !product.getImages().isEmpty()) 
+                ? product.getImages().get(0) 
+                : product.getImage();
+
         Glide.with(context)
-                .load(product.getImage())
+                .load(imageUrl)
                 .into(holder.image);
 
         // Check if product is favorite

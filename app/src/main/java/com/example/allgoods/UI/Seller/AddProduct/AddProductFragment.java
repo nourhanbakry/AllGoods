@@ -32,37 +32,45 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AddProductFragment extends Fragment {
     private FragmentAddProductBinding binding;
     private AddProductViewModel viewModel;
     private ActivityResultLauncher<Intent> cameraLauncher;
-    private ActivityResultLauncher<String> galleryLauncher;
-    private Uri selectedImageUri;
+    private ActivityResultLauncher<Intent> galleryLauncher;
+    private List<Uri> selectedImageUris = new ArrayList<>();
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //camera launcher
         cameraLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                Bundle extras = result.getData().getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-
-                // convert to uri
-                selectedImageUri = getImageUri(imageBitmap);
-                binding.etPhotoName.setText("camera_image_" + System.currentTimeMillis() + ".jpg");
+                Bitmap imageBitmap = (Bitmap) result.getData().getExtras().get("data");
+                Uri uri = getImageUri(imageBitmap);
+                selectedImageUris.add(uri);
+                updatePhotoNamesUI();
             }
         });
 
-        // gallary launcher
-        galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-            if (uri != null) {
-                selectedImageUri = uri;
-                binding.etPhotoName.setText(getFileName(uri));
+        galleryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                if (result.getData().getClipData() != null) {
+                    // multiple photos
+                    int count = result.getData().getClipData().getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        selectedImageUris.add(result.getData().getClipData().getItemAt(i).getUri());
+                    }
+                } else if (result.getData().getData() != null) {
+                    // one photo
+                    selectedImageUris.add(result.getData().getData());
+                }
+                updatePhotoNamesUI();
             }
         });
     }
@@ -116,8 +124,10 @@ public class AddProductFragment extends Fragment {
         if (title.isEmpty()) { Toast.makeText(requireContext(), "Title Required", Toast.LENGTH_SHORT).show(); return; }
         if (categoryStr.isEmpty()) { Toast.makeText(requireContext(), "Category Required", Toast.LENGTH_SHORT).show(); return; }
         if (price.isEmpty()) { Toast.makeText(requireContext(), "Price Required", Toast.LENGTH_SHORT).show(); return; }
-        if (selectedImageUri == null) { Toast.makeText(requireContext(), "Please Select an Image", Toast.LENGTH_SHORT).show(); return; }
-
+        if (selectedImageUris.isEmpty()) {
+            Toast.makeText(requireContext(), "Please Select Images", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Map<String, Integer> sizesMap = new HashMap<>();
         sizesMap.put("XS", getPickerValue(binding.pickerXS.getRoot()));
         sizesMap.put("S", getPickerValue(binding.pickerS.getRoot()));
@@ -133,12 +143,13 @@ public class AddProductFragment extends Fragment {
             categoryEnum = Category.TSHIRT;
         }
 
-        // استخدام الـ ID الحقيقي من الصورة اللي بعتيها (الأدمن)
         String adminId = FirebaseAuth.getInstance().getUid();
+
+        List<String> emptyUrls = new ArrayList<>();
 
         ProductModel sellerProduct = new ProductModel(
                 title,
-                "",
+                emptyUrls,
                 Double.parseDouble(price),
                 desc,
                 categoryEnum,
@@ -147,8 +158,8 @@ public class AddProductFragment extends Fragment {
         );
 
         Toast.makeText(requireContext(), "Uploading... Please wait", Toast.LENGTH_SHORT).show();
-        viewModel.saveProduct(sellerProduct, selectedImageUri);
-        Log.d("AddProductFragment", "Product Data: " + sellerProduct.toString() + ", Image URI: " + selectedImageUri.toString());
+        viewModel.saveProduct(sellerProduct, selectedImageUris);
+        Log.d("AddProductFragment", "Product Data: " + sellerProduct.toString() + ", Image URIs: " + selectedImageUris.toString());
     }
 
     private int getPickerValue(View includeView) {
@@ -216,7 +227,10 @@ public class AddProductFragment extends Fragment {
         });
 
         view.findViewById(R.id.layoutGallery).setOnClickListener(v -> {
-            galleryLauncher.launch("image/*");
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            galleryLauncher.launch(Intent.createChooser(intent, "Select Pictures"));
             bottomSheet.dismiss();
         });
 
@@ -247,7 +261,31 @@ public class AddProductFragment extends Fragment {
         binding.etProductPrice.setText("");
         binding.etProductDesc.setText("");
         binding.etPhotoName.setText("");
-        selectedImageUri = null;
+        binding.ImagesNumber.setText("0");
+        binding.spinnerCategory.setText(null);
+        binding.spinnerCategory.setHint(R.string.category_hint);
+        binding.spinnerCategory.clearFocus();
+        selectedImageUris.clear();
         setupAllPickers();
+    }
+
+
+    private void updatePhotoNamesUI() {
+        if (selectedImageUris.isEmpty()) {
+            binding.etPhotoName.setText("");
+            binding.ImagesNumber.setText("0");
+            return;
+        }
+
+        StringBuilder names = new StringBuilder();
+        for (int i = 0; i < selectedImageUris.size(); i++) {
+            names.append(getFileName(selectedImageUris.get(i)));
+            if (i < selectedImageUris.size() - 1) {
+                names.append(", ");
+            }
+        }
+
+        binding.etPhotoName.setText(names.toString());
+        binding.ImagesNumber.setText(String.valueOf(selectedImageUris.size()));
     }
 }
