@@ -3,6 +3,7 @@ package com.example.allgoods.UI.Seller.Inventory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +16,9 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
     List<String> list;
 
-    public InventoryAdapter(List<String> list) {
+    OnDeleteClickListener listener;
+    public InventoryAdapter(List<String> list, OnDeleteClickListener listener) {
+        this.listener = listener;
         this.list = list;
     }
 
@@ -29,6 +32,21 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.deleteBtn.setOnClickListener(v -> {
+
+            if (listener != null) {
+
+                int currentPosition = holder.getAdapterPosition();
+
+                if (currentPosition != RecyclerView.NO_POSITION) {
+
+                    listener.onDeleteClick(currentPosition);
+
+                }
+
+            }
+
+        });
     }
 
     @Override
@@ -37,8 +55,17 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView deleteBtn;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            deleteBtn = itemView.findViewById(R.id.imgDelete);
         }
+
+    }
+
+    public interface OnDeleteClickListener {
+
+        void onDeleteClick(int position);
+
     }
 }

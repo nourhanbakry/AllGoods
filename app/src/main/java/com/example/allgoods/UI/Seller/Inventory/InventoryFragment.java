@@ -11,8 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.app.Dialog;
 
+import android.graphics.Color;
+
+import android.graphics.drawable.ColorDrawable;
+
+import android.view.Window;
+
+import android.widget.TextView;
 import com.example.allgoods.R;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +60,53 @@ public class InventoryFragment extends Fragment {
         dummyList.add("2");
         dummyList.add("3");
 
-        rv.setAdapter(new InventoryAdapter(dummyList));
+        rv.setAdapter(new InventoryAdapter(dummyList, position -> {
+
+            showDeleteDialog(position, dummyList, rv);
+
+        }));
 
         return view;
+    }
+
+    private void showDeleteDialog(int position, List<String> list, RecyclerView rv) {
+
+        Dialog dialog = new Dialog(requireContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialog);
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().setLayout(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+        }
+
+        TextView title = dialog.findViewById(R.id.dialog_title);
+        TextView content = dialog.findViewById(R.id.dialog_content);
+        MaterialButton btnDelete = dialog.findViewById(R.id.btnDelete);
+        MaterialButton btnCancel = dialog.findViewById(R.id.btnCancel);
+
+        title.setText("Delete Product?");
+        content.setText("This action cannot be undone. This will permanently delete the product from your inventory .");
+
+        btnDelete.setOnClickListener(v -> {
+
+            if (position >= 0 && position < list.size()) {
+
+                list.remove(position);
+
+                rv.getAdapter().notifyItemRemoved(position);
+
+            }
+
+            dialog.dismiss();
+
+        });
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 }

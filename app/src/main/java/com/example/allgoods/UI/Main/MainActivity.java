@@ -310,9 +310,9 @@ public class MainActivity extends AppCompatActivity {
         MaterialButton btnDelete = dialog.findViewById(R.id.btnDelete);
         MaterialButton btnCancel = dialog.findViewById(R.id.btnCancel);
 
-        title.setText("Logout");
-        subtitle.setText("Do you really want to exit your account?");
-        btnDelete.setText("Logout");
+        title.setText(getString(R.string.logout));
+        subtitle.setText(R.string.do_you_really_want_to_exit_your_account);
+        btnDelete.setText(getString(R.string.logout));
 
         btnDelete.setOnClickListener(v -> {
             performLogout();

@@ -138,6 +138,9 @@
     <string name="save_card_info">Save card info</string>
     <string name="no_cards_please_add_one">No cards, please add one</string>
     <string name="_1_555_123_4567">+1 (555) 123-4567</string>
+    <string name="do_you_really_want_to_exit_your_account">Do you really want to exit your account?</string>
+    <string name="_3_reviews">3 Reviews</string>
+    <string name="customer_reviews">Customer Reviews</string>
     <string name="add_new_product">Add New Product</string>
     <string name="product_photo">Product Photo</string>
     <string name="upload_photo">Upload photo</string>
