@@ -53,7 +53,7 @@ dependencies {
     annotationProcessor("com.github.bumptech.glide:compiler:5.0.5")
 
     //lottie
-    implementation("com.airbnb.android:lottie-compose:6.7.1")
+    implementation(libs.lottie)
 
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

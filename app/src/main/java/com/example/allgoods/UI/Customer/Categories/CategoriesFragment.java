@@ -102,7 +102,10 @@ public class CategoriesFragment extends Fragment {
 
             ProductAdapter adapter = new ProductAdapter(requireContext(), products);
             binding.categoryProductsRv.setAdapter(adapter);
+            binding.categoryItemsNum.setText(String.valueOf(products.size()));
         });
-        viewModel.loadProducts();
+        if (category != null) {
+            viewModel.loadProductsByCategory(category);
+        }
     }
 }
