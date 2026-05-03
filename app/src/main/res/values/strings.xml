@@ -141,4 +141,9 @@
     <string name="do_you_really_want_to_exit_your_account">Do you really want to exit your account?</string>
     <string name="_3_reviews">3 Reviews</string>
     <string name="customer_reviews">Customer Reviews</string>
+    <string name="add_new_product">Add New Product</string>
+    <string name="product_photo">Product Photo</string>
+    <string name="upload_photo">Upload photo</string>
+    <string name="product_title">Product Title *</string>
+    <string name="classic_white">Classic White</string>
 </resources>

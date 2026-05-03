@@ -5,16 +5,12 @@ plugins {
 
 android {
     namespace = "com.example.allgoods"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.allgoods"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -46,6 +42,8 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -56,4 +54,6 @@ dependencies {
 
     //lottie
     implementation("com.airbnb.android:lottie-compose:6.7.1")
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

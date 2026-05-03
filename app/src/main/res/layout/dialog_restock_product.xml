@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- زر الإغلاق -->
+        <ImageView
+            android:id="@+id/btnClose"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end"
+            android:src="@drawable/close"
+            android:contentDescription="Close"
+            app:tint="#424242" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Restock Product"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvProductName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Slim Fit Denim Jeans"
+            android:textColor="#9E9E9E"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Current stock:"
+            android:textColor="#424242"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <!-- عرض المخزن الحالي بشكل منفصل -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="XS: " android:textColor="#757575"/>
+            <TextView android:id="@+id/tvStockXS" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#757575" android:layout_marginEnd="12dp"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="S: " android:textColor="#757575"/>
+            <TextView android:id="@+id/tvStockS" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2" android:textColor="#757575" android:layout_marginEnd="12dp"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="M: " android:textColor="#757575"/>
+            <TextView android:id="@+id/tvStockM" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="5" android:textColor="#757575" android:layout_marginEnd="12dp"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="L: " android:textColor="#757575"/>
+            <TextView android:id="@+id/tvStockL" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8" android:textColor="#757575" android:layout_marginEnd="12dp"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="XL: " android:textColor="#757575"/>
+            <TextView android:id="@+id/tvStockXL" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8" android:textColor="#757575" android:layout_marginEnd="12dp"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="XXL: " android:textColor="#757575"/>
+            <TextView android:id="@+id/tvStockXXL" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8" android:textColor="#757575" android:layout_marginEnd="12dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Quantity per Size"
+            android:textColor="#424242"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <GridLayout
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+            android:layout_marginVertical="20dp"
+          >
+
+            <include layout="@layout/item_size_quantity" android:id="@+id/restockPickerXS" android:layout_marginEnd="5dp" />
+            <include layout="@layout/item_size_quantity" android:id="@+id/restockPickerS" android:layout_marginEnd="5dp" />
+            <include layout="@layout/item_size_quantity" android:id="@+id/restockPickerM" />
+            <include layout="@layout/item_size_quantity" android:id="@+id/restockPickerL" />
+            <include layout="@layout/item_size_quantity" android:id="@+id/restockPickerXL" android:layout_marginEnd="5dp"/>
+            <include layout="@layout/item_size_quantity" android:id="@+id/restockPickerXXL" android:layout_marginEnd="5dp"/>
+        </GridLayout>
+
+        <!-- الأزرار بالتصميم المطلوب -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRestock"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Restock"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="false"
+            android:background="@drawable/bg_custom_button"
+            app:backgroundTint="@null"
+            android:textSize="17sp"
+          />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            android:background="@drawable/bg_white_outlined_squre"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="12dp"
+            android:text="Cancel"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            app:strokeColor="#E0E0E0"
+            app:strokeWidth="1.5dp"
+            app:cornerRadius="12dp" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
