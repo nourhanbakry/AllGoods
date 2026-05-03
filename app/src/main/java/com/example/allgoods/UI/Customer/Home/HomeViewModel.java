@@ -9,6 +9,7 @@ import com.example.allgoods.model.ProductModel;
 import com.example.allgoods.utils.Category;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class HomeViewModel extends ViewModel {
@@ -26,7 +27,7 @@ public class HomeViewModel extends ViewModel {
         list.add(new ProductModel(
                 1,
                 "Nike Sportswear Club Fleece",
-                "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
+                Arrays.asList("https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg"),
                 99.0,
                 Category.PANTS
         ));
@@ -34,7 +35,7 @@ public class HomeViewModel extends ViewModel {
         list.add(new ProductModel(
                 2,
                 "Trail Running Jacket Nike",
-                "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
+                Arrays.asList("https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg"),
                 120.0,
                 Category.PANTS
         ));
@@ -42,14 +43,14 @@ public class HomeViewModel extends ViewModel {
         list.add(new ProductModel(
                 3,
                 "Nike Sportswear Club Fleece",
-                "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
+                Arrays.asList("https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg"),
                 99.0,
                 Category.PANTS
         ));
         list.add(new ProductModel(
                 4,
                 "Trail Running Jacket Nike",
-                "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
+                Arrays.asList("https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg"),
                 120.0,
                 Category.PANTS
         ));
@@ -57,7 +58,7 @@ public class HomeViewModel extends ViewModel {
         list.add(new ProductModel(
                 5,
                 "Nike Sportswear Club Fleece",
-                "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
+                Arrays.asList("https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg"),
                 99.0,
                 Category.PANTS
         ));

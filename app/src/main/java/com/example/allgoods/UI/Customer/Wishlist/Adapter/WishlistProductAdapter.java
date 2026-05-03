@@ -45,7 +45,7 @@ public class WishlistProductAdapter extends RecyclerView.Adapter<WishlistProduct
         holder.price.setText(String.valueOf(product.getPrice()));
 
         Glide.with(context)
-                .load(product.getImage())
+                .load(product.getImages().getFirst())
                 .into(holder.image);
 
         if (product.isFav()) {

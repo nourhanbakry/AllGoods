@@ -146,4 +146,6 @@
     <string name="upload_photo">Upload photo</string>
     <string name="product_title">Product Title *</string>
     <string name="classic_white">Classic White</string>
+    <string name="images">images</string>
+    <string name="category_hint">e.g, shirt, t-shirt, pants, suit</string>
 </resources>

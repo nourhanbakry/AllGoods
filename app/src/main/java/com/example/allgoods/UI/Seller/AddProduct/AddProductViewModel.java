@@ -7,17 +7,19 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.allgoods.Data.repository.SellerProduct.ProductRepository;
 import com.example.allgoods.Data.repository.SellerProduct.ProductRepositoryImpl;
 
+import java.util.List;
+
 public class AddProductViewModel extends ViewModel {
     private final ProductRepository repository = new ProductRepositoryImpl();
     public MutableLiveData<String> uploadStatus = new MutableLiveData<>();
 
-    public void saveProduct(ProductModel product, Uri imageUri) {
-        if (imageUri == null) {
-            uploadStatus.postValue("Please select an image");
+    public void saveProduct(ProductModel product, List<Uri> imageUris) {
+        if (imageUris == null || imageUris.isEmpty()) {
+            uploadStatus.postValue("Please select at least one image");
             return;
         }
 
-        repository.uploadProduct(product, imageUri, new ProductRepository.OnProductUploadListener() {
+        repository.uploadProduct(product, imageUris, new ProductRepository.OnProductUploadListener() {
             @Override
             public void onSuccess() {
                 uploadStatus.postValue("Success");

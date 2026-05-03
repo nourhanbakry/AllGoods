@@ -4,8 +4,10 @@ import android.net.Uri;
 
 import com.example.allgoods.model.ProductModel;
 
+import java.util.List;
+
 public interface ProductRepository {
-    void uploadProduct(ProductModel product, Uri imageUri, OnProductUploadListener listener);
+    void uploadProduct(ProductModel product, List<Uri> imageUris, OnProductUploadListener listener);
 
     interface OnProductUploadListener {
         void onSuccess();

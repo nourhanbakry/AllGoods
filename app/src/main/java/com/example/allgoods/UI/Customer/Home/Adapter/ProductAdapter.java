@@ -46,7 +46,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.price.setText(String.valueOf(product.getPrice()));
 
         Glide.with(context)
-                .load(product.getImage())
+                .load(product.getImages().getFirst())
                 .into(holder.image);
 
         if (product.isFav()) {

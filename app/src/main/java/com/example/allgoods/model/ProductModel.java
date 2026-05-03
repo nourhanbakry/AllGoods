@@ -3,12 +3,13 @@ package com.example.allgoods.model;
 import com.example.allgoods.utils.Category;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ProductModel {
     private int id;
     private String name;
-    private String image;
+    private List<String> images;
     private double price;
     private String description;
     private Category category;
@@ -19,11 +20,13 @@ public class ProductModel {
 
     public ProductModel() {}
 
-    // 2. Constructor Seller (Add Product)
-    public ProductModel(String name, String image, double price, String description,
+
+
+    // Constructor  Seller
+    public ProductModel(String name, List<String> images, double price, String description,
                         Category category, String sellerId, Map<String, Integer> sizesQuantity) {
         this.name = name;
-        this.image = image;
+        this.images = images;
         this.price = price;
         this.description = description;
         this.category = category;
@@ -31,19 +34,21 @@ public class ProductModel {
         this.sizesQuantity = sizesQuantity;
     }
 
+
+
     // 3. Constructor للـ Customer (Dummy Data & Cart)
-    public ProductModel(int id, String name, String image, double price, Category category) {
+    public ProductModel(int id, String name, List<String> images, double price, Category category) {
         this.id = id;
         this.name = name;
-        this.image = image;
+        this.images = images;
         this.price = price;
         this.category = category;
     }
 
-    public ProductModel(int id, String name, String image, double price, Category category,boolean isFav ) {
+    public ProductModel(int id, String name, List<String> images, double price, Category category,boolean isFav ) {
         this.id = id;
         this.name = name;
-        this.image = image;
+        this.images = images;
         this.price = price;
         this.category = category;
         this.isFav = isFav;
@@ -56,11 +61,8 @@ public class ProductModel {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public String getImage() { return image; }
-    public void setImage(String image) { this.image = image; }
-
-    public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
+    public List<String> getImages() { return images; }
+    public void setImages(List<String> images) { this.images = images; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
@@ -80,4 +82,9 @@ public class ProductModel {
     public boolean isFav() {return isFav;}
 
     public void setFav(boolean fav) {isFav = fav;}
+
+
+    public double getPrice() {return price;}
+
+    public void setPrice(double price) {this.price = price; }
 }
