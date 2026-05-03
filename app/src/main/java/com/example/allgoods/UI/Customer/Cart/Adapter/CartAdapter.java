@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.allgoods.databinding.ItemInCartBinding;
 import com.example.allgoods.model.ProductModel;
+import com.example.allgoods.utils.PriceUtils;
 
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private OnCartItemChangeListener listener;
 
     public interface OnCartItemChangeListener {
-        void onDelete(String productId);
-        void onQuantityChange(String productId, int newQuantity);
+        void onDelete(String cartItemId);
+        void onQuantityChange(String cartItemId, int newQuantity);
     }
 
     public CartAdapter(Context context, List<ProductModel> list, OnCartItemChangeListener listener) {
@@ -46,7 +47,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         ProductModel item = list.get(position);
 
         holder.binding.cartProductName.setText(item.getName());
-        holder.binding.cartProductPrice.setText("$ " + item.getPrice());
+        holder.binding.cartProductPrice.setText("$" + PriceUtils.formatPrice(item.getPrice()));
+        holder.binding.cartProductSize.setText("Size: " + item.getSelectedSize());
         holder.binding.cartProductQuantity.setText(String.valueOf(item.getQuantity()));
 
         String imageUrl = (item.getImages() != null && !item.getImages().isEmpty()) 

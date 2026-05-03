@@ -19,7 +19,9 @@ import com.example.allgoods.UI.Customer.MyCards.MyCardsFragment;
 import com.example.allgoods.UI.Customer.Reviews.View.ReviewsFragment;
 import com.example.allgoods.databinding.FragmentCartBinding;
 import com.example.allgoods.model.AddressModel;
+import com.example.allgoods.utils.PriceUtils;
 
+import android.widget.Toast;
 import java.util.ArrayList;
 
 public class CartFragment extends Fragment {
@@ -50,13 +52,13 @@ public class CartFragment extends Fragment {
 
         adapter = new CartAdapter(requireContext(), new ArrayList<>(), new CartAdapter.OnCartItemChangeListener() {
             @Override
-            public void onDelete(String productId) {
-                viewModel.removeFromCart(productId);
+            public void onDelete(String cartItemId) {
+                viewModel.removeFromCart(cartItemId);
             }
 
             @Override
-            public void onQuantityChange(String productId, int newQuantity) {
-                viewModel.updateQuantity(productId, newQuantity);
+            public void onQuantityChange(String cartItemId, int newQuantity) {
+                viewModel.updateQuantity(cartItemId, newQuantity);
             }
         });
         binding.checkoutItemsRv.setAdapter(adapter);
@@ -105,10 +107,45 @@ public class CartFragment extends Fragment {
             }
         });
 
+        viewModel.getSelectedCard().observe(getViewLifecycleOwner(), card -> {
+            if (card != null) {
+                binding.txtVisa.setText(card.name);
+                String last4 = card.number.length() > 4
+                        ? card.number.substring(card.number.length() - 4)
+                        : card.number;
+                binding.visaCardNumber.setText("**** " + last4);
+            } else {
+                viewModel.loadPrimaryCard();
+            }
+        });
+
+        viewModel.getPrimaryCard().observe(getViewLifecycleOwner(), card -> {
+            if (viewModel.getSelectedCard().getValue() == null && card != null) {
+                viewModel.setSelectedCard(card);
+            }
+        });
+
+        viewModel.getOrderStatus().observe(getViewLifecycleOwner(), status -> {
+            if (status != null) {
+                if (status.equals("Success")) {
+                    viewModel.resetOrderStatus();
+                    getParentFragmentManager().beginTransaction()
+                            .replace(R.id.frameLayout, new OrderConfirmedFragment())
+                            .commit();
+                } else {
+                    Toast.makeText(getContext(), status, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         viewModel.loadCartProducts();
 
         if (viewModel.getSelectedAddress().getValue() == null) {
             viewModel.loadPrimaryAddress();
+        }
+
+        if (viewModel.getSelectedCard().getValue() == null) {
+            viewModel.loadPrimaryCard();
         }
 
         binding.OpenAddress.setOnClickListener(v -> {
@@ -119,11 +156,14 @@ public class CartFragment extends Fragment {
         });
 
         binding.OpenPayment.setOnClickListener(v -> openPayment());
+
+        binding.btnCheckout.setOnClickListener(v -> viewModel.checkout());
     }
 
     private void updatePrices() {
-        binding.subTotalPrice.setText(String.valueOf(viewModel.calculateSubtotal()));
-        binding.totalPrice.setText(String.valueOf(viewModel.calculateTotal()));
+        binding.subTotalPrice.setText("$" + PriceUtils.formatPrice(viewModel.calculateSubtotal()));
+        binding.shippingCostPrice.setText("$" + PriceUtils.formatPrice(20.0)); // Shipping is flat 20
+        binding.totalPrice.setText("$" + PriceUtils.formatPrice(viewModel.calculateTotal()));
     }
 
     private void openPayment() {

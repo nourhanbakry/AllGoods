@@ -10,13 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.allgoods.Data.repository.User.UserRepository;
+import com.example.allgoods.Data.repository.User.UserRepositoryImpl;
 import com.example.allgoods.R;
 import com.example.allgoods.UI.Main.MainActivity;
 import com.example.allgoods.databinding.FragmentAccountInfoBinding;
+import com.example.allgoods.model.AddressModel;
+
+import android.widget.Toast;
 
 
 public class AccountInfoFragment extends Fragment {
     FragmentAccountInfoBinding binding;
+    private UserRepository userRepository;
 
     public AccountInfoFragment() {}
 
@@ -36,7 +42,7 @@ public class AccountInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        userRepository = new UserRepositoryImpl();
     }
 
     @Override
@@ -50,6 +56,28 @@ public class AccountInfoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding.backButtonAccount.setOnClickListener(v -> {
             getParentFragmentManager().popBackStack();
+        });
+
+        loadAccountInfo();
+    }
+
+    private void loadAccountInfo() {
+        userRepository.getPrimaryAddress(new UserRepository.OnAddressFetchListener() {
+            @Override
+            public void onSuccess(AddressModel address) {
+                if (address != null) {
+                    binding.txtAddressValue.setText(address.getAddress());
+                    binding.txtPhoneValue.setText(address.getPhoneNumber());
+                } else {
+                    binding.txtAddressValue.setText("No primary address set");
+                    binding.txtPhoneValue.setText("N/A");
+                }
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(getContext(), "Error: " + message, Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

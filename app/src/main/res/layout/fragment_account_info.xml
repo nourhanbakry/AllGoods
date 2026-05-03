@@ -49,6 +49,7 @@
             android:layout_gravity="center"
             />
         <TextView
+            android:id="@+id/txtAddressValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/chhatak_sunamgonj_12_8ab"
@@ -98,6 +99,7 @@
             android:layout_gravity="center"
             />
         <TextView
+            android:id="@+id/txtPhoneValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/_1_555_123_4567"

@@ -16,12 +16,16 @@ import android.widget.Toast;
 import com.example.allgoods.R;
 import com.example.allgoods.UI.Main.MainActivity;
 import com.example.allgoods.databinding.FragmentAddCardsBinding;
+import com.example.allgoods.model.CardModel;
+import com.example.allgoods.Data.repository.Card.CardRepository;
+import com.example.allgoods.Data.repository.Card.CardRepositoryImpl;
 import com.example.allgoods.utils.ValidationUtils;
 
 
 public class AddCardsFragment extends Fragment {
 
     private FragmentAddCardsBinding binding;
+    private final CardRepository cardRepository = new CardRepositoryImpl();
 
     public static AddCardsFragment newInstance(String param1, String param2) {
         AddCardsFragment fragment = new AddCardsFragment();
@@ -134,7 +138,7 @@ public class AddCardsFragment extends Fragment {
 
     private void validateAndAddCard() {
         String owner = binding.etCardOwner.getText().toString().trim();
-        String number = binding.etCardNumber.getText().toString().trim();
+        String number = binding.etCardNumber.getText().toString().trim().replace(" ", "");
         String exp = binding.etEXP.getText().toString().trim();
         String cvv = binding.etCVV.getText().toString().trim();
 
@@ -158,9 +162,19 @@ public class AddCardsFragment extends Fragment {
             return;
         }
 
-        // If all valid
-        Toast.makeText(requireContext(), "Card added successfully!", Toast.LENGTH_SHORT).show();
-        getParentFragmentManager().popBackStack();
+        CardModel card = new CardModel(owner, number, exp, cvv);
+        cardRepository.saveCard(card, new CardRepository.OnCardChangeListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(requireContext(), "Card added successfully!", Toast.LENGTH_SHORT).show();
+                getParentFragmentManager().popBackStack();
+            }
+
+            @Override
+            public void onFailure(String error) {
+                showError("Error adding card: " + error);
+            }
+        });
     }
 
     private void showError(String message) {

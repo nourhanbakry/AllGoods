@@ -14,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.allgoods.R;
 import com.example.allgoods.UI.Customer.Home.HomeFragment;
+import com.example.allgoods.UI.Customer.Cart.CartViewModel;
 import com.example.allgoods.UI.Customer.MyCards.Adapter.CardsAdapter;
 import com.example.allgoods.UI.Main.MainActivity;
 import com.example.allgoods.databinding.FragmentMyCardsBinding;
@@ -23,6 +24,7 @@ import com.example.allgoods.utils.Network.NetworkManager;
 import com.example.allgoods.utils.Network.NetworkOverlayController;
 import com.example.allgoods.utils.SnackBarHelper;
 
+import android.widget.Toast;
 import java.util.List;
 
 public class MyCardsFragment extends Fragment implements NetworkOverlayController {
@@ -48,6 +50,31 @@ public class MyCardsFragment extends Fragment implements NetworkOverlayControlle
 
         binding.backButtonMyCard.setOnClickListener(v -> backToSource());
         binding.layoutAddPayment.setOnClickListener(v -> navigateToAddNewCard());
+        binding.btnSaveCard.setOnClickListener(v -> saveSelectedCard());
+    }
+
+    private void saveSelectedCard() {
+        String source = getArguments() != null ? getArguments().getString("source") : "";
+        List<CardModel> cards = viewModel.getCards().getValue();
+        if (cards != null && !cards.isEmpty()) {
+            int currentPos = binding.viewPagerCards.getCurrentItem();
+            CardModel selected = cards.get(currentPos);
+            boolean makePrimary = binding.saveCardInfoSwitch.isChecked();
+
+            if (makePrimary) {
+                viewModel.setPrimaryCard(selected.id);
+            }
+
+            if ("cart".equals(source)) {
+                CartViewModel cartViewModel = new ViewModelProvider(requireActivity()).get(CartViewModel.class);
+                cartViewModel.setSelectedCard(selected);
+                getParentFragmentManager().popBackStack();
+            } else if (makePrimary) {
+                Toast.makeText(requireContext(), "Card set as default", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(requireContext(), "Card Information Saved", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -55,7 +82,7 @@ public class MyCardsFragment extends Fragment implements NetworkOverlayControlle
         super.onResume();
         ((MainActivity) requireActivity()).hideBottomBar();
         setSaveCardsEnabled(networkManager.isConnected(requireContext()));
-
+        viewModel.loadCards();
     }
 
     @Override
@@ -70,32 +97,34 @@ public class MyCardsFragment extends Fragment implements NetworkOverlayControlle
 
 
     private void setupViewModel() {
-
         viewModel = new ViewModelProvider(this).get(CardsViewModel.class);
 
+        // Register callback once
+        binding.viewPagerCards.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                List<CardModel> currentCards = viewModel.getCards().getValue();
+                if (currentCards != null && position >= 0 && position < currentCards.size()) {
+                    bindCardData(currentCards.get(position));
+                }
+            }
+        });
+
         viewModel.getCards().observe(getViewLifecycleOwner(), cards -> {
-
             if (cards == null || cards.isEmpty()) {
-
                 binding.viewPagerCards.setVisibility(View.GONE);
                 binding.noCardsAnimation.setVisibility(View.VISIBLE);
                 binding.noCardsText.setVisibility(View.VISIBLE);
-
                 binding.saveCardInfoTxt.setVisibility(View.GONE);
                 binding.saveCardInfoSwitch.setVisibility(View.GONE);
-
                 setSaveCardsEnabled(false);
                 disableInputs();
-
             } else {
-
                 binding.viewPagerCards.setVisibility(View.VISIBLE);
                 binding.noCardsAnimation.setVisibility(View.GONE);
                 binding.noCardsText.setVisibility(View.GONE);
-
                 binding.saveCardInfoTxt.setVisibility(View.VISIBLE);
                 binding.saveCardInfoSwitch.setVisibility(View.VISIBLE);
-
                 setSaveCardsEnabled(true);
                 enableInputs();
 
@@ -105,35 +134,17 @@ public class MyCardsFragment extends Fragment implements NetworkOverlayControlle
                 binding.viewPagerCards.setClipToPadding(false);
                 binding.viewPagerCards.setClipChildren(false);
 
-
-
                 CompositePageTransformer transformer = new CompositePageTransformer();
-
                 transformer.addTransformer((page, position) -> {
-
                     float absPos = Math.abs(position);
-
                     page.setScaleY(0.85f + (1 - absPos) * 0.15f);
-
                     page.setAlpha(0.5f + (1 - absPos) * 0.5f);
-
                     page.setTranslationX(-position * 40);
                 });
-
                 binding.viewPagerCards.setPageTransformer(transformer);
 
-                // اول كارد
+                // Initial bind
                 bindCardData(cards.get(0));
-
-                // عند السحب
-                binding.viewPagerCards.registerOnPageChangeCallback(
-                        new ViewPager2.OnPageChangeCallback() {
-                            @Override
-                            public void onPageSelected(int position) {
-                                bindCardData(cards.get(position));
-                            }
-                        }
-                );
             }
         });
 

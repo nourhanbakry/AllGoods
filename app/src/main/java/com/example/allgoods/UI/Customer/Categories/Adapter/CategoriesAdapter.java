@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.allgoods.R;
 import com.example.allgoods.UI.Customer.ProductDetails.ProductDetails;
 import com.example.allgoods.model.ProductModel;
+import com.example.allgoods.utils.PriceUtils;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
         ProductModel product = productList.get(position);
 
         holder.name.setText(product.getName());
-        holder.price.setText(String.valueOf(product.getPrice()));
+        holder.price.setText("$" + PriceUtils.formatPrice(product.getPrice()));
 
         String imageUrl = (product.getImages() != null && !product.getImages().isEmpty()) 
                 ? product.getImages().get(0) 
