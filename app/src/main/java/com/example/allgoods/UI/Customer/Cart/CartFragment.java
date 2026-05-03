@@ -47,19 +47,42 @@ public class CartFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(CartViewModel.class);
 
-        adapter = new CartAdapter(requireContext(), new ArrayList<>());
+        adapter = new CartAdapter(requireContext(), new ArrayList<>(), new CartAdapter.OnCartItemChangeListener() {
+            @Override
+            public void onDelete(String productId) {
+                viewModel.removeFromCart(productId);
+            }
+
+            @Override
+            public void onQuantityChange(String productId, int newQuantity) {
+                viewModel.updateQuantity(productId, newQuantity);
+            }
+        });
         binding.checkoutItemsRv.setAdapter(adapter);
 
         viewModel.getCartItems().observe(getViewLifecycleOwner(), cartItems -> {
-
-            adapter.updateData(cartItems);
-
-            updatePrices();
+            if (cartItems.isEmpty()) {
+                binding.emptyCartLayout.setVisibility(View.VISIBLE);
+                binding.mainScrollView.setVisibility(View.GONE);
+            } else {
+                binding.emptyCartLayout.setVisibility(View.GONE);
+                binding.mainScrollView.setVisibility(View.VISIBLE);
+                adapter.updateData(cartItems);
+                updatePrices();
+            }
         });
 
-        if (viewModel.getCartItems().getValue() == null) {
-            viewModel.loadDummyCartProducts();
-        }
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading) {
+                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.emptyCartLayout.setVisibility(View.GONE);
+                binding.mainScrollView.setVisibility(View.GONE);
+            } else {
+                binding.progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        viewModel.loadCartProducts();
 
         binding.OpenAddress.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()

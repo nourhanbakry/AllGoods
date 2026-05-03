@@ -19,10 +19,14 @@ import com.example.allgoods.model.ProductModel;
 
 import java.util.List;
 
+import com.example.allgoods.Data.repository.Wishlist.WishlistRepository;
+import com.example.allgoods.Data.repository.Wishlist.WishlistRepositoryImpl;
+
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.CategoriesViewHolder> {
 
     private Context context;
     private List<ProductModel> productList;
+    private final WishlistRepository wishlistRepository = new WishlistRepositoryImpl();
 
     public CategoriesAdapter(Context context, List<ProductModel> productList) {
         this.context = context;
@@ -49,20 +53,53 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
                 .load(product.getImages().getFirst())
                 .into(holder.image);
 
-        if (product.isFav()) {
-            holder.favIcon.setImageResource(R.drawable.already_fav);
-        } else {
-            holder.favIcon.setImageResource(R.drawable.fav_icon);
-        }
+        // Check if product is favorite
+        wishlistRepository.isFavorite(product.getId(), isFavorite -> {
+            product.setFav(isFavorite);
+            if (isFavorite) {
+                holder.favIcon.setImageResource(R.drawable.already_fav);
+            } else {
+                holder.favIcon.setImageResource(R.drawable.fav_icon);
+            }
+        });
 
         holder.favIcon.setOnClickListener(v -> {
-            product.setFav(!product.isFav());
-            notifyItemChanged(position);
+            boolean newFavStatus = !product.isFav();
+            product.setFav(newFavStatus);
+            
+            if (newFavStatus) {
+                wishlistRepository.addToWishlist(product, new WishlistRepository.OnWishlistChangeListener() {
+                    @Override
+                    public void onSuccess() {
+                        holder.favIcon.setImageResource(R.drawable.already_fav);
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        product.setFav(false);
+                        holder.favIcon.setImageResource(R.drawable.fav_icon);
+                    }
+                });
+            } else {
+                wishlistRepository.removeFromWishlist(product.getId(), new WishlistRepository.OnWishlistChangeListener() {
+                    @Override
+                    public void onSuccess() {
+                        holder.favIcon.setImageResource(R.drawable.fav_icon);
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        product.setFav(true);
+                        holder.favIcon.setImageResource(R.drawable.already_fav);
+                    }
+                });
+            }
         });
 
         holder.itemView.setOnClickListener(v -> {
 
             Intent intent = new Intent(context, ProductDetails.class);
+            intent.putExtra("product", product);
             context.startActivity(intent);
         });
     }

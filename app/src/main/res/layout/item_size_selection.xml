@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvSize"
+    android:layout_width="60dp"
+    android:layout_height="55dp"
+    android:layout_margin="4dp"
+    android:background="@drawable/bg_gray_fa"
+    android:gravity="center"
+    android:text="S"
+    android:textColor="@color/black"
+    android:textSize="17sp"
+    android:textStyle="bold" />

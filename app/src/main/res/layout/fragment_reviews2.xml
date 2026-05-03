@@ -101,6 +101,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutReviews" />
 
+        <TextView
+            android:id="@+id/tvNoReviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No reviews for this product yet."
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutReviews"
+            android:layout_marginTop="50dp"/>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/btnAddReview"

@@ -16,11 +16,17 @@ import java.util.List;
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
     List<ProductModel> list;
     private Context context;
+    private OnCartItemChangeListener listener;
 
+    public interface OnCartItemChangeListener {
+        void onDelete(String productId);
+        void onQuantityChange(String productId, int newQuantity);
+    }
 
-    public CartAdapter(Context context, List<ProductModel> list) {
+    public CartAdapter(Context context, List<ProductModel> list, OnCartItemChangeListener listener) {
         this.list = list;
         this.context = context;
+        this.listener = listener;
     }
 
 
@@ -48,20 +54,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 .into(holder.binding.cartProductImage);
 
         holder.binding.increaseProductsQuantity.setOnClickListener(v -> {
-            item.setQuantity(item.getQuantity() + 1);
-            notifyItemChanged(position);
+            listener.onQuantityChange(item.getId(), item.getQuantity() + 1);
         });
 
         holder.binding.decreaseProductsQuantity.setOnClickListener(v -> {
             if (item.getQuantity() > 1) {
-                item.setQuantity(item.getQuantity() - 1);
-                notifyItemChanged(position);
+                listener.onQuantityChange(item.getId(), item.getQuantity() - 1);
             }
         });
 
         holder.binding.deleteBtn.setOnClickListener(v -> {
-            list.remove(position);
-            notifyDataSetChanged();
+            listener.onDelete(item.getId());
         });
     }
 

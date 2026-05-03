@@ -52,7 +52,17 @@ public class WishlistFragment extends Fragment {
 
             WishlistProductAdapter adapter = new WishlistProductAdapter(requireContext(),products);
             binding.wishlistProductsRv.setAdapter(adapter);
+            binding.favItemsNum.setText(String.valueOf(products.size()));
         });
+
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading) {
+                binding.progressBar.setVisibility(View.VISIBLE);
+            } else {
+                binding.progressBar.setVisibility(View.GONE);
+            }
+        });
+
         viewModel.loadProducts();
 
     }
