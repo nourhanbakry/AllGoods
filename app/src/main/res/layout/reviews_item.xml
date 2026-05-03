@@ -126,12 +126,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
             android:text="@string/discription"
             android:textAlignment="textStart"
             android:textColor="@color/gray"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/layoutRate"
             app:layout_constraintStart_toStartOf="@+id/ivReviewer"
             app:layout_constraintTop_toBottomOf="@id/layoutRate" />
 

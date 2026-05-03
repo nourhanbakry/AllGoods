@@ -14,6 +14,7 @@ import com.example.allgoods.UI.Customer.Reviews.View.ReviewsFragment;
 import com.example.allgoods.databinding.ActivityProductDetailsBinding;
 import com.example.allgoods.model.ProductModel;
 import com.example.allgoods.model.ReviewModel;
+import com.example.allgoods.utils.PriceUtils;
 import com.example.allgoods.Data.repository.Review.ReviewRepository;
 import com.example.allgoods.Data.repository.Review.ReviewRepositoryImpl;
 import com.example.allgoods.UI.Customer.Reviews.Adapter.ReviewAdapter;
@@ -90,11 +91,11 @@ public class ProductDetails extends AppCompatActivity {
 
     private void displayProductDetails() {
         binding.productTitle.setText(product.getName());
-        binding.productPrice.setText("$" + product.getPrice());
+        binding.productPrice.setText("$" + PriceUtils.formatPrice(product.getPrice()));
         binding.descText.setText(product.getDescription());
         binding.ratingValue.setText(String.valueOf(product.getRating()));
         binding.ratingBar.setRating(product.getRating());
-        binding.totalPriceValue.setText("$" + product.getPrice());
+        binding.totalPriceValue.setText("$" + PriceUtils.formatPrice(product.getPrice()));
 
         Glide.with(this)
                 .load(product.getImage())

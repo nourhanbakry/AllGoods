@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.allgoods.Data.repository.Card.CardRepository;
+import com.example.allgoods.Data.repository.Card.CardRepositoryImpl;
 import com.example.allgoods.model.CardModel;
 
 import java.util.ArrayList;
@@ -12,19 +14,38 @@ import java.util.List;
 public class CardsViewModel extends ViewModel {
 
     private final MutableLiveData<List<CardModel>> cards = new MutableLiveData<>();
+    private final CardRepository cardRepository = new CardRepositoryImpl();
 
     public LiveData<List<CardModel>> getCards() {
         return cards;
     }
 
     public void loadCards() {
+        cardRepository.getCards(new CardRepository.OnCardsFetchListener() {
+            @Override
+            public void onSuccess(List<CardModel> cardList) {
+                cards.setValue(cardList);
+            }
 
-        List<CardModel> list = new ArrayList<>();
+            @Override
+            public void onFailure(String error) {
+                cards.setValue(new ArrayList<>());
+            }
+        });
+    }
 
-        // test data
-        list.add(new CardModel("Nourhan Bakry", "5254763487347690", "12/28","129"));
-        list.add(new CardModel("Ali Ahmed", "4111111111111111", "11/26","139"));
+    public void setPrimaryCard(String cardId) {
+        cardRepository.setPrimaryCard(cardId, new CardRepository.OnCardChangeListener() {
+            @Override
+            public void onSuccess() {
+                // Optionally reload to sync UI
+                loadCards();
+            }
 
-        cards.setValue(list);
+            @Override
+            public void onFailure(String error) {
+                // Handle error
+            }
+        });
     }
 }
