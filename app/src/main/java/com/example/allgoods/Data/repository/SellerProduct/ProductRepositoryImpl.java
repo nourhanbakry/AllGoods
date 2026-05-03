@@ -31,6 +31,9 @@ public class ProductRepositoryImpl implements ProductRepository {
 
                             if (uploadCounter.incrementAndGet() == imageUris.size()) {
                                 product.setImages(uploadedUrls);
+                                if (!uploadedUrls.isEmpty()) {
+                                    product.setImage(uploadedUrls.get(0));
+                                }
                                 saveToFirestore(product, listener);
                             }
                         });

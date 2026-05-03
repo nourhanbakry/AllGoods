@@ -48,7 +48,11 @@ public class ProductModel implements Serializable {
     public ProductModel(String id, String name, String image, double price, Category category) {
         this.id = id;
         this.name = name;
-        this.images = images;
+        this.image = image;
+        this.images = new ArrayList<>();
+        if (image != null && !image.isEmpty()) {
+            this.images.add(image);
+        }
         this.price = price;
         this.category = category;
     }
@@ -56,7 +60,11 @@ public class ProductModel implements Serializable {
     public ProductModel(String id, String name, String image, double price, Category category,boolean isFav ) {
         this.id = id;
         this.name = name;
-        this.images = images;
+        this.image = image;
+        this.images = new ArrayList<>();
+        if (image != null && !image.isEmpty()) {
+            this.images.add(image);
+        }
         this.price = price;
         this.category = category;
         this.isFav = isFav;

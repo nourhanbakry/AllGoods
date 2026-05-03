@@ -158,8 +158,8 @@ public class AddProductFragment extends Fragment {
         );
 
         Toast.makeText(requireContext(), "Uploading... Please wait", Toast.LENGTH_SHORT).show();
-        viewModel.saveProduct(sellerProduct, selectedImageUri);
-        Log.d("AddProductFragment", "Product Data: " + sellerProduct.toString() + ", Image URI: " + selectedImageUri.toString());
+        viewModel.saveProduct(sellerProduct, selectedImageUris);
+        Log.d("AddProductFragment", "Product Data: " + sellerProduct.toString() + ", Image URIs: " + selectedImageUris.toString());
     }
 
     private int getPickerValue(View includeView) {
