@@ -12,58 +12,66 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.allgoods.Data.repository.Cart.CartRepository;
+import com.example.allgoods.Data.repository.Cart.CartRepositoryImpl;
+
 public class CartViewModel extends ViewModel {
 
     private final MutableLiveData<List<ProductModel>> cartItems = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
+    private final CartRepository cartRepository = new CartRepositoryImpl();
+
     public LiveData<List<ProductModel>> getCartItems() {
         return cartItems;
     }
 
-    public void loadDummyCartProducts() {
-        List<ProductModel> list = new ArrayList<>();
+    public LiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
 
-        list.add(new ProductModel(
-                1,
-                "Nike Sportswear Club Fleece",
-                "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
-                99.0,
-                Category.PANTS
-        ));
+    public void loadCartProducts() {
+        isLoading.setValue(true);
+        cartRepository.getCart(new CartRepository.OnCartFetchListener() {
+            @Override
+            public void onSuccess(List<ProductModel> productList) {
+                cartItems.setValue(productList);
+                isLoading.setValue(false);
+            }
 
-        list.add(new ProductModel(
-                2,
-                "Trail Running Jacket Nike",
-                "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
-                120.0,
-                Category.PANTS
-        ));
+            @Override
+            public void onFailure(String error) {
+                isLoading.setValue(false);
+                // Handle error
+            }
+        });
+    }
 
-        list.add(new ProductModel(
-                3,
-                "Nike Sportswear Club Fleece",
-                "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
-                99.0,
-                Category.PANTS
-        ));
-        list.add(new ProductModel(
-                4,
-                "Trail Running Jacket Nike",
-                "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
-                120.0,
-                Category.PANTS
-        ));
+    public void removeFromCart(String productId) {
+        cartRepository.removeFromCart(productId, new CartRepository.OnCartChangeListener() {
+            @Override
+            public void onSuccess() {
+                loadCartProducts();
+            }
 
-        list.add(new ProductModel(
-                5,
-                "Nike Sportswear Club Fleece",
-                "https://png.pngtree.com/png-vector/20210602/ourmid/pngtree-3d-beauty-cosmetics-product-design-png-image_3350323.jpg",
-                99.0,
-                Category.PANTS
-        ));
+            @Override
+            public void onFailure(String error) {
+                // Handle error
+            }
+        });
+    }
 
+    public void updateQuantity(String productId, int quantity) {
+        cartRepository.updateQuantity(productId, quantity, new CartRepository.OnCartChangeListener() {
+            @Override
+            public void onSuccess() {
+                loadCartProducts();
+            }
 
-
-        cartItems.setValue(list);
+            @Override
+            public void onFailure(String error) {
+                // Handle error
+            }
+        });
     }
 
     public double calculateSubtotal() {

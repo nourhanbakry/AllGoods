@@ -5,30 +5,21 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.view.Gravity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.example.allgoods.R;
-import com.example.allgoods.UI.Customer.AccountInfo.AccountInfoFragment;
 import com.example.allgoods.UI.Customer.Categories.CategoriesFragment;
 import com.example.allgoods.UI.Customer.Home.Adapter.ProductAdapter;
-import com.example.allgoods.UI.Customer.MyCards.MyCardsFragment;
-import com.example.allgoods.UI.Customer.Passwords.PassworsFragment;
-import com.example.allgoods.UI.Customer.Wishlist.WishlistFragment;
 import com.example.allgoods.UI.Main.MainActivity;
 import com.example.allgoods.databinding.FragmentHomeBinding;
-import com.example.allgoods.model.ProductModel;
 import com.example.allgoods.utils.Category;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class HomeFragment extends Fragment {
@@ -72,7 +63,29 @@ public class HomeFragment extends Fragment {
             ProductAdapter adapter = new ProductAdapter(requireContext(), products);
             binding.productsRv.setAdapter(adapter);
         });
+
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading) {
+                binding.progressBar.setVisibility(View.VISIBLE);
+            } else {
+                binding.progressBar.setVisibility(View.GONE);
+            }
+        });
+
         viewModel.loadProducts();
+
+        binding.etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.searchProducts(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
 
     private void openCategory(Category category) {

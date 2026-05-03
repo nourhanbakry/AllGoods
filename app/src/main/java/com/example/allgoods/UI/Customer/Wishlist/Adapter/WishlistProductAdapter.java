@@ -18,10 +18,14 @@ import com.example.allgoods.model.ProductModel;
 
 import java.util.List;
 
+import com.example.allgoods.Data.repository.Wishlist.WishlistRepository;
+import com.example.allgoods.Data.repository.Wishlist.WishlistRepositoryImpl;
+
 public class WishlistProductAdapter extends RecyclerView.Adapter<WishlistProductAdapter.WishlistProductViewHolder> {
 
     private Context context;
     private List<ProductModel> productList;
+    private final WishlistRepository wishlistRepository = new WishlistRepositoryImpl();
 
     public WishlistProductAdapter(Context context, List<ProductModel> productList) {
         this.context = context;
@@ -48,20 +52,29 @@ public class WishlistProductAdapter extends RecyclerView.Adapter<WishlistProduct
                 .load(product.getImage())
                 .into(holder.image);
 
-        if (product.isFav()) {
-            holder.favIcon.setImageResource(R.drawable.already_fav);
-        } else {
-            holder.favIcon.setImageResource(R.drawable.fav_icon);
-        }
+        // In wishlist, it's always fav initially
+        holder.favIcon.setImageResource(R.drawable.already_fav);
 
         holder.favIcon.setOnClickListener(v -> {
-            product.setFav(!product.isFav());
-            notifyItemChanged(position);
+            wishlistRepository.removeFromWishlist(product.getId(), new WishlistRepository.OnWishlistChangeListener() {
+                @Override
+                public void onSuccess() {
+                    productList.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, productList.size());
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    // Handle error
+                }
+            });
         });
 
         holder.itemView.setOnClickListener(v -> {
 
             Intent intent = new Intent(context, ProductDetails.class);
+            intent.putExtra("product", product);
             context.startActivity(intent);
         });
     }

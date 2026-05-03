@@ -17,6 +17,8 @@ import com.example.allgoods.R;
  * Use the {@link ReviewsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+import com.example.allgoods.Data.repository.Review.ReviewRepository;
+import com.example.allgoods.Data.repository.Review.ReviewRepositoryImpl;
 import com.example.allgoods.UI.Customer.Reviews.Adapter.ReviewAdapter;
 import com.example.allgoods.databinding.FragmentReviews2Binding;
 import com.example.allgoods.model.ReviewModel;
@@ -26,11 +28,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class ReviewsFragment extends Fragment {
 
+    private static final String ARG_PRODUCT_ID = "product_id";
+    private String productId;
     private com.example.allgoods.databinding.FragmentReviews2Binding binding;
+    private final ReviewRepository reviewRepository = new ReviewRepositoryImpl();
 
-    public static ReviewsFragment newInstance(String param1, String param2) {
+    public static ReviewsFragment newInstance(String productId, String param2) {
         ReviewsFragment fragment = new ReviewsFragment();
         Bundle args = new Bundle();
+        args.putString(ARG_PRODUCT_ID, productId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -38,6 +44,9 @@ public class ReviewsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            productId = getArguments().getString(ARG_PRODUCT_ID);
+        }
     }
 
     @Override
@@ -56,7 +65,7 @@ public class ReviewsFragment extends Fragment {
 
         binding.btnAddReview.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new AddReviewsFragment())
+                    .replace(android.R.id.content, AddReviewsFragment.newInstance(productId, ""))
                     .addToBackStack(null)
                     .commit();
         });
@@ -65,20 +74,45 @@ public class ReviewsFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        List<ReviewModel> reviews = new ArrayList<>();
-        reviews.add(new ReviewModel("Ronald Richards", "13 Sep, 2020", 4.8f, getString(R.string.discription)));
-        reviews.add(new ReviewModel("John Doe", "14 Sep, 2020", 4.5f, getString(R.string.discription)));
-        reviews.add(new ReviewModel("Jane Smith", "15 Sep, 2020", 5.0f, getString(R.string.discription)));
-        reviews.add(new ReviewModel("Ronald Richards", "13 Sep, 2020", 4.8f, getString(R.string.discription)));
-        reviews.add(new ReviewModel("John Doe", "14 Sep, 2020", 4.5f, getString(R.string.discription)));
-        reviews.add(new ReviewModel("Jane Smith", "15 Sep, 2020", 5.0f, getString(R.string.discription)));
-        reviews.add(new ReviewModel("Ronald Richards", "13 Sep, 2020", 4.8f, getString(R.string.discription)));
-        reviews.add(new ReviewModel("John Doe", "14 Sep, 2020", 4.5f, getString(R.string.discription)));
-        reviews.add(new ReviewModel("Jane Smith", "15 Sep, 2020", 5.0f, getString(R.string.discription)));
+        if (productId == null || productId.isEmpty()) return;
 
-        ReviewAdapter adapter = new ReviewAdapter(reviews);
-        binding.reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.reviewsRecyclerView.setAdapter(adapter);
+        reviewRepository.getReviewsForProduct(productId, new ReviewRepository.OnReviewsFetchListener() {
+            @Override
+            public void onSuccess(List<ReviewModel> reviews) {
+                if (binding == null) return;
+
+                if (reviews.isEmpty()) {
+                    binding.reviewsRecyclerView.setVisibility(View.GONE);
+                    binding.tvNoReviews.setVisibility(View.VISIBLE);
+                    binding.tvNumberOfReviews.setText("0");
+                    binding.ratingBar.setRating(0);
+                } else {
+                    binding.reviewsRecyclerView.setVisibility(View.VISIBLE);
+                    binding.tvNoReviews.setVisibility(View.GONE);
+
+                    binding.tvNumberOfReviews.setText(String.valueOf(reviews.size()));
+
+                    // Calculate average rating
+                    float totalRating = 0;
+                    for (ReviewModel r : reviews) {
+                        totalRating += r.getRating();
+                    }
+                    binding.ratingBar.setRating(totalRating / reviews.size());
+
+                    ReviewAdapter adapter = new ReviewAdapter(reviews);
+                    binding.reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                    binding.reviewsRecyclerView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                if (binding != null) {
+                    binding.tvNoReviews.setText("Error loading reviews: " + error);
+                    binding.tvNoReviews.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override

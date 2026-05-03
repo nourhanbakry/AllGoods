@@ -41,6 +41,32 @@
         android:maxLines="2"
         android:ellipsize="end"/>
 
+    <!-- rating -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="4dp">
+        <RatingBar
+            android:id="@+id/productRating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="4.5"
+            android:progressTint="#FFB300"
+            android:isIndicator="true"/>
+        <TextView
+            android:id="@+id/productReviewCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(45)"
+            android:textSize="12sp"
+            android:textColor="@color/gray9E"
+            android:layout_marginStart="4dp"/>
+    </LinearLayout>
+
     <!-- price -->
     <LinearLayout
         android:orientation="horizontal"

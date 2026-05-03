@@ -145,21 +145,16 @@
             app:layout_constraintTop_toTopOf="@+id/sizeHeader"
             app:layout_constraintVertical_bias="1.0" />
 
-        <LinearLayout
-            android:id="@+id/sizesLayout"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/sizesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
             android:paddingHorizontal="16dp"
-            app:layout_constraintTop_toBottomOf="@id/sizeHeader">
-
-            <TextView android:layout_width="0dp" android:layout_height="55dp" android:layout_weight="1" android:layout_margin="4dp" android:text="@string/s" android:gravity="center" android:background="@drawable/bg_gray_fa" android:textStyle="bold" android:textSize="17sp"  />
-            <TextView android:layout_width="0dp" android:layout_height="55dp" android:layout_weight="1" android:layout_margin="4dp" android:text="@string/m" android:gravity="center" android:background="@drawable/bg_gray_fa" android:textStyle="bold" android:textSize="17sp" />
-            <TextView android:layout_width="0dp" android:layout_height="55dp" android:layout_weight="1" android:layout_margin="4dp" android:text="@string/l" android:gravity="center" android:background="@drawable/bg_gray_fa" android:textStyle="bold" android:textSize="17sp" />
-            <TextView android:layout_width="0dp" android:layout_height="55dp" android:layout_weight="1" android:layout_margin="4dp" android:text="@string/xl" android:gravity="center" android:background="@drawable/bg_gray_fa" android:textStyle="bold" android:textSize="17sp" />
-            <TextView android:layout_width="0dp" android:layout_height="55dp" android:layout_weight="1" android:layout_margin="4dp" android:text="@string/_2xl" android:gravity="center" android:background="@drawable/bg_gray_fa" android:textStyle="bold" android:textSize="17sp"/>
-        </LinearLayout>
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/sizeHeader"
+            tools:listitem="@layout/item_size_selection" />
 
         <TextView
             android:id="@+id/descHeader"
@@ -169,7 +164,7 @@
             android:textStyle="bold"
             android:textSize="17sp"
             android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/sizesLayout"
+            app:layout_constraintTop_toBottomOf="@id/sizesRecyclerView"
             app:layout_constraintStart_toStartOf="@id/sizeHeader" />
 
         <TextView

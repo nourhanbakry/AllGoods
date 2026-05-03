@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,6 +148,7 @@ public class AddProductFragment extends Fragment {
 
         Toast.makeText(requireContext(), "Uploading... Please wait", Toast.LENGTH_SHORT).show();
         viewModel.saveProduct(sellerProduct, selectedImageUri);
+        Log.d("AddProductFragment", "Product Data: " + sellerProduct.toString() + ", Image URI: " + selectedImageUri.toString());
     }
 
     private int getPickerValue(View includeView) {
