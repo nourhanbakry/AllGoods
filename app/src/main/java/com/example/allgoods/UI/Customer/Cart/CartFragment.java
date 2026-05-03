@@ -18,6 +18,7 @@ import com.example.allgoods.UI.Customer.Home.Adapter.ProductAdapter;
 import com.example.allgoods.UI.Customer.MyCards.MyCardsFragment;
 import com.example.allgoods.UI.Customer.Reviews.View.ReviewsFragment;
 import com.example.allgoods.databinding.FragmentCartBinding;
+import com.example.allgoods.model.AddressModel;
 
 import java.util.ArrayList;
 
@@ -43,9 +44,9 @@ public class CartFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
     }
-    private void setupViewModel(){
 
-        viewModel = new ViewModelProvider(this).get(CartViewModel.class);
+    private void setupViewModel() {
+        viewModel = new ViewModelProvider(requireActivity()).get(CartViewModel.class);
 
         adapter = new CartAdapter(requireContext(), new ArrayList<>(), new CartAdapter.OnCartItemChangeListener() {
             @Override
@@ -82,7 +83,33 @@ public class CartFragment extends Fragment {
             }
         });
 
+        viewModel.getSelectedAddress().observe(getViewLifecycleOwner(), address -> {
+            if (address != null) {
+                binding.addressInfo.setVisibility(View.VISIBLE);
+                binding.noAddressText.setVisibility(View.GONE);
+                binding.txtDetaildAddress.setText(address.getAddress());
+                binding.cityName.setText(address.getCity());
+            } else {
+                // If no selected address, try loading the primary one
+                viewModel.loadPrimaryAddress();
+            }
+        });
+
+        viewModel.getPrimaryAddress().observe(getViewLifecycleOwner(), address -> {
+            // Only use primary address if no address is currently selected
+            if (viewModel.getSelectedAddress().getValue() == null && address != null) {
+                viewModel.setSelectedAddress(address);
+            } else if (viewModel.getSelectedAddress().getValue() == null) {
+                binding.addressInfo.setVisibility(View.GONE);
+                binding.noAddressText.setVisibility(View.VISIBLE);
+            }
+        });
+
         viewModel.loadCartProducts();
+
+        if (viewModel.getSelectedAddress().getValue() == null) {
+            viewModel.loadPrimaryAddress();
+        }
 
         binding.OpenAddress.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
@@ -99,7 +126,7 @@ public class CartFragment extends Fragment {
         binding.totalPrice.setText(String.valueOf(viewModel.calculateTotal()));
     }
 
-    private void openPayment(){
+    private void openPayment() {
         Bundle bundle = new Bundle();
         bundle.putString("source", "cart");
 
