@@ -5,7 +5,8 @@ import com.example.allgoods.model.ProductModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,26 +16,34 @@ public class ProductRepositoryImpl implements ProductRepository {
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     @Override
-    public void uploadProduct(ProductModel product, Uri imageUri, OnProductUploadListener listener) {
-        // select place to upload in
-        StorageReference storageRef = storage.getReference().child("products/" + System.currentTimeMillis() + ".jpg");
+    public void uploadProduct(ProductModel product, List<Uri> imageUris, OnProductUploadListener listener) {
+        List<String> uploadedUrls = new ArrayList<>();
+        AtomicInteger uploadCounter = new AtomicInteger(0);
 
-        // start upload
-        storageRef.putFile(imageUri)
-                .addOnSuccessListener(taskSnapshot -> {
-                    storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        product.setImage(uri.toString());
+        for (Uri uri : imageUris) {
+            StorageReference storageRef = storage.getReference()
+                    .child("products/" + UUID.randomUUID().toString() + ".jpg");
 
-                        // store in firestore
-                        firestore.collection("Products")
-                                .add(product)
-                                .addOnSuccessListener(documentReference -> listener.onSuccess())
-                                .addOnFailureListener(e -> listener.onFailure("Firestore: " + e.getMessage()));
-                    });
-                })
-                .addOnFailureListener(e -> {
-                    listener.onFailure("Storage: " + e.getMessage());
-                });
+            storageRef.putFile(uri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        storageRef.getDownloadUrl().addOnSuccessListener(downloadUrl -> {
+                            uploadedUrls.add(downloadUrl.toString());
+
+                            if (uploadCounter.incrementAndGet() == imageUris.size()) {
+                                product.setImages(uploadedUrls);
+                                saveToFirestore(product, listener);
+                            }
+                        });
+                    })
+                    .addOnFailureListener(e -> listener.onFailure("Storage: " + e.getMessage()));
+        }
+    }
+
+    private void saveToFirestore(ProductModel product, OnProductUploadListener listener) {
+        firestore.collection("Products")
+                .add(product)
+                .addOnSuccessListener(documentReference -> listener.onSuccess())
+                .addOnFailureListener(e -> listener.onFailure("Firestore: " + e.getMessage()));
     }
 
     @Override

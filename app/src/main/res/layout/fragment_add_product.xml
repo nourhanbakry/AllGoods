@@ -53,10 +53,12 @@
                         android:layout_weight="1"
                         android:background="@drawable/seller_et_bg"
                         android:paddingHorizontal="10dp"
-                        android:paddingVertical="8dp"
                         android:hint="@string/upload_photo"
                         android:textSize="14sp"
-                        android:enabled="false"/>
+                        android:enabled="false"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
                     <ImageButton
                         android:id="@+id/btnUpload"
                         android:layout_width="40dp"
@@ -68,6 +70,23 @@
                         android:src="@drawable/upload"
                        />
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/ImagesNumber"
+                        android:text="0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:paddingStart="5dp"
+                        android:text="@string/images"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -106,7 +125,7 @@
                         android:layout_height="50dp"
                         android:background="@drawable/seller_et_bg"
                         android:paddingHorizontal="10dp"
-                        android:hint="e.g, shirt, t-shirt, pants, suit"
+                        android:hint="@string/category_hint"
                         android:textSize="14sp"
                         android:inputType="none"/>
                 </com.google.android.material.textfield.TextInputLayout>

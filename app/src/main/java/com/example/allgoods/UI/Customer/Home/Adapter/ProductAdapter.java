@@ -53,7 +53,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.reviewCount.setText("(" + product.getReviewCount() + ")");
 
         Glide.with(context)
-                .load(product.getImage())
+                .load(product.getImages().getFirst())
                 .into(holder.image);
 
         // Check if product is favorite

@@ -50,7 +50,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.binding.cartProductQuantity.setText(String.valueOf(item.getQuantity()));
 
         Glide.with(holder.itemView.getContext())
-                .load(item.getImage())
+                .load(item.getImages().getFirst())
                 .into(holder.binding.cartProductImage);
 
         holder.binding.increaseProductsQuantity.setOnClickListener(v -> {

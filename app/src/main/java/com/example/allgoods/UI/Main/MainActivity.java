@@ -25,6 +25,7 @@ import com.example.allgoods.Data.repository.Auth.AuthRepositoryImpl;
 import com.example.allgoods.R;
 import com.example.allgoods.UI.Auth.forgetpassword.ForgetPasswordActivity;
 import com.example.allgoods.UI.Auth.login.LoginActivity;
+import com.example.allgoods.UI.Customer.AccountInfo.AccountInfoFragment;
 import com.example.allgoods.UI.Customer.Cart.CartFragment;
 import com.example.allgoods.UI.Customer.Home.HomeFragment;
 import com.example.allgoods.UI.Customer.MyCards.MyCardsFragment;
@@ -155,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             int id = item.getItemId();
 
             if (id == R.id.account_info) {
-//                replaceFragment( new AccountInfoFragment());
+                replaceFragment( new AccountInfoFragment());
             } else if (id == R.id.passwords) {
                 openForgetPassword();
             } else if (id == R.id.my_cards) {
@@ -255,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(binding.frameLayout.getId(), fragment)
+                .addToBackStack(null)
                 .commit();
     }
     private void openForgetPassword() {
