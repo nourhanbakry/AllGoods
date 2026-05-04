@@ -21,7 +21,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import com.example.allgoods.Data.local.SharedPrefManager;
 import com.example.allgoods.Data.repository.Auth.AuthRepositoryImpl;
 import com.example.allgoods.Data.repository.Order.OrderRepository;
 import com.example.allgoods.Data.repository.Order.OrderRepositoryImpl;
@@ -35,7 +34,7 @@ import com.example.allgoods.UI.Customer.MyCards.MyCardsFragment;
 import com.example.allgoods.UI.Customer.Wishlist.WishlistFragment;
 import com.example.allgoods.UI.Seller.AddProduct.AddProductFragment;
 import com.example.allgoods.UI.Seller.Inventory.InventoryFragment;
-import com.example.allgoods.UI.Seller.Orders.OrderskFragment;
+import com.example.allgoods.UI.Seller.Orders.OrdersFragment;
 import com.example.allgoods.UI.Seller.Reviews.ReviewsFragment;
 import com.example.allgoods.UI.Seller.Stats.StatsFragment;
 import com.example.allgoods.databinding.ActivityMainBinding;
@@ -259,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (tab == 3) {
             binding.ordersIcon.setVisibility(View.GONE);
             binding.ordersText.setVisibility(View.VISIBLE);
-            replaceFragment(new OrderskFragment());
+            replaceFragment(new OrdersFragment());
         } else if (tab == 4) {
             binding.reviewsIcon.setVisibility(View.GONE);
             binding.reviewsText.setVisibility(View.VISIBLE);

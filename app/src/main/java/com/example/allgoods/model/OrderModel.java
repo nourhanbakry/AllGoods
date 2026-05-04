@@ -16,6 +16,7 @@ public class OrderModel implements Serializable {
     private double total;
     private String status; // e.g., "pending", "confirmed", "shipped", "delivered"
     private long timestamp;
+    private long deliveredTimestamp;
 
     public OrderModel() {}
 
@@ -34,6 +35,24 @@ public class OrderModel implements Serializable {
         this.total = total;
         this.status = status;
         this.timestamp = timestamp;
+    }
+
+    public OrderModel(String orderId, String customerId, String customerName, String phoneNumber, 
+                      AddressModel address, CardModel paymentMethod, List<ProductModel> items, 
+                      double subtotal, double shippingCost, double total, String status, long timestamp, long deliveredTimestamp) {
+        this.orderId = orderId;
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.paymentMethod = paymentMethod;
+        this.items = items;
+        this.subtotal = subtotal;
+        this.shippingCost = shippingCost;
+        this.total = total;
+        this.status = status;
+        this.timestamp = timestamp;
+        this.deliveredTimestamp = deliveredTimestamp;
     }
 
     // Getters and Setters
@@ -72,4 +91,7 @@ public class OrderModel implements Serializable {
 
     public long getTimestamp() { return timestamp; }
     public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
+
+    public long getDeliveredTimestamp() { return deliveredTimestamp; }
+    public void setDeliveredTimestamp(long deliveredTimestamp) { this.deliveredTimestamp = deliveredTimestamp; }
 }

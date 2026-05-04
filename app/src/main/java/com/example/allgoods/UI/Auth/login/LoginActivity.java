@@ -1,6 +1,5 @@
 package com.example.allgoods.UI.Auth.login;
 
-import static com.example.allgoods.utils.Result.Status.LOADING;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +13,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.allgoods.Data.local.SharedPrefManager;
 import com.example.allgoods.Data.repository.Auth.AuthRepositoryImpl;
+import com.example.allgoods.R;
 import com.example.allgoods.UI.Auth.forgetpassword.ForgetPasswordActivity;
 import com.example.allgoods.UI.Auth.signup.SignUpActivity;
-import com.example.allgoods.UI.Auth.signup.SignUpViewModel;
 import com.example.allgoods.UI.Main.MainActivity;
 import com.example.allgoods.databinding.ActivityLoginBinding;
 import com.example.allgoods.utils.Network.NetworkListener;
@@ -162,11 +161,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isPasswordValid(String password) {
         if (password.isEmpty()) {
-            binding.etPassword.setError("Password is required");
+            binding.etPassword.setError(getString(R.string.password_is_required));
             return false;
         }
         else if (password.length() < 6) {
-            binding.etPassword.setError("Password Not Valid");
+            binding.etPassword.setError(getString(R.string.password_not_valid));
             return false;
         } else {
            binding.etPassword.setError(null);
@@ -176,10 +175,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isEmailValid(String email) {
         if (email.isEmpty()) {
-            binding.etEmail.setError("Email is required");
+            binding.etEmail.setError(getString(R.string.email_is_required1));
             return false;
         }else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.etEmail.setError("Enter valid email");
+            binding.etEmail.setError(getString(R.string.enter_valid_email1));
             return false;
         }else {
             binding.etEmail.setError(null);

@@ -34,7 +34,7 @@
     <string name="passwords">Passwords</string>
     <string name="my_cards">My Cards</string>
     <string name="logout">Logout</string>
-    <string name="orders">3 Orders</string>
+    <string name="orders">Orders</string>
     <string name="verified_profile">Verified Profile</string>
     <string name="user_name">Mrh Raju</string>
     <string name="forgot_pass_title">Forgot Password</string>
@@ -162,4 +162,18 @@
     <string name="close">Close</string>
     <string name="delete_product">Delete Product?</string>
     <string name="this_action_cannot_be_undone_this_will_permanently_delete_the_product_from_your_inventory">This action cannot be undone. This will permanently delete the product from your inventory .</string>
+    <string name="password_is_required">Password is required</string>
+    <string name="password_not_valid">Password Not Valid</string>
+    <string name="email_is_required1">Email is required</string>
+    <string name="enter_valid_email1">Enter valid email</string>
+    <string name="pending">Pending</string>
+    <string name="order_id">ORD - 001</string>
+    <string name="location">location</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="order_items">Order Items</string>
+    <string name="mark_delivered">Mark Delivered</string>
+    <string name="_2_total">2 Total</string>
+    <string name="delivered_orders_2">Delivered Orders (2)</string>
+    <string name="delivered_on_2025_11_13">Delivered on 2025 - 11 - 13</string>
+    <string name="delivered">Delivered</string>
 </resources>

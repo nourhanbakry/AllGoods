@@ -98,4 +98,64 @@ public class OrderRepositoryImpl implements OrderRepository {
                 })
                 .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
     }
+
+    @Override
+    public void getSellerOrders(String sellerId, OnOrdersFetchListener listener) {
+        // In a real app, orders might be segmented by seller. 
+        // For simplicity, we fetch all orders and filter those containing the seller's products.
+        firestore.collection("Orders")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<OrderModel> sellerOrders = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        OrderModel order = doc.toObject(OrderModel.class);
+                        boolean hasSellerProduct = false;
+                        if (order.getItems() != null) {
+                            for (ProductModel item : order.getItems()) {
+                                if (sellerId.equals(item.getSellerId())) {
+                                    hasSellerProduct = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (hasSellerProduct) {
+                            sellerOrders.add(order);
+                        }
+                    }
+                    listener.onSuccess(sellerOrders);
+                })
+                .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
+    }
+
+    @Override
+    public void updateOrderStatus(String orderId, String status, long deliveredTimestamp, OnOrderChangeListener listener) {
+        firestore.collection("Orders").document(orderId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    OrderModel order = documentSnapshot.toObject(OrderModel.class);
+                    if (order != null) {
+                        Map<String, Object> updates = new HashMap<>();
+                        updates.put("status", status);
+                        updates.put("deliveredTimestamp", deliveredTimestamp);
+
+                        // Update main Orders collection
+                        firestore.collection("Orders").document(orderId)
+                                .update(updates)
+                                .addOnSuccessListener(aVoid -> {
+                                    // Also update in User's orders sub-collection
+                                    firestore.collection("Users")
+                                            .document(order.getCustomerId())
+                                            .collection("Orders")
+                                            .document(orderId)
+                                            .update(updates);
+                                    
+                                    listener.onSuccess();
+                                })
+                                .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
+                    } else {
+                        listener.onFailure("Order not found");
+                    }
+                })
+                .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
+    }
 }
