@@ -21,7 +21,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.example.allgoods.Data.local.SharedPrefManager;
 import com.example.allgoods.Data.repository.Auth.AuthRepositoryImpl;
+import com.example.allgoods.Data.repository.Order.OrderRepository;
+import com.example.allgoods.Data.repository.Order.OrderRepositoryImpl;
 import com.example.allgoods.R;
 import com.example.allgoods.UI.Auth.forgetpassword.ForgetPasswordActivity;
 import com.example.allgoods.UI.Auth.login.LoginActivity;
@@ -36,10 +39,15 @@ import com.example.allgoods.UI.Seller.Orders.OrderskFragment;
 import com.example.allgoods.UI.Seller.Reviews.ReviewsFragment;
 import com.example.allgoods.UI.Seller.Stats.StatsFragment;
 import com.example.allgoods.databinding.ActivityMainBinding;
+import com.example.allgoods.model.OrderModel;
 import com.example.allgoods.utils.Network.NetworkListener;
 import com.example.allgoods.utils.Network.NetworkManager;
 import com.example.allgoods.utils.Network.NetworkOverlayController;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -142,6 +150,62 @@ public class MainActivity extends AppCompatActivity {
     private void setupHeader() {
         View header = binding.navigationView.getHeaderView(0);
         drawerIcon = header.findViewById(R.id.drawerMenuIcon);
+        TextView ordersCountText = header.findViewById(R.id.orders);
+        TextView userNameText = header.findViewById(R.id.userNameNavigation);
+
+        /*SharedPrefManager prefManager = new SharedPrefManager(this);
+        String name = prefManager.getName();*/
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            currentUser.reload().addOnCompleteListener(task -> {
+                String name = currentUser.getDisplayName();
+                if (name != null && !name.isEmpty()) {
+                    userNameText.setText(name);
+                } else {
+                    userNameText.setText(currentUser.getEmail());
+                }
+            });
+        } else {
+            userNameText.setText("Guest User");
+        }
+
+        // Check if name is passed via Intent (useful after login/signup)
+       /* if (getIntent() != null && getIntent().hasExtra("USER_NAME")) {
+            name = getIntent().getStringExtra("USER_NAME");
+            String email = prefManager.getKeyEmail();
+            String role = prefManager.getRole();
+            prefManager.saveUser(name, email, role);
+        }
+
+        if (name == null || name.isEmpty()) {
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (currentUser != null && currentUser.getDisplayName() != null) {
+                name = currentUser.getDisplayName();
+            }
+        }
+
+        if (name != null && !name.isEmpty()) {
+            userNameText.setText(name);
+        } else {
+            userNameText.setText("User");
+        }*/
+
+        // Fetch and update orders count
+        new OrderRepositoryImpl().getOrders(new OrderRepository.OnOrdersFetchListener() {
+            @Override
+            public void onSuccess(List<OrderModel> orders) {
+                if (orders != null) {
+                    String ordersText = orders.size() + (orders.size() == 1 ? " Order" : " Orders");
+                    ordersCountText.setText(ordersText);
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                // If failed, we keep the default "3 Orders" or could set to "0 Orders"
+                ordersCountText.setText(R.string._0_orders);
+            }
+        });
 
         drawerIcon.setOnClickListener(v ->
                 binding.drawerMainLayout.closeDrawer(GravityCompat.START)

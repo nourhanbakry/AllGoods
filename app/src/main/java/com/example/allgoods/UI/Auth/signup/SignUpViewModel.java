@@ -38,9 +38,7 @@ public class SignUpViewModel extends ViewModel {
     }
 
 
-    public void saveUserIfNeeded(boolean rememberMe, String name, String email) {
-        if (rememberMe) {
-            repository.saveUserLocally(name, email,"customer");
-        }
+    public void saveUser(String name, String email) {
+        repository.saveUserLocally(name, email,"customer");
     }
 }

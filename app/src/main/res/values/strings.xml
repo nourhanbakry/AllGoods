@@ -150,4 +150,7 @@
     <string name="category_hint">e.g, shirt, t-shirt, pants, suit</string>
     <string name="no_reviews_for_this_product_yet">No reviews for this product yet.</string>
     <string name="error_loading_reviews">Error loading reviews.</string>
+    <string name="_0_orders">0 Orders</string>
+    <string name="your_order_has_been_confirmed_we_will_send_you_confirmation_email_shortly">Your order has been confirmed, we will send you confirmation email shortly.</string>
+    <string name="wishlist_is_empty">Wishlist is empty</string>
 </resources>

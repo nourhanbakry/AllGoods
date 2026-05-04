@@ -63,9 +63,6 @@ public class CategoriesFragment extends Fragment {
         setupUI();
         loadData();
 
-
-
-
     }
 
     @Override
@@ -99,13 +96,26 @@ public class CategoriesFragment extends Fragment {
     private void loadData() {
         viewModel = new ViewModelProvider(this).get(CategoriesViewModel.class);
         viewModel.getProducts().observe(getViewLifecycleOwner(), products -> {
-
-            ProductAdapter adapter = new ProductAdapter(requireContext(), products);
-            binding.categoryProductsRv.setAdapter(adapter);
-            binding.categoryItemsNum.setText(String.valueOf(products.size()));
+            if (products != null) {
+                ProductAdapter adapter = new ProductAdapter(requireContext(), products);
+                binding.categoryProductsRv.setAdapter(adapter);
+                binding.categoryItemsNum.setText(String.valueOf(products.size()));
+            }
         });
+
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading) {
+                binding.categoryProgressBar.setVisibility(View.VISIBLE);
+                binding.categoryScrollView.setVisibility(View.GONE);
+            } else {
+                binding.categoryProgressBar.setVisibility(View.GONE);
+                binding.categoryScrollView.setVisibility(View.VISIBLE);
+            }
+        });
+
         if (category != null) {
             viewModel.loadProductsByCategory(category);
         }
+
     }
 }

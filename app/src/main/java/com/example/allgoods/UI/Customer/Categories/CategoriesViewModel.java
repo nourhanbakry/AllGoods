@@ -23,16 +23,21 @@ public class CategoriesViewModel extends ViewModel {
         return products;
     }
 
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    public LiveData<Boolean> getIsLoading() { return isLoading; }
+
     public void loadProductsByCategory(String category) {
+        isLoading.setValue(true);
         productRepository.getProductsByCategory(category, new ProductRepository.OnProductsFetchListener() {
             @Override
             public void onSuccess(List<ProductModel> productList) {
                 products.setValue(productList);
+                isLoading.setValue(false);
             }
 
             @Override
             public void onFailure(String error) {
-                // Handle error
+                isLoading.setValue(false);
             }
         });
     }

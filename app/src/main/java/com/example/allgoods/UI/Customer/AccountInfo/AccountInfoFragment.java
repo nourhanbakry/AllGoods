@@ -62,9 +62,16 @@ public class AccountInfoFragment extends Fragment {
     }
 
     private void loadAccountInfo() {
+        binding.accountProgressBar.setVisibility(View.VISIBLE);
+        binding.addressInfo.setAlpha(0f);
+        binding.infoNumber.setAlpha(0f);
         userRepository.getPrimaryAddress(new UserRepository.OnAddressFetchListener() {
             @Override
             public void onSuccess(AddressModel address) {
+                binding.accountProgressBar.setVisibility(View.GONE);
+                binding.addressInfo.animate().alpha(1f).setDuration(300);
+                binding.infoNumber.animate().alpha(1f).setDuration(300);
+
                 if (address != null) {
                     binding.txtAddressValue.setText(address.getAddress());
                     binding.txtPhoneValue.setText(address.getPhoneNumber());
@@ -76,6 +83,7 @@ public class AccountInfoFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
+                binding.accountProgressBar.setVisibility(View.GONE);
                 Toast.makeText(getContext(), "Error: " + message, Toast.LENGTH_SHORT).show();
             }
         });

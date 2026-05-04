@@ -1,5 +1,8 @@
 package com.example.allgoods.UI.Customer.Wishlist;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -50,21 +53,43 @@ public class WishlistFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(WishlistViewModel.class);
         viewModel.getProducts().observe(getViewLifecycleOwner(), products -> {
 
-            WishlistProductAdapter adapter = new WishlistProductAdapter(requireContext(),products);
-            binding.wishlistProductsRv.setAdapter(adapter);
-            binding.favItemsNum.setText(String.valueOf(products.size()));
+            if (products == null || products.isEmpty()){
+                showEmptyState();
+            } else {
+                binding.emptyWishlistLayout.setVisibility(View.GONE);
+                binding.wishlistS.setVisibility(View.VISIBLE);
+                binding.favItemsNum.setText(String.valueOf(products.size()));
+
+                WishlistProductAdapter adapter = new WishlistProductAdapter(requireContext(), products, remainingCount -> {
+                    binding.favItemsNum.setText(String.valueOf(remainingCount));
+
+                    if (remainingCount == 0) {
+                        showEmptyState();
+                    }
+                });
+                binding.wishlistProductsRv.setAdapter(adapter);
+            }
         });
 
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.wishlistS.setVisibility(GONE);
+                binding.progressBar.setVisibility(VISIBLE);
+                binding.emptyWishlistLayout.setVisibility(GONE);
             } else {
-                binding.progressBar.setVisibility(View.GONE);
+                binding.progressBar.setVisibility(GONE);
             }
         });
 
         viewModel.loadProducts();
 
+    }
+
+    private void showEmptyState() {
+        binding.wishlistS.setVisibility(View.GONE);
+        binding.emptyWishlistLayout.setVisibility(View.VISIBLE);
+        binding.favItemsNum.setText("0");
+        binding.emptyCartAnimation.playAnimation();
     }
 
     @Override

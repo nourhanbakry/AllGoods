@@ -40,12 +40,23 @@
             android:src="@drawable/pants" />
     </FrameLayout>
 
+    <ProgressBar
+        android:id="@+id/categoryProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <!-- Scroll Content -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
+        android:id="@+id/categoryScrollView"
         app:layout_constraintTop_toBottomOf="@id/categoryIconFrame"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

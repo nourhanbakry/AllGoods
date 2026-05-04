@@ -19,29 +19,33 @@ public class AuthRepositoryImpl implements AuthRepository{
 
     @Override
     public void signUp(String name, String email, String password, AuthCallback callback) {
-
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-
                     if (task.isSuccessful()) {
-
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
-                        User user = new User(
-                                name,
-                                email,
-                                "customer",
-                                firebaseUser != null ? firebaseUser.getUid() : ""
-                        );
+                        if (firebaseUser != null) {
+                            com.google.firebase.auth.UserProfileChangeRequest profileUpdates =
+                                    new com.google.firebase.auth.UserProfileChangeRequest.Builder()
+                                            .setDisplayName(name)
+                                            .build();
 
-                        callback.onSuccess(user);
-
+                            firebaseUser.updateProfile(profileUpdates)
+                                    .addOnCompleteListener(profileTask -> {
+                                        User user = new User(
+                                                name,
+                                                email,
+                                                "customer",
+                                                firebaseUser.getUid()
+                                        );
+                                        callback.onSuccess(user);
+                                    });
+                        }
                     } else {
                         callback.onFailure(task.getException().getMessage());
                     }
                 });
     }
-
     @Override
     public void login(String email, String password, AuthCallback callback) {
 

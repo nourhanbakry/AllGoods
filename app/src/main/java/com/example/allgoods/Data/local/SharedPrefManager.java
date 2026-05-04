@@ -33,6 +33,14 @@ public class SharedPrefManager {
         return sharedPreferences.getString(KEY_ROLE, "");
     }
 
+    public String getName() {
+        return sharedPreferences.getString(KEY_NAME, "");
+    }
+    public String getKeyEmail(){
+        return  sharedPreferences.getString(KEY_EMAIL, "");
+    }
+
+
     public void logout() {
         sharedPreferences.edit().clear().apply();
     }

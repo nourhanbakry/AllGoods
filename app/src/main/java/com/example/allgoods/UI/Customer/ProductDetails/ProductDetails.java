@@ -22,6 +22,8 @@ import com.example.allgoods.UI.Customer.ProductDetails.Adapter.SizeAdapter;
 import com.example.allgoods.Data.repository.Cart.CartRepository;
 import com.example.allgoods.Data.repository.Cart.CartRepositoryImpl;
 import com.bumptech.glide.Glide;
+import com.example.allgoods.utils.RateFormate;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -93,7 +95,8 @@ public class ProductDetails extends AppCompatActivity {
         binding.productTitle.setText(product.getName());
         binding.productPrice.setText("$" + PriceUtils.formatPrice(product.getPrice()));
         binding.descText.setText(product.getDescription());
-        binding.ratingValue.setText(String.valueOf(product.getRating()));
+        binding.ratingValue.setText(RateFormate.formateRating(product.getRating()));
+        //binding.ratingValue.setText(String.valueOf(product.getRating()));
         binding.ratingBar.setRating(product.getRating());
         binding.totalPriceValue.setText("$" + PriceUtils.formatPrice(product.getPrice()));
 
@@ -189,7 +192,8 @@ public class ProductDetails extends AppCompatActivity {
                     binding.reviewDate.setText(firstReview.getReviewDate());
                     binding.reviewComment.setText(firstReview.getDescription());
                     binding.ratingBar.setRating(firstReview.getRating());
-                    binding.ratingValue.setText(String.valueOf(firstReview.getRating()));
+                    binding.ratingValue.setText(RateFormate.formateRating(firstReview.getRating()));
+                    //binding.ratingValue.setText(String.valueOf(firstReview.getRating()));
                 }
             }
 

@@ -194,15 +194,11 @@ public class LoginActivity extends AppCompatActivity {
     private void navigateToHome(String role, boolean rememberMe, String email, String name) {
 
         SharedPrefManager pref = new SharedPrefManager(this);
-
-        if (role.equals("seller")) {
-            pref.logout();
-        } else if (rememberMe) {
-            pref.saveUser(name, email, role);
-        }
+        pref.saveUser(name, email, role);
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("USER_ROLE", role);
+        intent.putExtra("USER_NAME", name);
 
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 

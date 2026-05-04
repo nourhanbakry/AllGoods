@@ -36,10 +36,10 @@
 
         <!-- Name -->
         <TextView
-            android:id="@+id/userName"
+            android:id="@+id/userNameNavigation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/user_name"
+            android:text=""
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/profileImage"
@@ -52,8 +52,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="@+id/profileImage"
-            app:layout_constraintStart_toStartOf="@id/userName"
-            app:layout_constraintTop_toBottomOf="@id/userName">
+            app:layout_constraintStart_toStartOf="@id/userNameNavigation"
+            app:layout_constraintTop_toBottomOf="@id/userNameNavigation">
 
             <TextView
                 android:id="@+id/verifiedText"

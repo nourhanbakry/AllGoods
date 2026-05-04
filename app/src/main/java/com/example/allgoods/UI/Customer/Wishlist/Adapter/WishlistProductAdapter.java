@@ -24,13 +24,18 @@ import com.example.allgoods.Data.repository.Wishlist.WishlistRepositoryImpl;
 
 public class WishlistProductAdapter extends RecyclerView.Adapter<WishlistProductAdapter.WishlistProductViewHolder> {
 
+    public interface OnProductRemovedListener {
+        void onProductRemoved(int remainingCount);
+    }
+    private OnProductRemovedListener listener;
     private Context context;
     private List<ProductModel> productList;
     private final WishlistRepository wishlistRepository = new WishlistRepositoryImpl();
 
-    public WishlistProductAdapter(Context context, List<ProductModel> productList) {
+    public WishlistProductAdapter(Context context, List<ProductModel> productList, OnProductRemovedListener listener) {
         this.context = context;
         this.productList = productList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -61,12 +66,18 @@ public class WishlistProductAdapter extends RecyclerView.Adapter<WishlistProduct
         holder.favIcon.setImageResource(R.drawable.already_fav);
 
         holder.favIcon.setOnClickListener(v -> {
+            int currentPos = holder.getAdapterPosition();
+            if (currentPos == RecyclerView.NO_POSITION) return;
+
             wishlistRepository.removeFromWishlist(product.getId(), new WishlistRepository.OnWishlistChangeListener() {
                 @Override
                 public void onSuccess() {
-                    productList.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, productList.size());
+                    productList.remove(currentPos);
+                    notifyItemRemoved(currentPos);
+                    notifyItemRangeChanged(currentPos, productList.size());
+                    if (listener != null) {
+                        listener.onProductRemoved(productList.size());
+                    }
                 }
 
                 @Override

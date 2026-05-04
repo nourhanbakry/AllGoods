@@ -74,8 +74,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                 case SUCCESS:
                     setSignUpEnabled(true);
-                    viewModel.saveUserIfNeeded(
-                            binding.switchRememberMe.isChecked(),
+                    viewModel.saveUser(
                             binding.etName.getText().toString(),
                             binding.etEmail.getText().toString()
                     );
@@ -95,6 +94,8 @@ public class SignUpActivity extends AppCompatActivity {
     private void navigateToHome() {
 
         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+        intent.putExtra("USER_NAME", binding.etName.getText().toString());
+        intent.putExtra("USER_ROLE", "customer");
 
         // Delete All previous screens
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
