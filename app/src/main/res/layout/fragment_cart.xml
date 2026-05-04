@@ -352,6 +352,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!--Lottie animation-->
     <LinearLayout
         android:id="@+id/emptyCartLayout"
         android:layout_width="wrap_content"

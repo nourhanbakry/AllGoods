@@ -70,8 +70,6 @@ public class ReviewsFragment extends Fragment {
         if (sellerId == null) return;
 
         reviewsBinding.progressBarLoading.setVisibility(VISIBLE);
-        reviewsBinding.tvCustomerReviews.setVisibility(GONE);
-        reviewsBinding.tvProductsCount.setVisibility(GONE);
         reviewsBinding.cvRatingSummary.setVisibility(GONE);
         reviewsBinding.rvReviews.setVisibility(GONE);
         reviewsBinding.tvNoReviews.setVisibility(GONE);
@@ -83,7 +81,14 @@ public class ReviewsFragment extends Fragment {
 
                 reviewsBinding.progressBarLoading.setVisibility(GONE);
 
-                if (productReviews.isEmpty()) {
+                int totalReviewsCount = 0;
+                for (List<ReviewModel> reviews : productReviews.values()) {
+                    if (reviews != null) {
+                        totalReviewsCount += reviews.size();
+                    }
+                }
+
+                if (totalReviewsCount == 0) {
                     reviewsBinding.rvReviews.setVisibility(GONE);
                     reviewsBinding.cvRatingSummary.setVisibility(VISIBLE);
                     reviewsBinding.tvNoReviews.setVisibility(VISIBLE);
@@ -94,8 +99,8 @@ public class ReviewsFragment extends Fragment {
                     reviewsBinding.rvReviews.setVisibility(VISIBLE);
                     reviewsBinding.cvRatingSummary.setVisibility(VISIBLE);
                     reviewsBinding.tvNoReviews.setVisibility(GONE);
-                    adapter.setData(productReviews);
 
+                    adapter.setData(productReviews);
                     calculateAndDisplaySummary(productReviews);
                 }
             }

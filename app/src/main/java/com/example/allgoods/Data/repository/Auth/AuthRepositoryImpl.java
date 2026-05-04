@@ -6,15 +6,18 @@ import com.example.allgoods.Data.local.SharedPrefManager;
 import com.example.allgoods.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AuthRepositoryImpl implements AuthRepository{
 
     private FirebaseAuth firebaseAuth;
     private SharedPrefManager prefManager;
+    private FirebaseFirestore firestore;
 
     public AuthRepositoryImpl(Context context) {
         firebaseAuth = FirebaseAuth.getInstance();
         prefManager = new SharedPrefManager(context);
+        firestore = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -38,7 +41,13 @@ public class AuthRepositoryImpl implements AuthRepository{
                                                 "customer",
                                                 firebaseUser.getUid()
                                         );
-                                        callback.onSuccess(user);
+
+                                        // Save user to Firestore
+                                        firestore.collection("Users")
+                                                .document(user.uid)
+                                                .set(user)
+                                                .addOnSuccessListener(aVoid -> callback.onSuccess(user))
+                                                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
                                     });
                         }
                     } else {
@@ -48,6 +57,31 @@ public class AuthRepositoryImpl implements AuthRepository{
     }
     @Override
     public void login(String email, String password, AuthCallback callback) {
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                        if (firebaseUser != null) {
+                            firestore.collection("Users")
+                                    .document(firebaseUser.getUid())
+                                    .get()
+                                    .addOnSuccessListener(documentSnapshot -> {
+                                        if (documentSnapshot.exists()) {
+                                            User user = documentSnapshot.toObject(User.class);
+                                            callback.onSuccess(user);
+                                        } else {
+                                            callback.onFailure("User not found");
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+                        }
+                    } else {
+                        callback.onFailure(task.getException().getMessage());
+                    }
+                });
+    }
+    /*@Override
+    public void login(String email, String password, AuthCallback callback) {
 
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
@@ -56,12 +90,10 @@ public class AuthRepositoryImpl implements AuthRepository{
 
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
-                        String role;
+                        String role = "customer";
 
                         if (email.equals("admin@gmail.com")) {
                             role = "seller";
-                        } else {
-                            role = "customer";
                         }
 
                         User user = new User(
@@ -79,7 +111,7 @@ public class AuthRepositoryImpl implements AuthRepository{
                     }
                 });
     }
-
+*/
     @Override
     public void saveUserLocally(String name, String email,String role) {
         prefManager.saveUser(name, email, role);
