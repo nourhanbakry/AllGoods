@@ -70,7 +70,11 @@ public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapte
         @SuppressLint("SetTextI18n")
         void bind(OrderModel order, OnOrderActionListener listener) {
             userName.setText(order.getCustomerName());
-            orderId.setText("Order ID: #" + order.getOrderId());
+            
+            String rawId = order.getOrderId();
+            String displayId = (rawId != null && rawId.length() >= 3) ? rawId.substring(0, 3).toUpperCase() : "000";
+            orderId.setText("ORD - " + displayId);
+
             address.setText(order.getAddress().getAddress() + ", " + order.getAddress().getCity());
             phone.setText(order.getPhoneNumber());
             
