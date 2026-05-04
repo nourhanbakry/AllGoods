@@ -44,6 +44,7 @@
         android:layout_marginTop="20dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
+        android:background="@drawable/bg_gray_fa"
         app:cardBackgroundColor="@color/white"
         app:strokeColor="@color/gray"
         app:strokeWidth="1dp"
@@ -52,9 +53,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_white_outlined_squre"
             android:padding="16dp">
 
-            <!-- الجزء الأيسر: المعدل العام والنجوم -->
             <LinearLayout
                 android:id="@+id/llAverageRating"
                 android:layout_width="wrap_content"
@@ -89,12 +90,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="3 reviews"
                     android:textColor="#888888"
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <!-- الجزء الأيمن: تفاصيل الخمس نجوم -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -105,17 +104,52 @@
                 app:layout_constraintStart_toEndOf="@id/llAverageRating"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <include layout="@layout/item_rating_progress" />
-                <include layout="@layout/item_rating_progress" />
-                <include layout="@layout/item_rating_progress" />
-                <include layout="@layout/item_rating_progress" />
-                <include layout="@layout/item_rating_progress" />
+                <include android:id="@+id/rating5" layout="@layout/item_rating_progress" />
+                <include android:id="@+id/rating4" layout="@layout/item_rating_progress" />
+                <include android:id="@+id/rating3" layout="@layout/item_rating_progress" />
+                <include android:id="@+id/rating2" layout="@layout/item_rating_progress" />
+                <include android:id="@+id/rating1" layout="@layout/item_rating_progress" />
 
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvReviews"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cvRatingSummary"
+        android:layout_marginBottom="80dp"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="0dp"
+        tools:listitem="@layout/reviews_item" />
+
+    <TextView
+        android:id="@+id/tvNoReviews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No reviews yet"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/cvRatingSummary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"/>
+
+
+    <ProgressBar
+        android:id="@+id/progressBarLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:indeterminateTint="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 
