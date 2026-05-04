@@ -160,4 +160,6 @@
     <string name="slim_fit_denim_jeans">Slim Fit Denim Jeans</string>
     <string name="restock_product">Restock Product</string>
     <string name="close">Close</string>
+    <string name="delete_product">Delete Product?</string>
+    <string name="this_action_cannot_be_undone_this_will_permanently_delete_the_product_from_your_inventory">This action cannot be undone. This will permanently delete the product from your inventory .</string>
 </resources>
