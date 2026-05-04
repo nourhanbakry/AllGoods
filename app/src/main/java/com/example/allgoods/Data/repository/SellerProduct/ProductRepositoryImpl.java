@@ -124,4 +124,20 @@ public class ProductRepositoryImpl implements ProductRepository {
                     listener.onFailure(e.getMessage());
                 });
     }
+
+    @Override
+    public void updateProductQuantity(String productId, java.util.Map<String, Integer> newSizesQuantity, OnProductUploadListener listener) {
+        firestore.collection("Products").document(productId)
+                .update("sizesQuantity", newSizesQuantity)
+                .addOnSuccessListener(aVoid -> listener.onSuccess())
+                .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
+    }
+
+    @Override
+    public void deleteProduct(String productId, OnProductUploadListener listener) {
+        firestore.collection("Products").document(productId)
+                .delete()
+                .addOnSuccessListener(aVoid -> listener.onSuccess())
+                .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
+    }
 }
