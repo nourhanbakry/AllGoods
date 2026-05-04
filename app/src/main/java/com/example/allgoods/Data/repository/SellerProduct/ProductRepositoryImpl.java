@@ -87,6 +87,25 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public void getProductsBySeller(String sellerId, OnProductsFetchListener listener) {
+        firestore.collection("Products")
+                .whereEqualTo("sellerId", sellerId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<ProductModel> products = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        ProductModel product = document.toObject(ProductModel.class);
+                        product.setId(document.getId());
+                        products.add(product);
+                    }
+                    listener.onSuccess(products);
+                })
+                .addOnFailureListener(e -> {
+                    listener.onFailure(e.getMessage());
+                });
+    }
+
+    @Override
     public void searchProducts(String query, OnProductsFetchListener listener) {
         firestore.collection("Products")
                 .whereGreaterThanOrEqualTo("name", query)

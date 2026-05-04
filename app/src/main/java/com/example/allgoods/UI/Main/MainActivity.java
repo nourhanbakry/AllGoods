@@ -153,8 +153,6 @@ public class MainActivity extends AppCompatActivity {
         TextView ordersCountText = header.findViewById(R.id.orders);
         TextView userNameText = header.findViewById(R.id.userNameNavigation);
 
-        /*SharedPrefManager prefManager = new SharedPrefManager(this);
-        String name = prefManager.getName();*/
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             currentUser.reload().addOnCompleteListener(task -> {
@@ -169,26 +167,6 @@ public class MainActivity extends AppCompatActivity {
             userNameText.setText("Guest User");
         }
 
-        // Check if name is passed via Intent (useful after login/signup)
-       /* if (getIntent() != null && getIntent().hasExtra("USER_NAME")) {
-            name = getIntent().getStringExtra("USER_NAME");
-            String email = prefManager.getKeyEmail();
-            String role = prefManager.getRole();
-            prefManager.saveUser(name, email, role);
-        }
-
-        if (name == null || name.isEmpty()) {
-            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-            if (currentUser != null && currentUser.getDisplayName() != null) {
-                name = currentUser.getDisplayName();
-            }
-        }
-
-        if (name != null && !name.isEmpty()) {
-            userNameText.setText(name);
-        } else {
-            userNameText.setText("User");
-        }*/
 
         // Fetch and update orders count
         new OrderRepositoryImpl().getOrders(new OrderRepository.OnOrdersFetchListener() {

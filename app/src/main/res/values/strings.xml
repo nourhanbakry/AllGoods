@@ -153,4 +153,5 @@
     <string name="_0_orders">0 Orders</string>
     <string name="your_order_has_been_confirmed_we_will_send_you_confirmation_email_shortly">Your order has been confirmed, we will send you confirmation email shortly.</string>
     <string name="wishlist_is_empty">Wishlist is empty</string>
+    <string name="star">star</string>
 </resources>

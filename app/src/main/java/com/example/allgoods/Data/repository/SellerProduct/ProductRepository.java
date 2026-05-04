@@ -10,6 +10,7 @@ public interface ProductRepository {
     void uploadProduct(ProductModel product, List<Uri> imageUris, OnProductUploadListener listener);
     void getAllProducts(OnProductsFetchListener listener);
     void getProductsByCategory(String category, OnProductsFetchListener listener);
+    void getProductsBySeller(String sellerId, OnProductsFetchListener listener);
     void searchProducts(String query, OnProductsFetchListener listener);
 
     interface OnProductUploadListener {
