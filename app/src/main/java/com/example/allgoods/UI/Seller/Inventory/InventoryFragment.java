@@ -142,8 +142,8 @@ public class InventoryFragment extends Fragment {
         MaterialButton btnDelete = dialog.findViewById(R.id.btnDelete);
         MaterialButton btnCancel = dialog.findViewById(R.id.btnCancel);
 
-        title.setText("Delete Product?");
-        content.setText("This action cannot be undone. This will permanently delete the product from your inventory .");
+        title.setText(R.string.delete_product);
+        content.setText(R.string.this_action_cannot_be_undone_this_will_permanently_delete_the_product_from_your_inventory);
 
         btnDelete.setOnClickListener(v -> {
             productRepository.deleteProduct(product.getId(), new ProductRepository.OnProductUploadListener() {

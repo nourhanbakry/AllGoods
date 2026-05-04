@@ -6,6 +6,8 @@ import java.util.List;
 public interface OrderRepository {
     void placeOrder(OrderModel order, OnOrderChangeListener listener);
     void getOrders(OnOrdersFetchListener listener);
+    void getSellerOrders(String sellerId, OnOrdersFetchListener listener);
+    void updateOrderStatus(String orderId, String status, long deliveredTimestamp, OnOrderChangeListener listener);
 
     interface OnOrderChangeListener {
         void onSuccess();
