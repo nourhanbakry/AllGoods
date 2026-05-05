@@ -57,18 +57,16 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Grid لـ 4 كروت كاستم -->
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alignmentMode="alignMargins"
                 android:columnCount="2">
 
-                <!-- 1. Revenue Card -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -232,37 +230,11 @@
                         android:textColor="@color/black"
                         android:layout_marginBottom="12dp"/>
 
-                    <!-- Item 1 -->
-                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="10dp">
-                        <TextView android:id="@+id/rank1" android:layout_width="35dp" android:layout_height="35dp" android:text="1" android:gravity="center" android:background="@drawable/circle_bg" android:textStyle="bold" android:textColor="@color/black"/>
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/rank1" android:layout_marginStart="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Classic White T-Shirt" android:textColor="@color/black" android:textStyle="bold" android:textSize="15sp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="84 sold" android:textColor="#9E9E9E" android:textSize="13sp"/>
-                        </LinearLayout>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:layout_centerVertical="true" android:text="$29.99" android:paddingHorizontal="12dp" android:paddingVertical="6dp" android:background="@drawable/bg_white_outlined_squre" android:textColor="@color/black"/>
-                    </RelativeLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F5F5F5"/>
-
-                    <!-- Item 2 -->
-                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="10dp">
-                        <TextView android:id="@+id/rank2" android:layout_width="35dp" android:layout_height="35dp" android:text="2" android:gravity="center" android:background="@drawable/circle_bg" android:textStyle="bold" android:textColor="@color/black"/>
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/rank2" android:layout_marginStart="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Slim Fit Denim Jeans" android:textColor="@color/black" android:textStyle="bold" android:textSize="15sp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="67 sold" android:textColor="#9E9E9E" android:textSize="13sp"/>
-                        </LinearLayout>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:layout_centerVertical="true" android:text="$79.99" android:paddingHorizontal="12dp" android:paddingVertical="6dp" android:background="@drawable/bg_white_outlined_squre" android:textColor="@color/black"/>
-                    </RelativeLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F5F5F5"/>
-
-                    <!-- Item 3 -->
-                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingVertical="10dp">
-                        <TextView android:id="@+id/rank3" android:layout_width="35dp" android:layout_height="35dp" android:text="3" android:gravity="center" android:background="@drawable/circle_bg" android:textStyle="bold" android:textColor="@color/black"/>
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/rank3" android:layout_marginStart="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Business Suit" android:textColor="@color/black" android:textStyle="bold" android:textSize="15sp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="23 sold" android:textColor="#9E9E9E" android:textSize="13sp"/>
-                        </LinearLayout>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:layout_centerVertical="true" android:text="$299.99" android:paddingHorizontal="12dp" android:paddingVertical="6dp" android:background="@drawable/bg_white_outlined_squre" android:textColor="@color/black"/>
-                    </RelativeLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvTopSelling"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -272,6 +244,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="40dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="1dp"
@@ -283,28 +256,86 @@
                     android:padding="16dp"
                     android:background="@color/white">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Most Sold Sizes" android:textSize="17sp" android:textStyle="bold" android:textColor="@color/black"/>
-                    <ImageView android:layout_width="match_parent" android:layout_height="200dp" android:layout_marginTop="12dp" android:scaleType="fitCenter" android:src="@drawable/chart" android:layout_marginHorizontal="10dp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-            <!-- Current Stock (Pie Chart Placeholder) -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="#E0E0E0">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:background="@color/white">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Current Stock by Size" android:textSize="17sp" android:textStyle="bold" android:textColor="@color/black"/>
-                    <ImageView android:layout_width="match_parent" android:layout_height="220dp" android:layout_marginTop="12dp" android:scaleType="fitCenter" android:src="@drawable/pie_chart" android:layout_marginHorizontal="40dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="12dp">
+
+                        <!-- Y Axis -->
+                        <LinearLayout
+                            android:id="@+id/llYAxis"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/yMax"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="top"
+                                android:text="10"
+                                android:textSize="10sp"/>
+
+                            <TextView
+                                android:id="@+id/yMidTop"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="top"
+                                android:text="10"
+                                android:textSize="10sp"/>
+
+
+
+                            <TextView
+                                android:id="@+id/yMid"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="5"
+                                android:textSize="10sp"/>
+
+                            <TextView
+                                android:id="@+id/yMidBottom"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="5"
+                                android:textSize="10sp"/>
+
+                            <TextView
+                                android:id="@+id/yMin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="bottom"
+                                android:text="0"
+                                android:textSize="10sp"/>
+
+                        </LinearLayout>
+
+                        <!-- Bars -->
+                        <LinearLayout
+                            android:id="@+id/llMostSoldSizes"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:gravity="bottom"
+                            android:paddingStart="8dp"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E0E0E0"/>
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

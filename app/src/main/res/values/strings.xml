@@ -176,4 +176,5 @@
     <string name="delivered_orders_2">Delivered Orders (2)</string>
     <string name="delivered_on_2025_11_13">Delivered on 2025 - 11 - 13</string>
     <string name="delivered">Delivered</string>
+    <string name="no_data_available">No data available</string>
 </resources>

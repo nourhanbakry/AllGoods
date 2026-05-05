@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:gravity="bottom|center_horizontal"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="4dp">
+
+    <TextView
+        android:id="@+id/tvSizeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="10sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <View
+        android:id="@+id/viewBar"
+        android:layout_width="18dp"
+        android:layout_height="100dp"
+        android:background="@drawable/bg_black_rounded" />
+
+    <TextView
+        android:id="@+id/tvSizeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="XL"
+        android:textSize="12sp"
+        android:textColor="@color/gray"
+        android:layout_marginTop="8dp" />
+   <!-- <View
+
+        android:id="@+id/viewBar"
+
+        android:layout_width="18dp"
+
+        android:layout_height="100dp"
+
+        android:background="@drawable/bg_black_rounded"/>
+
+
+    <Space
+
+        android:layout_width="match_parent"
+
+        android:layout_height="6dp"/>
+
+
+    <TextView
+
+        android:id="@+id/tvSizeLabel"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:text="M"
+
+        android:textSize="12sp"
+
+        android:textColor="@android:color/black"/>-->
+
+</LinearLayout>
