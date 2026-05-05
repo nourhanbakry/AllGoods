@@ -31,7 +31,9 @@ import com.example.allgoods.model.ProductModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -115,14 +117,16 @@ public class StatsFragment extends Fragment {
                         
                         if (order.getItems() != null) {
                             for (ProductModel item : order.getItems()) {
+                                android.util.Log.d("StatsDebug", "Processing Item: " + item.getName() + " | ID: " + item.getId() + " | Qty: " + item.getQuantity());
                                 if (sellerId.equals(item.getSellerId())) {
                                     double itemTotal = item.getPrice() * item.getQuantity();
                                     totalRevenue += itemTotal;
                                     
                                     // Top Selling logic
-                                    ProductSalesInfo info = productSales.getOrDefault(item.getId(), new ProductSalesInfo(item.getName(), item.getPrice()));
+                                    String productId = (item.getId() != null && !item.getId().isEmpty()) ? item.getId() : item.getName();
+                                    ProductSalesInfo info = productSales.getOrDefault(productId, new ProductSalesInfo(item.getName(), item.getPrice()));
                                     info.soldCount += item.getQuantity();
-                                    productSales.put(item.getId(), info);
+                                    productSales.put(productId, info);
 
                                     // Size Stats logic
                                     String size = item.getSelectedSize();
@@ -150,42 +154,24 @@ public class StatsFragment extends Fragment {
     }
 
     private void displayTopSelling(Map<String, ProductSalesInfo> productSales) {
+        if (binding == null) return;
+        android.util.Log.d("StatsDebug", "ProductSales map size: " + productSales.size());
+        
         List<ProductSalesInfo> sortedSales = new ArrayList<>(productSales.values());
         Collections.sort(sortedSales, (o1, o2) -> Integer.compare(o2.soldCount, o1.soldCount));
+        
+        android.util.Log.d("StatsDebug", "SortedSales list size: " + sortedSales.size());
+        for (ProductSalesInfo info : sortedSales) {
+            android.util.Log.d("StatsDebug", "Product: " + info.name + ", Sold: " + info.soldCount);
+        }
 
-        binding.layoutRank1.setVisibility(View.GONE);
-        binding.dividerRank1.setVisibility(View.GONE);
-        binding.layoutRank2.setVisibility(View.GONE);
-        binding.dividerRank2.setVisibility(View.GONE);
-        binding.layoutRank3.setVisibility(View.GONE);
-
-        if (sortedSales.size() >= 1) {
-            ProductSalesInfo p = sortedSales.get(0);
-            binding.layoutRank1.setVisibility(View.VISIBLE);
-            binding.dividerRank1.setVisibility(View.VISIBLE);
-            binding.tvNameRank1.setText(p.name);
-            binding.tvSoldCountRank1.setText(p.soldCount + " sold");
-            binding.tvPriceRank1.setText("$" + String.format(Locale.US, "%.2f", p.price));
-        }
-        if (sortedSales.size() >= 2) {
-            ProductSalesInfo p = sortedSales.get(1);
-            binding.layoutRank2.setVisibility(View.VISIBLE);
-            binding.dividerRank2.setVisibility(View.VISIBLE);
-            binding.tvNameRank2.setText(p.name);
-            binding.tvSoldCountRank2.setText(p.soldCount + " sold");
-            binding.tvPriceRank2.setText("$" + String.format(Locale.US, "%.2f", p.price));
-        }
-        if (sortedSales.size() >= 3) {
-            ProductSalesInfo p = sortedSales.get(2);
-            binding.layoutRank3.setVisibility(View.VISIBLE);
-            binding.tvNameRank3.setText(p.name);
-            binding.tvSoldCountRank3.setText(p.soldCount + " sold");
-            binding.tvPriceRank3.setText("$" + String.format(Locale.US, "%.2f", p.price));
-        }
+        binding.rvTopSelling.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(getContext()));
+        binding.rvTopSelling.setAdapter(new TopSellingAdapter(sortedSales));
     }
 
     private void displayMostSoldSizes(Map<String, Integer> sizeSales) {
         if (binding == null) return;
+
         binding.llMostSoldSizes.removeAllViews();
 
         if (sizeSales.isEmpty()) {
@@ -196,46 +182,74 @@ public class StatsFragment extends Fragment {
             return;
         }
 
-        // Find max for scale calculation
-        int maxSales = 0;
-        for (int sales : sizeSales.values()) {
-            if (sales > maxSales) maxSales = sales;
+        int maxSales = Collections.max(sizeSales.values());
+
+// Set Y Axis values
+
+       /* int maxRounded = ((maxSales + 9) / 10) * 10;
+
+        binding.yMax.setText(String.valueOf(maxRounded));
+
+        binding.yMid.setText(String.valueOf(maxRounded / 2));
+
+        binding.yMin.setText("0");*/
+        int maxValue = 60;
+
+        binding.yMax.setText("60");
+        binding.yMidTop.setText("45");
+        binding.yMid.setText("30");
+        binding.yMidBottom.setText("15");
+        binding.yMin.setText("0");
+
+
+        List<String> sizesOrder = Arrays.asList("XS", "S", "M", "L", "XL", "XXL");
+
+        List<Map.Entry<String, Integer>> list = new ArrayList<>();
+
+        for (String size : sizesOrder) {
+            int value = sizeSales.getOrDefault(size, 0);
+            list.add(new AbstractMap.SimpleEntry<>(size, value));
         }
 
-        List<Map.Entry<String, Integer>> list = new ArrayList<>(sizeSales.entrySet());
-        // Sort alphabetically or by size? Let's keep them sorted by sales for now or simple order.
-        // Actually, sorting alphabetically is usually better for columns.
-        Collections.sort(list, (o1, o2) -> o1.getKey().compareTo(o2.getKey()));
+        float maxHeightDp = 120f;
+        float density = getResources().getDisplayMetrics().density;
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
+
         for (Map.Entry<String, Integer> entry : list) {
+
             View column = inflater.inflate(R.layout.item_column_size_stat, binding.llMostSoldSizes, false);
-            
+
             TextView tvLabel = column.findViewById(R.id.tvSizeLabel);
             TextView tvCount = column.findViewById(R.id.tvSizeCount);
             View viewBar = column.findViewById(R.id.viewBar);
-            
+
             tvLabel.setText(entry.getKey());
-            tvCount.setText(String.valueOf(entry.getValue()));
-            
-            // Adjust bar height
-            ViewGroup.LayoutParams params = viewBar.getLayoutParams();
-            if (maxSales > 0) {
-                // max height 140dp (approx from parent 180dp)
-                params.height = (int) ((float) entry.getValue() / maxSales * 140 * getResources().getDisplayMetrics().density);
-            } else {
-                params.height = 0;
+            if (tvCount != null) {
+
+                tvCount.setVisibility(View.GONE);
+
             }
+            //int height = (int) ((entry.getValue() * maxHeightDp / maxSales) * density);
+            /*float maxHeightPx = 140 * getResources().getDisplayMetrics().density;
+
+            int height = (int) ((entry.getValue() * maxHeightPx) / maxSales);*/
+            float maxHeightPx = 140 * getResources().getDisplayMetrics().density;
+
+            int height = (int) ((entry.getValue() * maxHeightPx) / maxValue);
+
+            ViewGroup.LayoutParams params = viewBar.getLayoutParams();
+            params.height = height;
             viewBar.setLayoutParams(params);
-            
+
             binding.llMostSoldSizes.addView(column);
         }
     }
 
-    private static class ProductSalesInfo {
-        String name;
-        double price;
-        int soldCount = 0;
+    public static class ProductSalesInfo {
+        public String name;
+        public double price;
+        public int soldCount = 0;
 
         ProductSalesInfo(String name, double price) {
             this.name = name;

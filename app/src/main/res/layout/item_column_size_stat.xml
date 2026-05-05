@@ -19,8 +19,8 @@
 
     <View
         android:id="@+id/viewBar"
-        android:layout_width="35dp"
-        android:layout_height="0dp"
+        android:layout_width="18dp"
+        android:layout_height="100dp"
         android:background="@drawable/bg_black_rounded" />
 
     <TextView
@@ -31,5 +31,36 @@
         android:textSize="12sp"
         android:textColor="@color/gray"
         android:layout_marginTop="8dp" />
+   <!-- <View
+
+        android:id="@+id/viewBar"
+
+        android:layout_width="18dp"
+
+        android:layout_height="100dp"
+
+        android:background="@drawable/bg_black_rounded"/>
+
+
+    <Space
+
+        android:layout_width="match_parent"
+
+        android:layout_height="6dp"/>
+
+
+    <TextView
+
+        android:id="@+id/tvSizeLabel"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:text="M"
+
+        android:textSize="12sp"
+
+        android:textColor="@android:color/black"/>-->
 
 </LinearLayout>
