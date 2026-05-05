@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingVertical="4dp">
+
+    <TextView
+        android:id="@+id/tvSizeLabel"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="XL"
+        android:textSize="12sp"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
+
+    <ProgressBar
+        android:id="@+id/sizeProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="8dp"
+        android:max="100"
+        android:progress="0"
+        android:progressTint="#FFC107"
+        android:progressBackgroundTint="#F0F2F5"
+        android:indeterminate="false" />
+
+    <TextView
+        android:id="@+id/tvSizeCount"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="12sp"
+        android:textColor="@color/gray"
+        android:gravity="end" />
+
+</LinearLayout>
