@@ -138,6 +138,13 @@ public class CartFragment extends Fragment {
             }
         });
 
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
+            if (error != null) {
+                Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                viewModel.resetErrorMessage();
+            }
+        });
+
         viewModel.loadCartProducts();
 
         if (viewModel.getSelectedAddress().getValue() == null) {

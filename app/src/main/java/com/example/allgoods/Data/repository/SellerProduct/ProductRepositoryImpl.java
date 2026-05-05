@@ -140,4 +140,24 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .addOnSuccessListener(aVoid -> listener.onSuccess())
                 .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
     }
+
+    @Override
+    public void getProductById(String productId, OnProductFetchListener listener) {
+        firestore.collection("Products").document(productId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        ProductModel product = documentSnapshot.toObject(ProductModel.class);
+                        if (product != null) {
+                            product.setId(documentSnapshot.getId());
+                            listener.onSuccess(product);
+                        } else {
+                            listener.onFailure("Product data is null");
+                        }
+                    } else {
+                        listener.onFailure("Product not found");
+                    }
+                })
+                .addOnFailureListener(e -> listener.onFailure(e.getMessage()));
+    }
 }

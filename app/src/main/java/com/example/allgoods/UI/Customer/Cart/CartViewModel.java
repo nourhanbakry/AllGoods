@@ -35,6 +35,7 @@ public class CartViewModel extends ViewModel {
     private final MutableLiveData<List<ProductModel>> cartItems = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private final MutableLiveData<String> orderStatus = new MutableLiveData<>();
+    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<OrderModel> lastPlacedOrder = new MutableLiveData<>();
     private final MutableLiveData<AddressModel> primaryAddress = new MutableLiveData<>();
     private final MutableLiveData<AddressModel> selectedAddress = new MutableLiveData<>();
@@ -55,6 +56,14 @@ public class CartViewModel extends ViewModel {
 
     public LiveData<String> getOrderStatus() {
         return orderStatus;
+    }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void resetErrorMessage() {
+        errorMessage.setValue(null);
     }
 
     public LiveData<OrderModel> getLastPlacedOrder() {
@@ -149,6 +158,11 @@ public class CartViewModel extends ViewModel {
         orderRepository.placeOrder(order, new OrderRepository.OnOrderChangeListener() {
             @Override
             public void onSuccess() {
+                // Decrement Stock Immediately after successful payment
+                for (ProductModel item : items) {
+                    decrementStockAfterOrder(item);
+                }
+
                 cartRepository.clearCart(new CartRepository.OnCartChangeListener() {
                     @Override
                     public void onSuccess() {
@@ -169,6 +183,60 @@ public class CartViewModel extends ViewModel {
             public void onFailure(String error) {
                 isLoading.setValue(false);
                 orderStatus.setValue("Checkout failed: " + error);
+            }
+        });
+    }
+
+    private void decrementStockAfterOrder(ProductModel orderItem) {
+        final com.example.allgoods.Data.repository.SellerProduct.ProductRepository productRepo = 
+            new com.example.allgoods.Data.repository.SellerProduct.ProductRepositoryImpl();
+        
+        // In Cart, the item's 'id' might be the Firestore doc ID OR the cartItemId (docId_size)
+        // We need the original product doc ID to update stock.
+        String productId = orderItem.getId();
+        if (productId != null && productId.contains("_")) {
+            productId = productId.substring(0, productId.lastIndexOf("_"));
+        }
+        
+        final String finalProductId = productId;
+        final String selectedSize = orderItem.getSelectedSize();
+        final int quantitySold = orderItem.getQuantity();
+
+        if (finalProductId == null || selectedSize == null || selectedSize.isEmpty()) {
+            android.util.Log.e("StockUpdate", "Skipping decrement: Missing info for " + orderItem.getName());
+            return;
+        }
+
+        android.util.Log.d("StockUpdate", "Attempting to decrement stock for ID: " + finalProductId + ", Size: " + selectedSize + ", Qty: " + quantitySold);
+
+        productRepo.getProductById(finalProductId, new com.example.allgoods.Data.repository.SellerProduct.ProductRepository.OnProductFetchListener() {
+            @Override
+            public void onSuccess(ProductModel currentProduct) {
+                Map<String, Integer> sizesQuantity = currentProduct.getSizesQuantity();
+                if (sizesQuantity != null && sizesQuantity.containsKey(selectedSize)) {
+                    int currentQty = sizesQuantity.get(selectedSize);
+                    int newQty = Math.max(0, currentQty - quantitySold);
+                    sizesQuantity.put(selectedSize, newQty);
+
+                    productRepo.updateProductQuantity(finalProductId, sizesQuantity, new com.example.allgoods.Data.repository.SellerProduct.ProductRepository.OnProductUploadListener() {
+                        @Override
+                        public void onSuccess() {
+                            android.util.Log.d("StockUpdate", "SUCCESS: Stock updated for " + currentProduct.getName() + ". New Qty: " + newQty);
+                        }
+
+                        @Override
+                        public void onFailure(String error) {
+                            android.util.Log.e("StockUpdate", "FAILURE: Failed to update quantity for " + finalProductId + ": " + error);
+                        }
+                    });
+                } else {
+                    android.util.Log.e("StockUpdate", "FAILURE: Size " + selectedSize + " not found in product " + finalProductId);
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                android.util.Log.e("StockUpdate", "FAILURE: Could not fetch product " + finalProductId + " to update stock: " + error);
             }
         });
     }
@@ -210,7 +278,7 @@ public class CartViewModel extends ViewModel {
 
             @Override
             public void onFailure(String error) {
-                // Handle error
+                errorMessage.setValue(error);
             }
         });
     }
@@ -224,7 +292,7 @@ public class CartViewModel extends ViewModel {
 
             @Override
             public void onFailure(String error) {
-                // Handle error
+                errorMessage.setValue(error);
             }
         });
     }

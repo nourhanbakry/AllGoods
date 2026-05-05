@@ -15,6 +15,7 @@ public interface ProductRepository {
     void searchProducts(String query, OnProductsFetchListener listener);
     void updateProductQuantity(String productId, Map<String, Integer> newSizesQuantity, OnProductUploadListener listener);
     void deleteProduct(String productId, OnProductUploadListener listener);
+    void getProductById(String productId, OnProductFetchListener listener);
 
     interface OnProductUploadListener {
         void onSuccess();
@@ -23,6 +24,11 @@ public interface ProductRepository {
 
     interface OnProductsFetchListener {
         void onSuccess(List<ProductModel> products);
+        void onFailure(String error);
+    }
+
+    interface OnProductFetchListener {
+        void onSuccess(ProductModel product);
         void onFailure(String error);
     }
 }

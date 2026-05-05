@@ -26,6 +26,7 @@ public class OrdersFragment extends Fragment {
 
     private FragmentOrdersBinding binding;
     private final OrderRepository orderRepository = new OrderRepositoryImpl();
+    private final com.example.allgoods.Data.repository.SellerProduct.ProductRepository productRepository = new com.example.allgoods.Data.repository.SellerProduct.ProductRepositoryImpl();
     private SellerOrdersAdapter adapter;
     private List<OrderModel> orderList = new ArrayList<>();
 
@@ -95,11 +96,19 @@ public class OrdersFragment extends Fragment {
             @Override
             public void onSuccess() {
                 if (binding == null) return;
+
+                // Decrement Stock Logic
+                if (order.getItems() != null) {
+                    for (com.example.allgoods.model.ProductModel item : order.getItems()) {
+                        decrementProductStock(item);
+                    }
+                }
+
                 order.setStatus("delivered");
                 order.setDeliveredTimestamp(timestamp);
                 adapter.notifyItemChanged(position);
                 updateOrderSummary();
-                Toast.makeText(requireContext(), "Order marked as delivered", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Order marked as delivered and stock updated", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -107,6 +116,43 @@ public class OrdersFragment extends Fragment {
                 if (isAdded()) {
                     Toast.makeText(requireContext(), "Error: " + error, Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+
+    private void decrementProductStock(com.example.allgoods.model.ProductModel orderItem) {
+        String productId = orderItem.getId();
+        String selectedSize = orderItem.getSelectedSize();
+        int quantitySold = orderItem.getQuantity();
+
+        if (productId == null || selectedSize == null || selectedSize.isEmpty()) return;
+
+        productRepository.getProductById(productId, new com.example.allgoods.Data.repository.SellerProduct.ProductRepository.OnProductFetchListener() {
+            @Override
+            public void onSuccess(com.example.allgoods.model.ProductModel currentProduct) {
+                java.util.Map<String, Integer> sizesQuantity = currentProduct.getSizesQuantity();
+                if (sizesQuantity != null && sizesQuantity.containsKey(selectedSize)) {
+                    int currentQty = sizesQuantity.get(selectedSize);
+                    int newQty = Math.max(0, currentQty - quantitySold);
+                    sizesQuantity.put(selectedSize, newQty);
+
+                    productRepository.updateProductQuantity(productId, sizesQuantity, new com.example.allgoods.Data.repository.SellerProduct.ProductRepository.OnProductUploadListener() {
+                        @Override
+                        public void onSuccess() {
+                            android.util.Log.d("StockUpdate", "Stock updated for product: " + currentProduct.getName() + " size: " + selectedSize);
+                        }
+
+                        @Override
+                        public void onFailure(String error) {
+                            android.util.Log.e("StockUpdate", "Failed to update stock: " + error);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                android.util.Log.e("StockUpdate", "Failed to fetch product for stock update: " + error);
             }
         });
     }
